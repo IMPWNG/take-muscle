@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+:root {
+  --tile: #c9d2c8;
+  --steam: #e7eee8;
+  --chalk: #f3f7f2;
+  --ink: #1c211e;
+  --ink-soft: #3a433d;
+  --sesame: #c9892a;
+  --chili: #c4452d;
+  --rubber: #314038;
+  --plate: #4a524c;
+  --line: color-mix(in srgb, var(--ink) 14%, transparent);
+}
+
+@theme inline {
+  --color-tile: var(--tile);
+  --color-steam: var(--steam);
+  --color-chalk: var(--chalk);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-sesame: var(--sesame);
+  --color-chili: var(--chili);
+  --color-rubber: var(--rubber);
+  --color-plate: var(--plate);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-data);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--tile);
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at 12% -10%, color-mix(in srgb, var(--sesame) 18%, transparent), transparent 42%),
+    linear-gradient(180deg, #d5ddd4 0%, var(--tile) 28%, #bec8bd 100%);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--sesame) 45%, white);
+}
+
+.tray {
+  background:
+    linear-gradient(180deg, #dfe6de, #c5cec4 40%, #b7c1b6);
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 18px 40px rgba(28, 33, 30, 0.12);
+}
+
+.stamp {
+  font-family: var(--font-data), ui-monospace, monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.plate-ring {
+  background:
+    radial-gradient(circle at 50% 50%, #6a736c 0 18%, #3e4641 19% 62%, #2b322e 63% 100%);
+  box-shadow:
+    inset 0 0 0 10px #1f2622,
+    inset 0 0 0 14px #8a928b,
+    0 10px 24px rgba(28, 33, 30, 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
