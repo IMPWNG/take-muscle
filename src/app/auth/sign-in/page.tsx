@@ -1,17 +1,39 @@
 "use client";
 
-import { useActionState } from "react";
+import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { T } from "@/components/T";
 import { useLocale } from "@/hooks/useLocale";
 import { msg } from "@/lib/i18n/copy";
-import { signInWithEmail } from "@/app/auth/actions";
+import { authClient } from "@/lib/auth/client";
 
 export default function SignInPage() {
   const { locale } = useLocale();
-  const [state, formAction, pending] = useActionState(signInWithEmail, null);
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(null);
+    setPending(true);
+    const form = new FormData(event.currentTarget);
+    const { error: signInError } = await authClient.signIn.email({
+      email: String(form.get("email") ?? ""),
+      password: String(form.get("password") ?? ""),
+      callbackURL: "/",
+    });
+    setPending(false);
+    if (signInError) {
+      setError(signInError.message || "Connexion impossible.");
+      return;
+    }
+    router.push("/");
+    router.refresh();
+  }
 
   return (
-    <form action={formAction} className="mx-auto mt-10 max-w-sm space-y-4 rounded-3xl bg-chalk p-6">
+    <form onSubmit={onSubmit} className="mx-auto mt-10 max-w-sm space-y-4 rounded-3xl bg-chalk p-6">
       <T text={msg(locale, "authSignInTitle")} as="h1" className="font-[family-name:var(--font-display)] text-3xl" />
       <T text={msg(locale, "authLead")} as="p" className="text-sm text-ink-soft" />
       <label className="block text-sm">
@@ -34,7 +56,7 @@ export default function SignInPage() {
           className="mt-1 w-full rounded-xl border border-ink/10 bg-white px-3 py-2"
         />
       </label>
-      {state?.error && <p className="text-sm text-chili">{state.error}</p>}
+      {error && <p className="text-sm text-chili">{error}</p>}
       <button
         type="submit"
         disabled={pending}
