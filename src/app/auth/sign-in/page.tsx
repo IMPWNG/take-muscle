@@ -25,7 +25,7 @@ export default function SignInPage() {
     });
     setPending(false);
     if (signInError) {
-      setError(signInError.message || "Connexion impossible.");
+      setError("auth");
       return;
     }
     router.push("/");
@@ -56,7 +56,9 @@ export default function SignInPage() {
           className="mt-1 h-12 w-full rounded-xl border border-ink/10 bg-white px-3 py-2"
         />
       </label>
-      {error && <p className="text-sm text-chili">{error}</p>}
+      {error && (
+        <T text={msg(locale, "authErrorSignIn")} as="p" className="text-sm text-chili" />
+      )}
       <button
         type="submit"
         disabled={pending}

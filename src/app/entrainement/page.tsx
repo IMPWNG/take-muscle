@@ -41,7 +41,8 @@ export default function TrainingPage() {
 
       <section className="space-y-2 sm:space-y-3">
         <article className="rounded-2xl bg-chalk px-4 py-3">
-          <T text={msg(locale, "ruleIntensityDetail")} as="p" className="text-sm leading-5" />
+          <T text={msg(locale, "ruleIntensityTitle")} as="p" className="stamp text-[10px] text-ink-soft normal-case" />
+          <T text={msg(locale, "ruleIntensityDetail")} as="p" className="mt-1 text-sm leading-5" />
         </article>
         <div className="grid gap-2 sm:grid-cols-2 sm:gap-3">
           {(

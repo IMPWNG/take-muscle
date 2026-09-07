@@ -6,7 +6,7 @@ export function reviewSystem(locale: "fr" | "en" | "zh") {
       ? "Write summary, exercise names, amount, and reason in clear English."
       : locale === "zh"
         ? "summary、exercise、amount 和 reason 用简洁的简体中文写。动作名可保留常用英文。"
-        : "Écris summary, exercise, amount et reason en français, direct, sans marketing.";
+        : "Écris summary, exercise, amount et reason en français, direct, précis, sans marketing.";
 
   return `Tu es le coach de progression de Take Muscle. Tu ne discutes pas. Tu lis une séance déjà faite et tu dis quoi changer la prochaine fois.
 

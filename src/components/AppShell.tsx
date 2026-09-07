@@ -9,6 +9,8 @@ import { SignOutButton } from "@/components/SignOutButton";
 import { T } from "@/components/T";
 import { useLocale } from "@/hooks/useLocale";
 import { useRestTimer } from "@/hooks/useRestTimer";
+import { useTracker } from "@/hooks/useTracker";
+import { latestWeight } from "@/lib/stats";
 import { msg } from "@/lib/i18n/copy";
 
 const LINKS = [
@@ -22,6 +24,9 @@ export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const { locale } = useLocale();
   const { remaining } = useRestTimer();
+  const { state } = useTracker();
+  const currentKg = latestWeight(state.weights, state.profile.startKg);
+  const goalStamp = `${currentKg.toFixed(1)} → ${state.profile.targetKg} kg`;
   const isAuth = pathname.startsWith("/auth");
   const localeClass = locale === "zh" ? "font-[family-name:var(--font-zh)]" : "";
 
@@ -47,7 +52,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     >
       <aside className="mb-8 hidden w-56 shrink-0 lg:block">
         <div className="sticky top-8">
-          <p className="stamp text-[11px] text-ink-soft">83 → 90 kg</p>
+          <p className="stamp text-[11px] text-ink-soft">{goalStamp}</p>
           <Link href="/" className="mt-2 block font-[family-name:var(--font-display)] text-4xl leading-none tracking-tight">
             Take
             <br />
@@ -81,7 +86,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <div className="mb-4 flex items-center justify-between gap-3 lg:hidden">
         <Link href="/" className="min-w-0">
-          <p className="stamp text-[10px] text-ink-soft">83 → 90 kg</p>
+          <p className="stamp text-[10px] text-ink-soft">{goalStamp}</p>
           <p className="font-[family-name:var(--font-display)] text-2xl leading-none">Take Muscle</p>
         </Link>
         <div className="flex shrink-0 items-center gap-2">

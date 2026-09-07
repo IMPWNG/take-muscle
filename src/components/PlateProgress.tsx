@@ -43,7 +43,7 @@ export function PlateProgress({
           ))}
         </div>
         <T
-          text={pathLabel(locale, Number(start.toFixed(0)), Number(target.toFixed(0)), pct.toFixed(0))}
+          text={pathLabel(locale, current, target, pct.toFixed(0))}
           as="p"
           className="mt-2 text-sm text-ink-soft"
         />

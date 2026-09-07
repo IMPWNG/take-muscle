@@ -26,7 +26,7 @@ export default function SignUpPage() {
     });
     setPending(false);
     if (signUpError) {
-      setError(signUpError.message || "Inscription impossible.");
+      setError("auth");
       return;
     }
     router.push("/");
@@ -67,8 +67,11 @@ export default function SignUpPage() {
           autoComplete="new-password"
           className="mt-1 h-12 w-full rounded-xl border border-ink/10 bg-white px-3 py-2"
         />
+        <T text={msg(locale, "authPasswordHint")} as="span" className="mt-1 block text-xs text-ink-soft" />
       </label>
-      {error && <p className="text-sm text-chili">{error}</p>}
+      {error && (
+        <T text={msg(locale, "authErrorSignUp")} as="p" className="text-sm text-chili" />
+      )}
       <button
         type="submit"
         disabled={pending}

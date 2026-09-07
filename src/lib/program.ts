@@ -18,7 +18,7 @@ export const MEALS: MealSlot[] = [
   {
     id: "breakfast",
     title: "Petit-déjeuner",
-    hint: "Solide dès le matin, sans te forcer sur le volume.",
+    hint: "Objectif : un vrai repas le matin. 3 œufs + pain ou mantou + 500 ml de lait.",
     items: [
       { id: "b-eggs", label: "3 œufs", zh: "鸡蛋", proteinG: 18, kcal: 210 },
       {
@@ -48,7 +48,7 @@ export const MEALS: MealSlot[] = [
   {
     id: "lunch",
     title: "Déjeuner",
-    hint: "Le repas le plus facile à charger : riz + viande + tofu.",
+    hint: "Objectif : le repas le plus facile à charger. 1,5–2 bols de riz + 150–200 g de viande + tofu.",
     items: [
       {
         id: "l-rice",
@@ -64,11 +64,11 @@ export const MEALS: MealSlot[] = [
         proteinG: 40,
         kcal: 280,
       },
-      { id: "l-veg", label: "Légumes", zh: "蔬菜", proteinG: 3, kcal: 50 },
-      { id: "l-tofu", label: "Tofu", zh: "豆腐", proteinG: 10, kcal: 80 },
+      { id: "l-veg", label: "Légumes, 1 portion", zh: "蔬菜", proteinG: 3, kcal: 50 },
+      { id: "l-tofu", label: "Tofu, 100–150 g", zh: "豆腐", proteinG: 10, kcal: 80 },
       {
         id: "l-oil",
-        label: "Un peu d’huile dans le plat",
+        label: "1 cuillère d’huile (colza ou sésame)",
         zh: "菜籽油 / 芝麻油",
         proteinG: 0,
         kcal: 120,
@@ -79,11 +79,11 @@ export const MEALS: MealSlot[] = [
   {
     id: "snack",
     title: "Collation",
-    hint: "C’est ici que les noix servent vraiment : calories denses, petit volume.",
+    hint: "Objectif : calories denses, petit volume. 30–40 g de noix + yaourt + 1 fruit.",
     items: [
       {
         id: "s-yogurt",
-        label: "Yaourt entier",
+        label: "Yaourt entier, 150–200 g",
         zh: "酸奶",
         proteinG: 8,
         kcal: 150,
@@ -101,11 +101,11 @@ export const MEALS: MealSlot[] = [
   {
     id: "dinner",
     title: "Dîner",
-    hint: "Nouilles ou riz, plus une vraie source de protéines.",
+    hint: "Objectif : glucides + une vraie source de protéines. Ajoute 2 œufs si la protéine manque.",
     items: [
       {
         id: "d-carb",
-        label: "Nouilles ou riz",
+        label: "Nouilles ou riz, 1,5 à 2 bols",
         zh: "面条 / 米饭",
         proteinG: 8,
         kcal: 350,
@@ -124,13 +124,13 @@ export const MEALS: MealSlot[] = [
         proteinG: 12,
         kcal: 140,
       },
-      { id: "d-veg", label: "Légumes", zh: "蔬菜", proteinG: 3, kcal: 50 },
+      { id: "d-veg", label: "Légumes, 1 portion", zh: "蔬菜", proteinG: 3, kcal: 50 },
     ],
   },
   {
     id: "night",
     title: "Avant de dormir",
-    hint: "Le smoothie évite de mâcher un gros repas. Environ 600–800 kcal.",
+    hint: "Objectif : 600–800 kcal sans un gros repas à mâcher.",
     items: [
       {
         id: "n-milk",
@@ -168,21 +168,21 @@ export const BOOSTERS: FoodItem[] = [
   },
   {
     id: "x-milk",
-    label: "Un verre de lait entier",
+    label: "250 ml de lait entier",
     zh: "全脂牛奶",
     proteinG: 8,
     kcal: 150,
   },
   {
     id: "x-rice",
-    label: "Une portion de riz en plus",
+    label: "1 bol de riz en plus",
     zh: "米饭",
     proteinG: 4,
     kcal: 200,
   },
   {
     id: "x-pb",
-    label: "Une cuillère de beurre de cacahuète",
+    label: "1 cuillère de beurre de cacahuète",
     zh: "花生酱",
     proteinG: 4,
     kcal: 95,
@@ -190,9 +190,9 @@ export const BOOSTERS: FoodItem[] = [
 ];
 
 export const DENSE_FOODS = [
-  { food: "Riz 米饭", use: "Ajouter une portion au déjeuner et au dîner" },
-  { food: "Avoine 燕麦", use: "Dans un smoothie ou avec du lait" },
-  { food: "Cacahuètes / noix", use: "Collation de 30–50 g, non sucrées" },
+  { food: "Riz 米饭", use: "+1 bol au déjeuner et au dîner" },
+  { food: "Avoine 燕麦", use: "60–80 g dans le smoothie du soir, ou avec du lait" },
+  { food: "Cacahuètes / noix", use: "Collation 30–50 g, non sucrées, peu salées" },
 ];
 
 export const NUT_OPTIONS =

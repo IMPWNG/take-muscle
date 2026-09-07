@@ -30,8 +30,9 @@ const zh = Noto_Sans_SC({
 });
 
 export const metadata: Metadata = {
-  title: "Take Muscle",
-  description: "83 to 90 kg. Track meals, weight, and lifting. 增肌增重追踪。",
+  title: "Take Muscle — Objectif 90 kg",
+  description:
+    "Protocole de prise de masse : objectif 90 kg, +0,2–0,4 kg/semaine. Nutrition, pesées, Upper/Lower 4 jours. 增肌增重追踪。",
 };
 
 export const viewport: Viewport = {

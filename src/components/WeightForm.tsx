@@ -3,16 +3,17 @@
 import { useState } from "react";
 import { useTracker } from "@/hooks/useTracker";
 import { useLocale } from "@/hooks/useLocale";
-import { formatDay, localDateKey } from "@/lib/stats";
+import { formatDay, latestWeight, localDateKey } from "@/lib/stats";
 import { BCP47 } from "@/lib/i18n";
 import { T } from "@/components/T";
 import { msg } from "@/lib/i18n/copy";
 
 export function WeightForm() {
-  const { addWeight } = useTracker();
+  const { addWeight, state } = useTracker();
   const { locale } = useLocale();
   const [kg, setKg] = useState("");
   const [date, setDate] = useState(localDateKey());
+  const current = latestWeight(state.weights, state.profile.startKg);
 
   return (
     <form
@@ -31,7 +32,7 @@ export function WeightForm() {
           value={kg}
           onChange={(event) => setKg(event.target.value)}
           inputMode="decimal"
-          placeholder="83.4"
+          placeholder={current.toFixed(1)}
           className="mt-1 h-12 w-full rounded-xl border border-ink/15 bg-chalk px-3 font-[family-name:var(--font-data)]"
         />
       </label>
