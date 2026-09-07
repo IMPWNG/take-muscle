@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { emptySets, templateById } from "@/lib/workouts";
 import { localDateKey, uid } from "@/lib/stats";
 import { useTracker } from "@/hooks/useTracker";
+import { useRestTimer } from "@/hooks/useRestTimer";
 import { useLocale } from "@/hooks/useLocale";
 import { T } from "@/components/T";
 import { msg } from "@/lib/i18n/copy";
@@ -76,8 +77,8 @@ function normalizeLog(session: SessionLog): SessionLog {
 
 export function SessionBoard() {
   const { saveSession, state } = useTracker();
+  const { startRest } = useRestTimer();
   const { locale } = useLocale();
-  const [rest, setRest] = useState(0);
   const [log, setLog] = useState<SessionLog | null>(null);
   const [notes, setNotes] = useState<SessionExercise[]>([]);
   const [reviewing, setReviewing] = useState(false);
@@ -92,12 +93,6 @@ export function SessionBoard() {
     () => log?.exercises.reduce((n, ex) => n + ex.sets.length, 0) ?? 0,
     [log],
   );
-
-  useEffect(() => {
-    if (rest <= 0) return;
-    const timer = window.setInterval(() => setRest((value) => value - 1), 1000);
-    return () => window.clearInterval(timer);
-  }, [rest]);
 
   useEffect(() => {
     if (!log) return;
@@ -151,7 +146,7 @@ export function SessionBoard() {
         j !== setIndex ? set : { ...set, done: !set.done },
       ),
     });
-    if (turningOn) setRest(restSeconds);
+    if (turningOn) startRest(restSeconds);
   }
 
   function updateSet(exIndex: number, setIndex: number, field: "kg" | "reps", value: string) {
@@ -242,13 +237,6 @@ export function SessionBoard() {
           </button>
         ))}
       </div>
-
-      {rest > 0 && (
-        <p className="gym-clock sticky top-2 z-10 rounded-[22px] px-4 py-3 font-[family-name:var(--font-data)] text-xl sm:text-2xl">
-          <T text={msg(locale, "restTimer")} as="span" />{" "}
-          {Math.floor(rest / 60)}:{String(rest % 60).padStart(2, "0")}
-        </p>
-      )}
 
       {!log && (
         <p className="text-sm text-ink-soft">

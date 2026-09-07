@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { AppShell } from "@/components/AppShell";
 import { TrackerProvider } from "@/hooks/useTracker";
 import { LocaleProvider } from "@/hooks/useLocale";
+import { RestTimerProvider } from "@/hooks/useRestTimer";
 import "./globals.css";
 
 const display = Bricolage_Grotesque({
@@ -54,7 +55,9 @@ export default function RootLayout({
       <body className="min-h-full" suppressHydrationWarning>
         <LocaleProvider>
           <TrackerProvider>
-            <AppShell>{children}</AppShell>
+            <RestTimerProvider>
+              <AppShell>{children}</AppShell>
+            </RestTimerProvider>
           </TrackerProvider>
         </LocaleProvider>
       </body>

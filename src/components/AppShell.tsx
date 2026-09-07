@@ -4,9 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { LocaleSwitch } from "@/components/LocaleSwitch";
+import { RestClock } from "@/components/RestClock";
 import { SignOutButton } from "@/components/SignOutButton";
 import { T } from "@/components/T";
 import { useLocale } from "@/hooks/useLocale";
+import { useRestTimer } from "@/hooks/useRestTimer";
 import { msg } from "@/lib/i18n/copy";
 
 const LINKS = [
@@ -19,6 +21,7 @@ const LINKS = [
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const { locale } = useLocale();
+  const { remaining } = useRestTimer();
   const isAuth = pathname.startsWith("/auth");
   const localeClass = locale === "zh" ? "font-[family-name:var(--font-zh)]" : "";
 
@@ -36,7 +39,11 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div
-      className={`mx-auto flex min-h-full max-w-6xl flex-col px-4 pt-4 pb-[calc(5.75rem+env(safe-area-inset-bottom))] sm:px-6 sm:pt-6 lg:flex-row lg:gap-10 lg:px-8 lg:pb-10 ${localeClass}`}
+      className={`mx-auto flex min-h-full max-w-6xl flex-col px-4 pt-4 sm:px-6 sm:pt-6 lg:flex-row lg:gap-10 lg:px-8 lg:pb-10 ${
+        remaining > 0
+          ? "pb-[calc(9.75rem+env(safe-area-inset-bottom))]"
+          : "pb-[calc(5.75rem+env(safe-area-inset-bottom))]"
+      } ${localeClass}`}
     >
       <aside className="mb-8 hidden w-56 shrink-0 lg:block">
         <div className="sticky top-8">
@@ -84,6 +91,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       </div>
 
       <main className="min-w-0 flex-1">{children}</main>
+
+      <RestClock />
 
       <nav className="fixed inset-x-3 bottom-[max(0.65rem,env(safe-area-inset-bottom))] z-20 grid grid-cols-4 gap-1 rounded-[28px] bg-rubber/95 p-1.5 text-chalk shadow-xl backdrop-blur lg:hidden">
         {LINKS.map((link) => {

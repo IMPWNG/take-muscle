@@ -283,6 +283,7 @@ export const copy = {
     py: "jīn tiān yǐ liàn",
   },
   restTimer: { fr: "Repos", en: "Rest", zh: "休息", py: "xiū xi" },
+  skipRest: { fr: "Passer", en: "Skip", zh: "跳过", py: "tiào guò" },
   markDone: {
     fr: "Séance finie — analyser",
     en: "Workout done — review",
