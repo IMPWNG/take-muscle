@@ -5,5 +5,5 @@ export default getAuth().middleware({
 });
 
 export const config = {
-  matcher: ["/((?!_next|favicon.ico|auth|api/auth).*)"],
+  matcher: ["/((?!_next|favicon.ico|auth|api).*)"],
 };

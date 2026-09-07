@@ -331,6 +331,24 @@ export const copy = {
     zh: "正在分析这次训练…",
     py: "zhèng zài fēn xī zhè cì xùn liàn",
   },
+  reviewTimeout: {
+    fr: "L’analyse a dépassé 40 s. Relance-la.",
+    en: "The review took more than 40 s. Try again.",
+    zh: "分析超过 40 秒。再试一次。",
+    py: "fēn xī chāo guò 40 miǎo. zài shì yí cì.",
+  },
+  reviewAuth: {
+    fr: "Session expirée. Reconnecte-toi, puis relance l’analyse.",
+    en: "Session expired. Sign in again, then retry the review.",
+    zh: "登录已过期。重新登录后再分析。",
+    py: "dēng lù yǐ guò qī. chóng xīn dēng lù hòu zài fēn xī.",
+  },
+  reviewFail: {
+    fr: "L’analyse n’a pas abouti. Relance-la.",
+    en: "The review did not finish. Try again.",
+    zh: "分析没有完成。再试一次。",
+    py: "fēn xī méi yǒu wán chéng. zài shì yí cì.",
+  },
   retryAnalysis: {
     fr: "Relancer l’analyse",
     en: "Run the review again",

@@ -15,6 +15,7 @@ import {
 } from "@/lib/i18n/content";
 import { TEMPLATES_I18N } from "@/lib/i18n/content";
 import { BCP47, t, type Text } from "@/lib/i18n";
+import { isAbortError, withTimeout } from "@/lib/timeout";
 import type {
   SessionAnalysis,
   SessionExercise,
@@ -86,7 +87,7 @@ export function SessionBoard() {
   const [log, setLog] = useState<SessionLog | null>(null);
   const [notes, setNotes] = useState<SessionExercise[]>([]);
   const [reviewing, setReviewing] = useState(false);
-  const [reviewError, setReviewError] = useState<string | null>(null);
+  const [reviewError, setReviewError] = useState<Text | null>(null);
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
   const skipPersist = useRef(true);
   const boardRef = useRef<HTMLElement>(null);
@@ -220,6 +221,7 @@ export function SessionBoard() {
     applyLog(completed);
     setReviewing(true);
     setReviewError(null);
+    const timeout = withTimeout(40_000);
     try {
       const previous = state.sessions.find(
         (session) =>
@@ -229,12 +231,22 @@ export function SessionBoard() {
       );
       const response = await fetch("/api/session-review", {
         method: "POST",
+        credentials: "same-origin",
         headers: { "Content-Type": "application/json" },
+        signal: timeout.signal,
         body: JSON.stringify({ locale, session: completed, previous: previous ?? null }),
       });
-      const payload = (await response.json()) as SessionAnalysis & { error?: string };
-      if (!response.ok || !payload.summary || !payload.adjustments) {
-        throw new Error(payload.error || "Analyse impossible.");
+      const payload = (await response.json().catch(() => null)) as
+        | (SessionAnalysis & { error?: string })
+        | null;
+      if (response.status === 401 || payload?.error === "unauthorized") {
+        throw new Error("auth");
+      }
+      if (response.status === 504 || payload?.error === "timeout") {
+        throw new Error("timeout");
+      }
+      if (!response.ok || !payload?.summary || !payload.adjustments) {
+        throw new Error("fail");
       }
       const withAnalysis = {
         ...completed,
@@ -245,8 +257,21 @@ export function SessionBoard() {
       };
       applyLog(withAnalysis);
     } catch (error) {
-      setReviewError(error instanceof Error ? error.message : "Analyse impossible.");
+      const message = error instanceof Error ? error.message : "";
+      if (
+        isAbortError(error) ||
+        message === "timeout" ||
+        message === "Failed to fetch" ||
+        message === "NetworkError when attempting to fetch resource."
+      ) {
+        setReviewError(msg(locale, "reviewTimeout"));
+      } else if (message === "auth") {
+        setReviewError(msg(locale, "reviewAuth"));
+      } else {
+        setReviewError(msg(locale, "reviewFail"));
+      }
     } finally {
+      timeout.dispose();
       setReviewing(false);
     }
   }
@@ -393,7 +418,7 @@ export function SessionBoard() {
               )}
               {reviewError && (
                 <div className="mt-2">
-                  <p className="text-sm text-sesame">{reviewError}</p>
+                  <T text={reviewError} as="p" className="text-sm text-sesame" />
                   <button
                     type="button"
                     onClick={() => {
