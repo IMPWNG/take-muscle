@@ -70,7 +70,7 @@ export default function TrainingPage() {
                     text={msg(locale, session.completed ? "done" : "open")}
                     as="span"
                     className="stamp shrink-0 text-[10px] text-ink-soft normal-case"
-                  />
+                  />r
                 </div>
                 {session.analysis && (
                   <p className="mt-2 text-xs leading-5 text-ink-soft">{session.analysis.summary}</p>
