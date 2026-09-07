@@ -290,9 +290,17 @@ export const copy = {
     zh: "训练结束 — 分析",
     py: "xùn liàn jié shù — fēn xī",
   },
-  easy: { fr: "Facile", en: "Easy", zh: "轻松", py: "qīng sōng" },
-  normal: { fr: "Normal", en: "OK", zh: "正常", py: "zhèng cháng" },
-  hard: { fr: "Dur", en: "Hard", zh: "吃力", py: "chī lì" },
+  editSession: { fr: "Modifier", en: "Edit", zh: "修改", py: "xiū gǎi" },
+  deleteSession: { fr: "Supprimer", en: "Delete", zh: "删除", py: "shān chú" },
+  confirmDelete: {
+    fr: "Confirmer",
+    en: "Confirm",
+    zh: "确认删除",
+    py: "què rèn shān chú",
+  },
+  closeLog: { fr: "Fermer", en: "Close", zh: "收起", py: "shōu qǐ" },
+  sessionDate: { fr: "Date", en: "Date", zh: "日期", py: "rì qī" },
+  reopenSession: { fr: "Rouvrir", en: "Reopen", zh: "重新打开", py: "chóng xīn dǎ kāi" },
   debriefTitle: {
     fr: "Pour la prochaine fois",
     en: "Next time",
@@ -317,12 +325,6 @@ export const copy = {
   lowerA: { fr: "Lower A", en: "Lower A", zh: "下肢 A", py: "xià zhī A" },
   upperB: { fr: "Upper B", en: "Upper B", zh: "上肢 B", py: "shàng zhī B" },
   lowerB: { fr: "Lower B", en: "Lower B", zh: "下肢 B", py: "xià zhī B" },
-  ruleIntensityTitle: {
-    fr: "Intensité",
-    en: "Intensity",
-    zh: "强度",
-    py: "qiáng dù",
-  },
   ruleIntensityDetail: {
     fr: "Garde 1–3 reps en réserve. 2–3 min de repos sur les lourds, 60–120 s sur les isolations. Quand tu atteins le haut de la fourchette partout, +2,5 à 5 %. Semaine plus légère toutes les 6–10 semaines si tu es fatigué.",
     en: "Leave 1–3 reps in reserve. Rest 2–3 min on heavy lifts, 60–120 s on isolation. When you hit the top of the range on every set, add 2.5–5%. Take a lighter week every 6–10 weeks if you are tired.",

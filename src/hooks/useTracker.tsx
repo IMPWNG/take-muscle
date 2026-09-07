@@ -22,6 +22,7 @@ type TrackerContextValue = {
   addWeight: (kg: number, date?: string) => void;
   removeWeight: (id: string) => void;
   saveSession: (session: SessionLog) => void;
+  deleteSession: (id: string) => void;
   setExtraKcal: (kcal: number) => void;
 };
 
@@ -124,6 +125,13 @@ export function TrackerProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
+  const deleteSession = useCallback((id: string) => {
+    setState((prev) => ({
+      ...prev,
+      sessions: prev.sessions.filter((item) => item.id !== id),
+    }));
+  }, []);
+
   const value = useMemo<TrackerContextValue>(
     () => ({
       ready,
@@ -143,6 +151,7 @@ export function TrackerProvider({ children }: { children: ReactNode }) {
         }));
       },
       saveSession,
+      deleteSession,
       setExtraKcal: (kcal) => {
         setState((prev) => ({
           ...prev,
@@ -150,7 +159,7 @@ export function TrackerProvider({ children }: { children: ReactNode }) {
         }));
       },
     }),
-    [ready, state, toggleInMap, saveSession],
+    [ready, state, toggleInMap, saveSession, deleteSession],
   );
 
   return <TrackerContext.Provider value={value}>{children}</TrackerContext.Provider>;

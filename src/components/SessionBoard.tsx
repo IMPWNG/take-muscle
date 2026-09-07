@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { emptySets, templateById } from "@/lib/workouts";
-import { localDateKey, uid } from "@/lib/stats";
+import { formatDay, localDateKey, uid } from "@/lib/stats";
 import { useTracker } from "@/hooks/useTracker";
 import { useRestTimer } from "@/hooks/useRestTimer";
 import { useLocale } from "@/hooks/useLocale";
@@ -14,16 +14,13 @@ import {
   templateFocus,
 } from "@/lib/i18n/content";
 import { TEMPLATES_I18N } from "@/lib/i18n/content";
-import { t, type Text } from "@/lib/i18n";
+import { BCP47, t, type Text } from "@/lib/i18n";
 import type {
-  Effort,
   SessionAnalysis,
   SessionExercise,
   SessionExerciseLog,
   SessionLog,
 } from "@/lib/types";
-
-const EFFORTS: Effort[] = ["easy", "normal", "hard"];
 
 function toLog(
   name: string,
@@ -45,7 +42,6 @@ function toLog(
       const last = lastByName.get(exercise.name);
       return {
         name: exercise.name,
-        difficulty: null,
         sets: emptySets(exercise.sets).map((set, index) => ({
           ...set,
           kg: last?.sets[index]?.kg ?? last?.sets.at(-1)?.kg ?? "",
@@ -64,26 +60,36 @@ function sessionTitle(locale: "fr" | "en" | "zh", name: string): Text {
   return name;
 }
 
-function normalizeLog(session: SessionLog): SessionLog {
+function notesFor(session: SessionLog): SessionExercise[] {
+  return templateById(session.focus)?.exercises ?? [];
+}
+
+function stripDifficulty(session: SessionLog): SessionLog {
   return {
     ...session,
     analysis: session.analysis ?? null,
     exercises: session.exercises.map((exercise) => ({
-      ...exercise,
-      difficulty: exercise.difficulty ?? null,
+      name: exercise.name,
+      sets: exercise.sets.map((set) => ({
+        done: set.done,
+        kg: set.kg,
+        reps: set.reps,
+      })),
     })),
   };
 }
 
 export function SessionBoard() {
-  const { saveSession, state } = useTracker();
+  const { saveSession, deleteSession, state } = useTracker();
   const { startRest } = useRestTimer();
   const { locale } = useLocale();
   const [log, setLog] = useState<SessionLog | null>(null);
   const [notes, setNotes] = useState<SessionExercise[]>([]);
   const [reviewing, setReviewing] = useState(false);
   const [reviewError, setReviewError] = useState<string | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<string | null>(null);
   const skipPersist = useRef(true);
+  const boardRef = useRef<HTMLElement>(null);
 
   const doneSets = useMemo(
     () => log?.exercises.reduce((n, ex) => n + ex.sets.filter((set) => set.done).length, 0) ?? 0,
@@ -104,11 +110,19 @@ export function SessionBoard() {
     return () => window.clearTimeout(timer);
   }, [log, saveSession]);
 
-  function applyLog(next: SessionLog, templateExercises?: SessionExercise[]) {
+  function applyLog(
+    next: SessionLog,
+    templateExercises?: SessionExercise[],
+    scroll = false,
+  ) {
     skipPersist.current = true;
-    if (templateExercises) setNotes(templateExercises);
+    setNotes(templateExercises ?? notesFor(next));
     setLog(next);
     saveSession(next);
+    if (!scroll) return;
+    window.requestAnimationFrame(() => {
+      boardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   }
 
   function startTemplate(id: string) {
@@ -119,13 +133,44 @@ export function SessionBoard() {
       (session) => session.focus === id && session.date === today && !session.completed,
     );
     if (open) {
-      applyLog(normalizeLog(open), template.exercises);
+      applyLog(stripDifficulty(open), template.exercises, true);
       return;
     }
     const previous = state.sessions.find(
       (session) => session.focus === id && session.completed,
     );
-    applyLog(toLog(template.name, template.id, template.exercises, previous), template.exercises);
+    applyLog(
+      toLog(template.name, template.id, template.exercises, previous),
+      template.exercises,
+      true,
+    );
+  }
+
+  function openSession(session: SessionLog) {
+    setPendingDelete(null);
+    applyLog(stripDifficulty(session), undefined, true);
+    setReviewError(null);
+  }
+
+  function closeLog() {
+    skipPersist.current = true;
+    setLog(null);
+    setReviewError(null);
+    setPendingDelete(null);
+  }
+
+  function removeSession(id: string) {
+    if (pendingDelete !== id) {
+      setPendingDelete(id);
+      return;
+    }
+    if (log?.id === id) {
+      skipPersist.current = true;
+      setLog(null);
+      setReviewError(null);
+    }
+    deleteSession(id);
+    setPendingDelete(null);
   }
 
   function patchExercise(exIndex: number, next: SessionExerciseLog) {
@@ -160,13 +205,10 @@ export function SessionBoard() {
     });
   }
 
-  function setDifficulty(exIndex: number, difficulty: Effort) {
+  function reopenSession() {
     if (!log) return;
-    const exercise = log.exercises[exIndex];
-    patchExercise(exIndex, {
-      ...exercise,
-      difficulty: exercise.difficulty === difficulty ? null : difficulty,
-    });
+    applyLog({ ...log, completed: false, analysis: null });
+    setReviewError(null);
   }
 
   async function finishSession() {
@@ -174,10 +216,6 @@ export function SessionBoard() {
     const completed: SessionLog = {
       ...log,
       completed: true,
-      exercises: log.exercises.map((exercise) => ({
-        ...exercise,
-        difficulty: exercise.difficulty ?? "normal",
-      })),
     };
     applyLog(completed);
     setReviewing(true);
@@ -246,8 +284,11 @@ export function SessionBoard() {
       )}
 
       {log && (
-        <section className="rounded-[24px] bg-chalk p-4 shadow-[inset_0_0_0_1px_rgba(28,33,30,0.08)] sm:p-5">
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
+        <section
+          ref={boardRef}
+          className="rounded-[24px] bg-chalk p-4 shadow-[inset_0_0_0_1px_rgba(28,33,30,0.08)] sm:p-5"
+        >
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div className="min-w-0">
               <T
                 text={templateFocus(locale, log.focus)}
@@ -260,9 +301,20 @@ export function SessionBoard() {
                 className="font-[family-name:var(--font-display)] text-2xl leading-none sm:text-3xl"
               />
             </div>
-            <p className="font-[family-name:var(--font-data)] text-sm">
-              {doneSets}/{totalSets} <T text={msg(locale, "sets")} as="span" />
-            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              <label className="text-sm text-ink-soft">
+                <T text={msg(locale, "sessionDate")} as="span" className="sr-only" />
+                <input
+                  type="date"
+                  value={log.date}
+                  onChange={(event) => setLog({ ...log, date: event.target.value })}
+                  className="h-11 rounded-xl border border-ink/10 bg-white px-3 font-[family-name:var(--font-data)] text-sm"
+                />
+              </label>
+              <p className="font-[family-name:var(--font-data)] text-sm">
+                {doneSets}/{totalSets} <T text={msg(locale, "sets")} as="span" />
+              </p>
+            </div>
           </div>
           <ol className="space-y-5">
             {log.exercises.map((exercise, exIndex) => {
@@ -324,29 +376,6 @@ export function SessionBoard() {
                       </div>
                     ))}
                   </div>
-                  <div className="mt-3 grid grid-cols-3 gap-1.5">
-                    {EFFORTS.map((effort) => {
-                      const on = exercise.difficulty === effort;
-                      return (
-                        <button
-                          key={effort}
-                          type="button"
-                          onClick={() => setDifficulty(exIndex, effort)}
-                          className={`stamp min-h-11 rounded-xl px-1 text-[10px] normal-case tracking-[0.08em] sm:text-[11px] ${
-                            on
-                              ? effort === "hard"
-                                ? "bg-chili text-chalk"
-                                : effort === "easy"
-                                  ? "bg-sesame text-ink"
-                                  : "bg-rubber text-chalk"
-                              : "bg-white text-ink-soft shadow-[inset_0_0_0_1px_rgba(28,33,30,0.1)]"
-                          }`}
-                        >
-                          <T text={msg(locale, effort)} />
-                        </button>
-                      );
-                    })}
-                  </div>
                 </li>
               );
             })}
@@ -395,18 +424,118 @@ export function SessionBoard() {
             </div>
           )}
 
-          {!log.completed && (
+          <div className="mt-5 flex flex-wrap gap-2">
+            {!log.completed && (
+              <button
+                type="button"
+                disabled={reviewing || totalSets === 0}
+                onClick={() => {
+                  void finishSession();
+                }}
+                className="min-h-12 flex-1 rounded-full bg-rubber px-5 py-3 text-sm text-chalk disabled:opacity-60 sm:flex-none"
+              >
+                <T text={msg(locale, "markDone")} />
+              </button>
+            )}
+            {log.completed && (
+              <>
+                <button
+                  type="button"
+                  disabled={reviewing}
+                  onClick={reopenSession}
+                  className="min-h-12 rounded-full bg-white px-5 py-3 text-sm shadow-[inset_0_0_0_1px_rgba(28,33,30,0.12)]"
+                >
+                  <T text={msg(locale, "reopenSession")} />
+                </button>
+                <button
+                  type="button"
+                  disabled={reviewing}
+                  onClick={() => {
+                    void finishSession();
+                  }}
+                  className="min-h-12 rounded-full bg-rubber px-5 py-3 text-sm text-chalk disabled:opacity-60"
+                >
+                  <T text={msg(locale, "retryAnalysis")} />
+                </button>
+              </>
+            )}
             <button
               type="button"
-              disabled={reviewing || totalSets === 0}
-              onClick={() => {
-                void finishSession();
-              }}
-              className="mt-5 min-h-12 w-full rounded-full bg-rubber px-5 py-3 text-sm text-chalk disabled:opacity-60 sm:w-auto"
+              onClick={() => removeSession(log.id)}
+              className={`min-h-12 rounded-full px-5 py-3 text-sm ${
+                pendingDelete === log.id
+                  ? "bg-chili text-chalk"
+                  : "bg-white text-chili shadow-[inset_0_0_0_1px_rgba(196,69,45,0.35)]"
+              }`}
             >
-              <T text={msg(locale, "markDone")} />
+              <T text={msg(locale, pendingDelete === log.id ? "confirmDelete" : "deleteSession")} />
             </button>
-          )}
+            <button
+              type="button"
+              onClick={closeLog}
+              className="min-h-12 rounded-full bg-white px-5 py-3 text-sm shadow-[inset_0_0_0_1px_rgba(28,33,30,0.12)]"
+            >
+              <T text={msg(locale, "closeLog")} />
+            </button>
+          </div>
+        </section>
+      )}
+
+      {state.sessions.length > 0 && (
+        <section>
+          <T text={msg(locale, "loggedSessions")} as="h2" className="font-[family-name:var(--font-display)] text-2xl" />
+          <ul className="mt-3 divide-y divide-ink/10 overflow-hidden rounded-3xl bg-chalk">
+            {state.sessions.map((session) => {
+              const active = log?.id === session.id;
+              const confirm = pendingDelete === session.id;
+              return (
+                <li key={session.id} className={`px-4 py-3 text-sm ${active ? "bg-tile/60" : ""}`}>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <button
+                      type="button"
+                      onClick={() => openSession(session)}
+                      className="min-w-0 flex-1 text-left"
+                    >
+                      <span className="font-[family-name:var(--font-data)]">
+                        {formatDay(session.date, BCP47[locale])}
+                      </span>
+                      <span className="mt-0.5 block truncate">
+                        <T text={sessionTitle(locale, session.name)} as="span" />
+                      </span>
+                    </button>
+                    <T
+                      text={msg(locale, session.completed ? "done" : "open")}
+                      as="span"
+                      className="stamp shrink-0 text-[10px] text-ink-soft normal-case"
+                    />
+                  </div>
+                  {session.analysis && (
+                    <p className="mt-2 text-xs leading-5 text-ink-soft">{session.analysis.summary}</p>
+                  )}
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => openSession(session)}
+                      className="min-h-11 rounded-full bg-rubber px-4 text-sm text-chalk"
+                    >
+                      <T text={msg(locale, "editSession")} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeSession(session.id)}
+                      className={`min-h-11 rounded-full px-4 text-sm ${
+                        confirm
+                          ? "bg-chili text-chalk"
+                          : "bg-white text-chili shadow-[inset_0_0_0_1px_rgba(196,69,45,0.35)]"
+                      }`}
+                    >
+                      <T text={msg(locale, confirm ? "confirmDelete" : "deleteSession")} />
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </section>
       )}
     </div>

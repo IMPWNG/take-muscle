@@ -13,12 +13,11 @@ export function reviewSystem(locale: "fr" | "en" | "zh") {
 Athlète : homme, 1,92 m, 83 → 90 kg, Upper/Lower 4 jours.
 Règles :
 - 1–3 reps en réserve. Jamais pousser un lourd à l’échec.
-- Facile + haut de la fourchette de reps sur toutes les séries → +2,5 à 5 % de charge.
-- Facile mais reps encore bas dans la fourchette → d’abord + reps, pas le poids.
-- Normal → garder, ou + petite charge seulement si toutes les séries sont au plafond propre.
-- Dur → garder ou −2,5 à 5 %. Ne jamais ajouter.
+- Toutes les séries au haut de la fourchette, propres → +2,5 à 5 % de charge.
+- Reps encore bas dans la fourchette → d’abord + reps, pas le poids.
+- Charge ou reps en baisse vs la séance précédente → garder ou −2,5 à 5 %.
 - Squat, RDL, deadlift, hip thrust, rowing : rester conservateur (lombaires déjà chargés).
-- Cou : toujours très léger. Si dur, baisser.
+- Cou : toujours très léger.
 - ${langRule}
 
 Réponds UNIQUEMENT avec un JSON :
@@ -29,7 +28,7 @@ Réponds UNIQUEMENT avec un JSON :
       "exercise": "nom exact de l’exercice",
       "change": "add_weight" | "drop_weight" | "add_reps" | "drop_reps" | "keep",
       "amount": "ex. +2,5 kg" | "ex. +1–2 reps" | "identique",
-      "reason": "une phrase, liée à facile/normal/dur et aux séries notées"
+      "reason": "une phrase, liée aux kg, reps et à la séance précédente"
     }
   ]
 }
@@ -72,7 +71,6 @@ export function sessionReviewPayload(session: SessionLog, previous: SessionLog |
       date: session.date,
       exercises: session.exercises.map((exercise) => ({
         name: exercise.name,
-        difficulty: exercise.difficulty ?? "normal",
         sets: exercise.sets.map((set, index) => ({
           set: index + 1,
           kg: set.kg,
@@ -86,7 +84,6 @@ export function sessionReviewPayload(session: SessionLog, previous: SessionLog |
           date: previous.date,
           exercises: previous.exercises.map((exercise) => ({
             name: exercise.name,
-            difficulty: exercise.difficulty,
             sets: exercise.sets.map((set) => ({ kg: set.kg, reps: set.reps })),
           })),
         }

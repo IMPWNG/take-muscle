@@ -56,12 +56,9 @@ export type LiftSet = {
   reps: string;
 };
 
-export type Effort = "easy" | "normal" | "hard";
-
 export type SessionExerciseLog = {
   name: string;
   sets: LiftSet[];
-  difficulty: Effort | null;
 };
 
 export type SessionAdjustment = {
