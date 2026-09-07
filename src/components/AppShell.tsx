@@ -14,7 +14,6 @@ const LINKS = [
   { href: "/nutrition", label: "navFood", short: "navFoodShort" },
   { href: "/entrainement", label: "navGym", short: "navGymShort" },
   { href: "/poids", label: "navWeight", short: "navWeightShort" },
-  { href: "/coach", label: "navCoach", short: "navCoachShort" },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -25,19 +24,19 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   if (isAuth) {
     return (
-      <div className={`mx-auto flex min-h-full max-w-6xl flex-col px-4 pb-10 pt-6 sm:px-6 ${localeClass}`}>
-        <div className="mb-6 flex items-center justify-between">
-          <p className="font-[family-name:var(--font-display)] text-2xl">Take Muscle</p>
+      <div className={`mx-auto flex min-h-full max-w-6xl flex-col px-4 pb-10 pt-4 sm:px-6 sm:pt-6 ${localeClass}`}>
+        <div className="mb-6 flex items-center justify-between gap-3">
+          <p className="font-[family-name:var(--font-display)] text-xl sm:text-2xl">Take Muscle</p>
           <LocaleSwitch compact />
         </div>
-        <main className="min-w-0 flex-1">{children}</main>
+        <main className="flex min-w-0 flex-1 justify-center">{children}</main>
       </div>
     );
   }
 
   return (
     <div
-      className={`mx-auto flex min-h-full max-w-6xl flex-col px-4 pb-32 pt-6 sm:px-6 lg:flex-row lg:gap-10 lg:px-8 lg:pb-10 ${localeClass}`}
+      className={`mx-auto flex min-h-full max-w-6xl flex-col px-4 pt-4 pb-[calc(5.75rem+env(safe-area-inset-bottom))] sm:px-6 sm:pt-6 lg:flex-row lg:gap-10 lg:px-8 lg:pb-10 ${localeClass}`}
     >
       <aside className="mb-8 hidden w-56 shrink-0 lg:block">
         <div className="sticky top-8">
@@ -55,7 +54,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`rounded-2xl px-3 py-2 text-sm transition ${
+                  className={`rounded-2xl px-3 py-2.5 text-sm transition ${
                     active
                       ? "bg-rubber text-chalk"
                       : "text-ink-soft hover:bg-chalk/70 hover:text-ink"
@@ -73,27 +72,28 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      <div className="mb-4 flex items-start justify-between gap-3 lg:hidden">
-        <div>
-          <p className="stamp text-[11px] text-ink-soft">83 → 90 kg</p>
-          <h1 className="font-[family-name:var(--font-display)] text-4xl leading-none">
-            Take Muscle
-          </h1>
+      <div className="mb-4 flex items-center justify-between gap-3 lg:hidden">
+        <Link href="/" className="min-w-0">
+          <p className="stamp text-[10px] text-ink-soft">83 → 90 kg</p>
+          <p className="font-[family-name:var(--font-display)] text-2xl leading-none">Take Muscle</p>
+        </Link>
+        <div className="flex shrink-0 items-center gap-2">
+          <LocaleSwitch compact />
+          <SignOutButton />
         </div>
-        <LocaleSwitch compact />
       </div>
 
       <main className="min-w-0 flex-1">{children}</main>
 
-      <nav className="fixed inset-x-3 bottom-3 z-20 grid grid-cols-5 gap-1 rounded-[28px] bg-rubber/95 p-1 text-chalk shadow-xl backdrop-blur lg:hidden">
+      <nav className="fixed inset-x-3 bottom-[max(0.65rem,env(safe-area-inset-bottom))] z-20 grid grid-cols-4 gap-1 rounded-[28px] bg-rubber/95 p-1.5 text-chalk shadow-xl backdrop-blur lg:hidden">
         {LINKS.map((link) => {
           const active = pathname === link.href;
           return (
             <Link
               key={link.href}
               href={link.href}
-              className={`rounded-2xl px-1 py-2 text-center text-[11px] leading-tight ${
-                active ? "bg-sesame text-ink" : "text-chalk/80"
+              className={`grid min-h-12 place-items-center rounded-2xl px-1 text-center text-[12px] leading-tight ${
+                active ? "bg-sesame text-ink" : "text-chalk/85"
               }`}
             >
               <T text={msg(locale, link.short)} />

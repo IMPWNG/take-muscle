@@ -31,10 +31,10 @@ export default function WeightPage() {
   const bmi = currentBmi(current, state.profile.heightCm).toFixed(1);
 
   return (
-    <div className="space-y-8 pt-6">
+    <div className="space-y-6 pt-2 sm:space-y-8 sm:pt-4">
       <header>
         <T text={msg(locale, "wKicker")} as="p" className="stamp text-[11px] text-ink-soft normal-case" />
-        <T text={msg(locale, "wTitle")} as="h1" className="font-[family-name:var(--font-display)] text-4xl" />
+        <T text={msg(locale, "wTitle")} as="h1" className="page-title font-[family-name:var(--font-display)]" />
         <T text={msg(locale, "wLead")} as="p" className="mt-3 max-w-2xl text-sm leading-6 text-ink-soft" />
         <p className="mt-2 text-xs text-ink-soft">
           BMI {bmi} · +{WEEKLY_GAIN_MIN}–{WEEKLY_GAIN_MAX} kg
@@ -94,7 +94,7 @@ export default function WeightPage() {
               <button
                 type="button"
                 onClick={() => removeWeight(entry.id)}
-                className="text-xs text-chili"
+              className="min-h-11 text-xs text-chili"
               >
                 <T text={msg(locale, "remove")} />
               </button>

@@ -34,7 +34,7 @@ export default function SignUpPage() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="mx-auto mt-10 max-w-sm space-y-4 rounded-3xl bg-chalk p-6">
+    <form onSubmit={onSubmit} className="mx-auto mt-4 w-full max-w-sm space-y-4 rounded-3xl bg-chalk p-5 sm:mt-10 sm:p-6">
       <T text={msg(locale, "authSignUpTitle")} as="h1" className="font-[family-name:var(--font-display)] text-3xl" />
       <T text={msg(locale, "authLead")} as="p" className="text-sm text-ink-soft" />
       <label className="block text-sm">
@@ -44,7 +44,7 @@ export default function SignUpPage() {
           type="text"
           required
           defaultValue="Matisse"
-          className="mt-1 w-full rounded-xl border border-ink/10 bg-white px-3 py-2"
+          className="mt-1 h-12 w-full rounded-xl border border-ink/10 bg-white px-3 py-2"
         />
       </label>
       <label className="block text-sm">
@@ -54,7 +54,7 @@ export default function SignUpPage() {
           type="email"
           required
           autoComplete="email"
-          className="mt-1 w-full rounded-xl border border-ink/10 bg-white px-3 py-2"
+          className="mt-1 h-12 w-full rounded-xl border border-ink/10 bg-white px-3 py-2"
         />
       </label>
       <label className="block text-sm">
@@ -65,14 +65,14 @@ export default function SignUpPage() {
           required
           minLength={8}
           autoComplete="new-password"
-          className="mt-1 w-full rounded-xl border border-ink/10 bg-white px-3 py-2"
+          className="mt-1 h-12 w-full rounded-xl border border-ink/10 bg-white px-3 py-2"
         />
       </label>
       {error && <p className="text-sm text-chili">{error}</p>}
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-full bg-rubber px-4 py-2.5 text-sm text-chalk disabled:opacity-60"
+        className="h-12 w-full rounded-full bg-rubber px-4 text-sm text-chalk disabled:opacity-60"
       >
         <T text={msg(locale, pending ? "authCreating" : "authCreate")} />
       </button>

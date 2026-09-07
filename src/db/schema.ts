@@ -56,6 +56,7 @@ export const sessions = pgTable(
     focus: text("focus").notNull().default(""),
     completed: boolean("completed").notNull().default(false),
     exercises: jsonb("exercises").notNull().default([]),
+    analysis: jsonb("analysis"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [index("sessions_user_logged_idx").on(table.userId, table.loggedOn)],

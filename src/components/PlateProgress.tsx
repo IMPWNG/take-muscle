@@ -19,8 +19,8 @@ export function PlateProgress({
   const filled = Math.round((pct / 100) * 7);
 
   return (
-    <div className="flex items-center gap-5">
-      <div className="relative grid h-28 w-28 place-items-center">
+    <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:gap-5">
+      <div className="relative grid h-24 w-24 place-items-center sm:h-28 sm:w-28">
         <div className="plate-ring absolute inset-0 rounded-full" />
         <div className="relative grid place-items-center text-center text-chalk">
           <span className="font-[family-name:var(--font-data)] text-2xl leading-none">

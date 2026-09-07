@@ -32,7 +32,7 @@ export function WeightForm() {
           onChange={(event) => setKg(event.target.value)}
           inputMode="decimal"
           placeholder="83.4"
-          className="mt-1 w-full rounded-xl border border-ink/15 bg-chalk px-3 py-2 font-[family-name:var(--font-data)]"
+          className="mt-1 h-12 w-full rounded-xl border border-ink/15 bg-chalk px-3 font-[family-name:var(--font-data)]"
         />
       </label>
       <label className="text-sm">
@@ -41,12 +41,12 @@ export function WeightForm() {
           type="date"
           value={date}
           onChange={(event) => setDate(event.target.value)}
-          className="mt-1 w-full rounded-xl border border-ink/15 bg-chalk px-3 py-2"
+          className="mt-1 h-12 w-full rounded-xl border border-ink/15 bg-chalk px-3"
         />
       </label>
       <button
         type="submit"
-        className="rounded-full bg-rubber px-5 py-2.5 text-sm text-chalk"
+        className="min-h-12 rounded-full bg-rubber px-5 py-2.5 text-sm text-chalk"
       >
         <T text={msg(locale, "save")} />
       </button>

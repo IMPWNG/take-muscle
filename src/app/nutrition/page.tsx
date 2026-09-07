@@ -20,10 +20,10 @@ export default function NutritionPage() {
   const proteinOk = totals.proteinG >= PROTEIN_MIN;
 
   return (
-    <div className="space-y-8 pt-6">
+    <div className="space-y-6 pt-2 sm:space-y-8 sm:pt-4">
       <header>
         <T text={msg(locale, "nutKicker")} as="p" className="stamp text-[11px] text-ink-soft normal-case" />
-        <T text={msg(locale, "nutTitle")} as="h1" className="font-[family-name:var(--font-display)] text-4xl" />
+        <T text={msg(locale, "nutTitle")} as="h1" className="page-title font-[family-name:var(--font-display)]" />
         <T text={msg(locale, "nutLead")} as="p" className="mt-3 max-w-2xl text-sm leading-6 text-ink-soft" />
       </header>
 
@@ -65,7 +65,7 @@ export default function NutritionPage() {
                 <button
                   type="button"
                   onClick={() => toggleExtra(date, item.id)}
-                  className={`flex w-full items-center justify-between rounded-2xl px-3 py-3 text-left ${
+                  className={`flex w-full min-h-12 items-center justify-between rounded-2xl px-3 py-3 text-left ${
                     on ? "bg-sesame/25" : "bg-tile/60"
                   }`}
                 >

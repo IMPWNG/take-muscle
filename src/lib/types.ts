@@ -50,20 +50,30 @@ export type WorkoutTemplate = {
   exercises: SessionExercise[];
 };
 
-export type GeneratedWorkout = {
-  sessionName: string;
-  sessionType: string;
-  focusMuscles: string[];
-  durationEstimatedMin: number;
-  exercises: SessionExercise[];
-  warmup: string;
-  progressionNotes: string;
-};
-
 export type LiftSet = {
   done: boolean;
   kg: string;
   reps: string;
+};
+
+export type Effort = "easy" | "normal" | "hard";
+
+export type SessionExerciseLog = {
+  name: string;
+  sets: LiftSet[];
+  difficulty: Effort | null;
+};
+
+export type SessionAdjustment = {
+  exercise: string;
+  change: "add_weight" | "drop_weight" | "add_reps" | "drop_reps" | "keep";
+  amount: string;
+  reason: string;
+};
+
+export type SessionAnalysis = {
+  summary: string;
+  adjustments: SessionAdjustment[];
 };
 
 export type SessionLog = {
@@ -72,10 +82,8 @@ export type SessionLog = {
   name: string;
   focus: string;
   completed: boolean;
-  exercises: {
-    name: string;
-    sets: LiftSet[];
-  }[];
+  exercises: SessionExerciseLog[];
+  analysis: SessionAnalysis | null;
 };
 
 export type TrackerState = {
@@ -84,9 +92,4 @@ export type TrackerState = {
   checkedByDate: Record<string, string[]>;
   extraByDate: Record<string, string[]>;
   sessions: SessionLog[];
-};
-
-export type ChatMessage = {
-  role: "user" | "assistant";
-  content: string;
 };

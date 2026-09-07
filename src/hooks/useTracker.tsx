@@ -117,6 +117,13 @@ export function TrackerProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const saveSession = useCallback((session: SessionLog) => {
+    setState((prev) => ({
+      ...prev,
+      sessions: [session, ...prev.sessions.filter((item) => item.id !== session.id)],
+    }));
+  }, []);
+
   const value = useMemo<TrackerContextValue>(
     () => ({
       ready,
@@ -135,12 +142,7 @@ export function TrackerProvider({ children }: { children: ReactNode }) {
           weights: prev.weights.filter((entry) => entry.id !== id),
         }));
       },
-      saveSession: (session) => {
-        setState((prev) => ({
-          ...prev,
-          sessions: [session, ...prev.sessions.filter((item) => item.id !== session.id)],
-        }));
-      },
+      saveSession,
       setExtraKcal: (kcal) => {
         setState((prev) => ({
           ...prev,
@@ -148,7 +150,7 @@ export function TrackerProvider({ children }: { children: ReactNode }) {
         }));
       },
     }),
-    [ready, state, toggleInMap],
+    [ready, state, toggleInMap, saveSession],
   );
 
   return <TrackerContext.Provider value={value}>{children}</TrackerContext.Provider>;

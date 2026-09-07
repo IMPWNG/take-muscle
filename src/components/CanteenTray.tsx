@@ -59,12 +59,12 @@ export function CanteenTray({ date = localDateKey(), compact = false }) {
                       <button
                         type="button"
                         onClick={() => toggleFood(date, item.id)}
-                        className={`flex w-full items-start gap-2 rounded-xl px-2 py-1.5 text-left text-sm transition scroll-mb-24 ${
+                        className={`flex w-full min-h-11 items-start gap-2 rounded-xl px-2 py-2 text-left text-sm transition scroll-mb-24 ${
                           on ? "bg-sesame/20" : "hover:bg-white/70"
                         }`}
                       >
                         <span
-                          className={`mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-sm border ${
+                          className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-sm border ${
                             on
                               ? "border-chili bg-chili text-[10px] text-chalk"
                               : "border-ink/25"

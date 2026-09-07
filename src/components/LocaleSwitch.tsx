@@ -12,7 +12,7 @@ export function LocaleSwitch({ compact = false }: { compact?: boolean }) {
           key={item.id}
           type="button"
           onClick={() => setLocale(item.id)}
-          className={`min-w-8 rounded-full px-2 py-1 text-xs ${
+          className={`min-h-9 min-w-9 rounded-full px-2.5 text-xs ${
             locale === item.id ? "bg-rubber text-chalk" : "bg-chalk/80 text-ink-soft"
           }`}
         >

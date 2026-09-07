@@ -9,7 +9,7 @@ export function SignOutButton() {
   const { locale } = useLocale();
   return (
     <form action={signOutAction}>
-      <button type="submit" className="text-xs text-ink-soft underline">
+      <button type="submit" className="min-h-11 px-2 text-xs text-ink-soft underline">
         <T text={msg(locale, "authSignOut")} />
       </button>
     </form>

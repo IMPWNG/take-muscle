@@ -52,6 +52,7 @@ async function loadState(userId: string): Promise<TrackerState> {
       focus: row.focus,
       completed: row.completed,
       exercises: (row.exercises as SessionLog["exercises"]) ?? [],
+      analysis: (row.analysis as SessionLog["analysis"]) ?? null,
     })),
   };
 }
@@ -131,6 +132,7 @@ export async function PUT(req: Request) {
         focus: session.focus,
         completed: session.completed,
         exercises: session.exercises,
+        analysis: session.analysis ?? null,
       })),
     );
   }

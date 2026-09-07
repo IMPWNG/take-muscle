@@ -36,14 +36,14 @@ export default function HomePage() {
     : null;
 
   return (
-    <div className="space-y-8 pt-6">
-      <header className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+    <div className="space-y-6 pt-2 sm:space-y-8 sm:pt-4">
+      <header className="flex flex-col gap-5 sm:gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="stamp text-[11px] text-ink-soft">{formatDay(localDateKey(), BCP47[locale])}</p>
           <T
             text={msg(locale, "homeTitle")}
             as="h1"
-            className="mt-1 max-w-xl font-[family-name:var(--font-display)] text-4xl leading-none sm:text-5xl"
+            className="page-title mt-1 max-w-xl font-[family-name:var(--font-display)]"
           />
           <T
             text={homeSub(locale, currentBmi(current, state.profile.heightCm).toFixed(1))}
@@ -107,12 +107,9 @@ export default function HomePage() {
           ) : (
             <T text={dayNote(locale, weekday.note)} as="p" className="mt-2 text-sm text-ink-soft" />
           )}
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Link href="/entrainement" className="rounded-full bg-rubber px-4 py-2 text-sm text-chalk">
+          <div className="mt-4">
+            <Link href="/entrainement" className="inline-flex min-h-11 items-center rounded-full bg-rubber px-5 py-2.5 text-sm text-chalk">
               <T text={msg(locale, "openSession")} />
-            </Link>
-            <Link href="/coach" className="rounded-full bg-sesame px-4 py-2 text-sm">
-              <T text={msg(locale, "askCoach")} />
             </Link>
           </div>
         </article>
