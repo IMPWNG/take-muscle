@@ -15,9 +15,8 @@ import {
 } from "@/lib/i18n/content";
 import { TEMPLATES_I18N } from "@/lib/i18n/content";
 import { BCP47, t, type Text } from "@/lib/i18n";
-import { isAbortError, withTimeout } from "@/lib/timeout";
+import { analyzeSession } from "@/lib/analyze";
 import type {
-  SessionAnalysis,
   SessionExercise,
   SessionExerciseLog,
   SessionLog,
@@ -212,68 +211,21 @@ export function SessionBoard() {
     setReviewError(null);
   }
 
-  async function finishSession() {
+  function finishSession() {
     if (!log) return;
-    const completed: SessionLog = {
+    const previous =
+      state.sessions.find(
+        (session) =>
+          session.id !== log.id &&
+          session.focus === log.focus &&
+          session.completed,
+      ) ?? null;
+    applyLog({
       ...log,
       completed: true,
-    };
-    applyLog(completed);
-    setReviewing(true);
+      analysis: analyzeSession({ ...log, completed: true }, previous, locale),
+    });
     setReviewError(null);
-    const timeout = withTimeout(40_000);
-    try {
-      const previous = state.sessions.find(
-        (session) =>
-          session.id !== completed.id &&
-          session.focus === completed.focus &&
-          session.completed,
-      );
-      const response = await fetch("/api/session-review", {
-        method: "POST",
-        credentials: "same-origin",
-        headers: { "Content-Type": "application/json" },
-        signal: timeout.signal,
-        body: JSON.stringify({ locale, session: completed, previous: previous ?? null }),
-      });
-      const payload = (await response.json().catch(() => null)) as
-        | (SessionAnalysis & { error?: string })
-        | null;
-      if (response.status === 401 || payload?.error === "unauthorized") {
-        throw new Error("auth");
-      }
-      if (response.status === 504 || payload?.error === "timeout") {
-        throw new Error("timeout");
-      }
-      if (!response.ok || !payload?.summary || !payload.adjustments) {
-        throw new Error("fail");
-      }
-      const withAnalysis = {
-        ...completed,
-        analysis: {
-          summary: payload.summary,
-          adjustments: payload.adjustments,
-        },
-      };
-      applyLog(withAnalysis);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "";
-      if (
-        isAbortError(error) ||
-        message === "timeout" ||
-        message === "Failed to fetch" ||
-        message === "NetworkError when attempting to fetch resource."
-      ) {
-        setReviewError(msg(locale, "reviewTimeout"));
-      } else if (message === "auth") {
-        setReviewError(msg(locale, "reviewAuth"));
-      } else {
-        setReviewError(msg(locale, "reviewFail"));
-      }
-    } finally {
-      timeout.dispose();
-      setReviewing(false);
-    }
   }
 
   const todayCount = state.sessions.filter((session) => session.date === localDateKey()).length;
