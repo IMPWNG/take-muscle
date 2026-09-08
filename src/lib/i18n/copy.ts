@@ -289,10 +289,28 @@ export const copy = {
   done: { fr: "terminée", en: "done", zh: "已完成", py: "yǐ wán chéng" },
   open: { fr: "en cours", en: "open", zh: "进行中", py: "jìn xíng zhōng" },
   startHint: {
-    fr: "Choisis Upper A, Lower A, Upper B ou Lower B. Chaque série (kg × reps) est enregistrée.",
-    en: "Pick Upper A, Lower A, Upper B, or Lower B. Each set (kg × reps) is saved.",
-    zh: "选上肢 A、下肢 A、上肢 B 或下肢 B。每组重量和次数都会保存。",
-    py: "xuǎn shàng zhī A, xià zhī A, shàng zhī B huò xià zhī B. měi zǔ zhòng liàng hé cì shù dōu huì bǎo cún.",
+    fr: "Choisis Upper A, Lower A, Upper B ou Lower B. Échauffement d’abord, puis les séries.",
+    en: "Pick Upper A, Lower A, Upper B, or Lower B. Warm up first, then the working sets.",
+    zh: "选上肢 A、下肢 A、上肢 B 或下肢 B。先热身，再做正式组。",
+    py: "xuǎn shàng zhī A, xià zhī A, shàng zhī B huò xià zhī B. xiān rè shēn, zài zuò zhèng shì zǔ.",
+  },
+  warmupTitle: {
+    fr: "Échauffement",
+    en: "Warm-up",
+    zh: "热身",
+    py: "rè shēn",
+  },
+  warmupLead: {
+    fr: "8–10 min. Léger. Réveille les muscles, ne les fatigue pas. Aucune série à l’échec.",
+    en: "8–10 min. Keep it light. Wake the muscles up. Do not fatigue them. No set to failure.",
+    zh: "8 到 10 分钟。要轻。把肌肉唤醒，不要练累。任何一组都不要力竭。",
+    py: "8 dào 10 fēn zhōng. yào qīng. bǎ jī ròu huàn xǐng, bú yào liàn lèi.",
+  },
+  warmupWork: {
+    fr: "Séries de travail",
+    en: "Working sets",
+    zh: "正式组",
+    py: "zhèng shì zǔ",
   },
   sessionsToday: {
     fr: "séance(s) aujourd’hui",

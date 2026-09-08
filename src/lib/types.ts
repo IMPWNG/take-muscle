@@ -42,11 +42,16 @@ export type SessionExercise = {
   notes: string;
 };
 
+export type WarmupStep = {
+  id: string;
+};
+
 export type WorkoutTemplate = {
   id: string;
   name: string;
   focus: string;
   durationMin: number;
+  warmup: WarmupStep[];
   exercises: SessionExercise[];
 };
 
@@ -81,6 +86,7 @@ export type SessionLog = {
   completed: boolean;
   exercises: SessionExerciseLog[];
   analysis: SessionAnalysis | null;
+  warmupDone: string[];
 };
 
 export type TrackerState = {

@@ -1,5 +1,6 @@
 import { DEFAULT_PROFILE } from "./program";
-import type { TrackerState } from "./types";
+import { normalizeSession } from "./session-log";
+import type { SessionLog, TrackerState } from "./types";
 
 export const STORAGE_KEY = "take-muscle-v1";
 
@@ -23,7 +24,9 @@ export function loadState(): TrackerState {
       weights: parsed.weights ?? [],
       checkedByDate: parsed.checkedByDate ?? {},
       extraByDate: parsed.extraByDate ?? {},
-      sessions: parsed.sessions ?? [],
+      sessions: (parsed.sessions ?? []).map((session) =>
+        normalizeSession(session as SessionLog),
+      ),
     };
   } catch {
     return emptyState();

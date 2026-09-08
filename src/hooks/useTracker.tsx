@@ -12,6 +12,7 @@ import {
 } from "react";
 import { emptyState, loadState, saveState } from "@/lib/storage";
 import { localDateKey, uid } from "@/lib/stats";
+import { normalizeSession } from "@/lib/session-log";
 import type { SessionLog, TrackerState } from "@/lib/types";
 
 type TrackerContextValue = {
@@ -68,11 +69,15 @@ export function TrackerProvider({ children }: { children: ReactNode }) {
         }
         if (!response.ok) throw new Error("load failed");
         const remote = (await response.json()) as TrackerState;
-        if (isEmptyRemote(remote) && hasLocalData(local)) {
+        const remoteState: TrackerState = {
+          ...remote,
+          sessions: (remote.sessions ?? []).map((session) => normalizeSession(session)),
+        };
+        if (isEmptyRemote(remoteState) && hasLocalData(local)) {
           await persistRemote(local);
           if (!cancelled) setState(local);
         } else if (!cancelled) {
-          setState(remote);
+          setState(remoteState);
         }
       } catch {
         if (!cancelled) setState(local);

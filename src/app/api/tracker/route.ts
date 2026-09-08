@@ -3,6 +3,7 @@ import { getDb } from "@/db";
 import { mealChecks, profiles, sessions, weights } from "@/db/schema";
 import { requireUserId } from "@/lib/auth/server";
 import { DEFAULT_PROFILE } from "@/lib/program";
+import { packStoredAnalysis, unpackStoredAnalysis } from "@/lib/session-log";
 import type { SessionLog, TrackerState } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -45,15 +46,19 @@ async function loadState(userId: string): Promise<TrackerState> {
     })),
     checkedByDate,
     extraByDate,
-    sessions: sessionRows.map((row) => ({
-      id: row.id,
-      date: row.loggedOn,
-      name: row.name,
-      focus: row.focus,
-      completed: row.completed,
-      exercises: (row.exercises as SessionLog["exercises"]) ?? [],
-      analysis: (row.analysis as SessionLog["analysis"]) ?? null,
-    })),
+    sessions: sessionRows.map((row) => {
+      const { analysis, warmupDone } = unpackStoredAnalysis(row.analysis);
+      return {
+        id: row.id,
+        date: row.loggedOn,
+        name: row.name,
+        focus: row.focus,
+        completed: row.completed,
+        exercises: (row.exercises as SessionLog["exercises"]) ?? [],
+        analysis,
+        warmupDone,
+      };
+    }),
   };
 }
 
@@ -132,7 +137,7 @@ export async function PUT(req: Request) {
         focus: session.focus,
         completed: session.completed,
         exercises: session.exercises,
-        analysis: session.analysis ?? null,
+        analysis: packStoredAnalysis(session),
       })),
     );
   }

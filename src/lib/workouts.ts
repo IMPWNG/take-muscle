@@ -19,7 +19,14 @@ export const TEMPLATES: WorkoutTemplate[] = [
     id: "upper-a",
     name: "Upper A",
     focus: "Poussée et tirage : développé, tractions, épaules",
-    durationMin: 70,
+    durationMin: 80,
+    warmup: [
+      { id: "ua-pulse" },
+      { id: "ua-shoulders" },
+      { id: "ua-scap" },
+      { id: "ua-cuff" },
+      { id: "ua-ramp" },
+    ],
     exercises: [
       {
         name: "Bench press",
@@ -76,7 +83,14 @@ export const TEMPLATES: WorkoutTemplate[] = [
     id: "lower-a",
     name: "Lower A",
     focus: "Force des jambes : squat, ischios, mollets",
-    durationMin: 75,
+    durationMin: 85,
+    warmup: [
+      { id: "la-pulse" },
+      { id: "la-hips" },
+      { id: "la-glutes" },
+      { id: "la-pattern" },
+      { id: "la-ramp" },
+    ],
     exercises: [
       {
         name: "Back squat",
@@ -133,7 +147,14 @@ export const TEMPLATES: WorkoutTemplate[] = [
     id: "upper-b",
     name: "Upper B",
     focus: "Épaules, dos, développé haltères",
-    durationMin: 70,
+    durationMin: 80,
+    warmup: [
+      { id: "ub-pulse" },
+      { id: "ub-slides" },
+      { id: "ub-cuff" },
+      { id: "ub-rear" },
+      { id: "ub-ramp" },
+    ],
     exercises: [
       {
         name: "Overhead press",
@@ -197,7 +218,14 @@ export const TEMPLATES: WorkoutTemplate[] = [
     id: "lower-b",
     name: "Lower B",
     focus: "Deadlift, jambes unilatérales, gainage",
-    durationMin: 80,
+    durationMin: 90,
+    warmup: [
+      { id: "lb-pulse" },
+      { id: "lb-hinge" },
+      { id: "lb-glutes" },
+      { id: "lb-adductor" },
+      { id: "lb-ramp" },
+    ],
     exercises: [
       {
         name: "Deadlift classique ou trap-bar",
@@ -261,6 +289,10 @@ export const TEMPLATES: WorkoutTemplate[] = [
 
 export function templateById(id: string) {
   return TEMPLATES.find((item) => item.id === id);
+}
+
+export function warmupFor(templateId: string) {
+  return templateById(templateId)?.warmup ?? [];
 }
 
 export function emptySets(count: number) {

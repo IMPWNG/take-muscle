@@ -192,6 +192,219 @@ export function dayNote(locale: Locale, note: keyof typeof NOTE_KEYS) {
   return msg(locale, NOTE_KEYS[note]);
 }
 
+export const WARMUPS: Record<string, { name: Line; dose: Line; cue: Line }> = {
+  "ua-pulse": {
+    name: { fr: "Cardio facile", en: "Easy cardio", zh: "轻松有氧", py: "qīng sōng yǒu yǎng" },
+    dose: { fr: "4 min", en: "4 min", zh: "4 分钟", py: "4 fēn zhōng" },
+    cue: {
+      fr: "Vélo, rameur ou marche. Respiration nasale, pas d’essoufflement.",
+      en: "Bike, rower, or walk. Nasal breathing. Do not get out of breath.",
+      zh: "单车、划船机或走路。用鼻子呼吸，不要喘。",
+      py: "dān chē, huá chuán jī huò zǒu lù. yòng bí zi hū xī, bú yào chuǎn.",
+    },
+  },
+  "ua-shoulders": {
+    name: { fr: "Épaules", en: "Shoulders", zh: "肩膀", py: "jiān bǎng" },
+    dose: { fr: "2 × 15", en: "2 × 15", zh: "2 × 15", py: "2 × 15" },
+    cue: {
+      fr: "Cercles d’épaules, puis pull-aparts élastique. Léger, amplitude complète.",
+      en: "Arm circles, then band pull-aparts. Light, full range.",
+      zh: "先绕肩，再做弹力带面拉。要轻，幅度做满。",
+      py: "xiān rào jiān, zài zuò tán lì dài miàn lā. yào qīng, fú dù zuò mǎn.",
+    },
+  },
+  "ua-scap": {
+    name: { fr: "Omoplates", en: "Scapula", zh: "肩胛", py: "jiān jiǎ" },
+    dose: { fr: "2 × 8", en: "2 × 8", zh: "2 × 8", py: "2 × 8" },
+    cue: {
+      fr: "Scap pull-ups ou dead hang 20 s. Épaules basses, poitrine haute.",
+      en: "Scap pull-ups or a 20 s dead hang. Shoulders down, chest up.",
+      zh: "肩胛引体，或悬垂 20 秒。沉肩、挺胸。",
+      py: "jiān jiǎ yǐn tǐ, huò xuán chuí 20 miǎo. chén jiān, tǐng xiōng.",
+    },
+  },
+  "ua-cuff": {
+    name: { fr: "Coiffe des rotateurs", en: "Rotator cuff", zh: "肩袖", py: "jiān xiù" },
+    dose: { fr: "2 × 15", en: "2 × 15", zh: "2 × 15", py: "2 × 15" },
+    cue: {
+      fr: "Face pulls légers. Coudes hauts. Réveille l’arrière d’épaule avant le bench.",
+      en: "Light face pulls. Elbows high. Wake the rear delts before bench.",
+      zh: "轻做面拉。手肘抬高。卧推前把后肩唤醒。",
+      py: "qīng zuò miàn lā. shǒu zhǒu tái gāo. wò tuī qián bǎ hòu jiān huàn xǐng.",
+    },
+  },
+  "ua-ramp": {
+    name: { fr: "Montée bench", en: "Bench ramp", zh: "卧推热身组", py: "wò tuī rè shēn zǔ" },
+    dose: { fr: "3 séries", en: "3 sets", zh: "3 组", py: "3 zǔ" },
+    cue: {
+      fr: "Barre × 8, ~50 % × 5, ~70 % × 3. Jamais à l’échec. Puis la première série de travail.",
+      en: "Empty bar × 8, ~50% × 5, ~70% × 3. Never to failure. Then the first work set.",
+      zh: "空杆 8 次，约 50% 做 5 次，约 70% 做 3 次。不要力竭。然后开始正式组。",
+      py: "kōng gān 8 cì, yuē 50% zuò 5 cì, yuē 70% zuò 3 cì. bú yào lì jié.",
+    },
+  },
+  "la-pulse": {
+    name: { fr: "Cardio facile", en: "Easy cardio", zh: "轻松有氧", py: "qīng sōng yǒu yǎng" },
+    dose: { fr: "4 min", en: "4 min", zh: "4 分钟", py: "4 fēn zhōng" },
+    cue: {
+      fr: "Marche ou vélo. Hanches et genoux se mettent en route, sans fatigue.",
+      en: "Walk or bike. Get the hips and knees moving, without fatigue.",
+      zh: "走路或骑车。把髋和膝盖活动开，不要累。",
+      py: "zǒu lù huò qí chē. bǎ kuān hé xī gài huó dòng kāi, bú yào lèi.",
+    },
+  },
+  "la-hips": {
+    name: { fr: "Hanches et dos", en: "Hips and back", zh: "髋和背", py: "kuān hé bèi" },
+    dose: { fr: "1–2 min", en: "1–2 min", zh: "1 到 2 分钟", py: "1 dào 2 fēn zhōng" },
+    cue: {
+      fr: "90/90 hanches, puis chat-chameau. Bassin mobile, dos sans douleur.",
+      en: "90/90 hip switches, then cat-camel. Hips moving, no pain in the back.",
+      zh: "90/90 转髋，再做猫牛。髋要活动，腰不能疼。",
+      py: "90/90 zhuǎn kuān, zài zuò māo niú. kuān yào huó dòng, yāo bù néng téng.",
+    },
+  },
+  "la-glutes": {
+    name: { fr: "Fessiers", en: "Glutes", zh: "臀部", py: "tún bù" },
+    dose: { fr: "2 × 10", en: "2 × 10", zh: "2 × 10", py: "2 × 10" },
+    cue: {
+      fr: "Pont fessier au sol. Pause 1 s en haut. Réveille les hanches avant le squat.",
+      en: "Glute bridge on the floor. Pause 1 s at the top. Wake the hips before squatting.",
+      zh: "仰卧臀桥。顶部停 1 秒。深蹲前把髋唤醒。",
+      py: "yǎng wò tún qiáo. dǐng bù tíng 1 miǎo. shēn dūn qián bǎ kuān huàn xǐng.",
+    },
+  },
+  "la-pattern": {
+    name: { fr: "Squat au poids du corps", en: "Bodyweight squat", zh: "徒手深蹲", py: "tú shǒu shēn dūn" },
+    dose: { fr: "2 × 8", en: "2 × 8", zh: "2 × 8", py: "2 × 8" },
+    cue: {
+      fr: "Lent, genoux dans l’axe, profondeur confortable. Pas de charge.",
+      en: "Slow, knees in line, comfortable depth. No load.",
+      zh: "慢做，膝盖对准脚尖，深度舒服即可。不要负重。",
+      py: "màn zuò, xī gài duì zhǔn jiǎo jiān, shēn dù shū fu. bú yào fù zhòng.",
+    },
+  },
+  "la-ramp": {
+    name: { fr: "Montée squat", en: "Squat ramp", zh: "深蹲热身组", py: "shēn dūn rè shēn zǔ" },
+    dose: { fr: "3 séries", en: "3 sets", zh: "3 组", py: "3 zǔ" },
+    cue: {
+      fr: "Barre × 8, ~50 % × 5, ~70 % × 3. 1–3 reps en réserve. Puis la première série de travail.",
+      en: "Empty bar × 8, ~50% × 5, ~70% × 3. Leave 1–3 reps in reserve. Then the first work set.",
+      zh: "空杆 8 次，约 50% 做 5 次，约 70% 做 3 次。留 1 到 3 次余力。然后开始正式组。",
+      py: "kōng gān 8 cì, yuē 50% zuò 5 cì, yuē 70% zuò 3 cì. liú 1 dào 3 cì yú lì.",
+    },
+  },
+  "ub-pulse": {
+    name: { fr: "Cardio facile", en: "Easy cardio", zh: "轻松有氧", py: "qīng sōng yǒu yǎng" },
+    dose: { fr: "4 min", en: "4 min", zh: "4 分钟", py: "4 fēn zhōng" },
+    cue: {
+      fr: "Vélo ou rameur. Épaules relâchées, pas de charge encore.",
+      en: "Bike or rower. Shoulders relaxed. No lifting yet.",
+      zh: "单车或划船机。肩膀放松，先不要加重量。",
+      py: "dān chē huò huá chuán jī. jiān bǎng fàng sōng, xiān bú yào jiā zhòng liàng.",
+    },
+  },
+  "ub-slides": {
+    name: { fr: "Wall slides", en: "Wall slides", zh: "靠墙滑臂", py: "kào qiáng huá bì" },
+    dose: { fr: "2 × 8", en: "2 × 8", zh: "2 × 8", py: "2 × 8" },
+    cue: {
+      fr: "Dos au mur, avant-bras qui glissent vers le haut. Ouvre les épaules pour le développé militaire.",
+      en: "Back to the wall, forearms slide up. Open the shoulders for overhead press.",
+      zh: "背靠墙，小臂向上滑。为过头推举把肩膀打开。",
+      py: "bèi kào qiáng, xiǎo bì xiàng shàng huá. wèi guò tóu tuī jǔ bǎ jiān bǎng dǎ kāi.",
+    },
+  },
+  "ub-cuff": {
+    name: { fr: "Rotation externe", en: "External rotation", zh: "肩外旋", py: "jiān wài xuán" },
+    dose: { fr: "2 × 12 / côté", en: "2 × 12 / side", zh: "每侧 2 × 12", py: "měi cè 2 × 12" },
+    cue: {
+      fr: "Élastique, coude collé au corps. Léger. Prépare la coiffe avant de pousser au-dessus de la tête.",
+      en: "Band, elbow tucked. Light. Prep the cuff before pressing overhead.",
+      zh: "弹力带，手肘贴身。要轻。过头推之前把肩袖准备好。",
+      py: "tán lì dài, shǒu zhǒu tiē shēn. yào qīng. guò tóu tuī zhī qián bǎ jiān xiù zhǔn bèi hǎo.",
+    },
+  },
+  "ub-rear": {
+    name: { fr: "Y raises", en: "Y raises", zh: "Y 字平举", py: "Y zì píng jǔ" },
+    dose: { fr: "2 × 10", en: "2 × 10", zh: "2 × 10", py: "2 × 10" },
+    cue: {
+      fr: "Haltères très légers, bras en Y. Contrôle. Équilibre le développé.",
+      en: "Very light dumbbells, arms in a Y. Controlled. Balances the press.",
+      zh: "很轻的哑铃，手臂成 Y。控制着做。平衡推的动作。",
+      py: "hěn qīng de yǎ líng, shǒu bì chéng Y. kòng zhì zhe zuò.",
+    },
+  },
+  "ub-ramp": {
+    name: { fr: "Montée développé militaire", en: "OHP ramp", zh: "推举热身组", py: "tuī jǔ rè shēn zǔ" },
+    dose: { fr: "3 séries", en: "3 sets", zh: "3 组", py: "3 zǔ" },
+    cue: {
+      fr: "Barre × 8, ~50 % × 5, ~70 % × 3. Fessiers serrés, pas de cambrure. Puis la première série de travail.",
+      en: "Empty bar × 8, ~50% × 5, ~70% × 3. Glutes tight, no over-arching. Then the first work set.",
+      zh: "空杆 8 次，约 50% 做 5 次，约 70% 做 3 次。夹紧臀部，腰不要后仰。然后开始正式组。",
+      py: "kōng gān 8 cì, yuē 50% zuò 5 cì, yuē 70% zuò 3 cì. jiā jǐn tún bù, yāo bú yào hòu yǎng.",
+    },
+  },
+  "lb-pulse": {
+    name: { fr: "Cardio facile", en: "Easy cardio", zh: "轻松有氧", py: "qīng sōng yǒu yǎng" },
+    dose: { fr: "4 min", en: "4 min", zh: "4 分钟", py: "4 fēn zhōng" },
+    cue: {
+      fr: "Marche. Réchauffe hanches, ischios et bas du dos avant le deadlift.",
+      en: "Walk. Warm the hips, hamstrings, and lower back before deadlifting.",
+      zh: "走路。硬拉前把髋、腘绳和腰活动开。",
+      py: "zǒu lù. yìng lā qián bǎ kuān, guó shéng hé yāo huó dòng kāi.",
+    },
+  },
+  "lb-hinge": {
+    name: { fr: "Charnière de hanche", en: "Hip hinge", zh: "髋铰链", py: "kuān jiǎo liàn" },
+    dose: { fr: "2 × 8", en: "2 × 8", zh: "2 × 8", py: "2 × 8" },
+    cue: {
+      fr: "Bâton ou barre vide contre le dos. Hanche en arrière, dos plat. Le schéma du deadlift, sans charge.",
+      en: "Stick or empty bar along the back. Hips back, flat back. The deadlift pattern, unloaded.",
+      zh: "棍子或空杆贴背。髋往后坐，背保持平。这是硬拉的模式，不要负重。",
+      py: "gùn zi huò kōng gān tiē bèi. kuān wǎng hòu zuò, bèi bǎo chí píng.",
+    },
+  },
+  "lb-glutes": {
+    name: { fr: "Fessiers", en: "Glutes", zh: "臀部", py: "tún bù" },
+    dose: { fr: "2 × 10", en: "2 × 10", zh: "2 × 10", py: "2 × 10" },
+    cue: {
+      fr: "Pont fessier. Pause 1 s en haut. Les hanches poussent, pas le bas du dos.",
+      en: "Glute bridge. Pause 1 s at the top. Hips drive, not the lower back.",
+      zh: "臀桥。顶部停 1 秒。用髋发力，不要用腰。",
+      py: "tún qiáo. dǐng bù tíng 1 miǎo. yòng kuān fā lì, bú yào yòng yāo.",
+    },
+  },
+  "lb-adductor": {
+    name: { fr: "Adducteurs", en: "Adductors", zh: "内收肌", py: "nèi shōu jī" },
+    dose: { fr: "1 × 20 s / côté", en: "1 × 20 s / side", zh: "每侧 1 × 20 秒", py: "měi cè 1 × 20 miǎo" },
+    cue: {
+      fr: "Copenhagen court (genou sur le banc) ou squeeze ballon. Léger. Réveille l’intérieur de cuisse.",
+      en: "Short Copenhagen (knee on the bench) or a ball squeeze. Light. Wake the inner thigh.",
+      zh: "短哥本哈根（膝盖撑凳）或夹球。要轻。把大腿内侧唤醒。",
+      py: "duǎn gē běn hā gēn (xī gài chēng dèng) huò jiā qiú. yào qīng.",
+    },
+  },
+  "lb-ramp": {
+    name: { fr: "Montée deadlift", en: "Deadlift ramp", zh: "硬拉热身组", py: "yìng lā rè shēn zǔ" },
+    dose: { fr: "2 séries", en: "2 sets", zh: "2 组", py: "2 zǔ" },
+    cue: {
+      fr: "~40 % × 5, ~60 % × 3. Technique propre. Jamais à l’échec. Puis la première série de travail.",
+      en: "~40% × 5, ~60% × 3. Clean technique. Never to failure. Then the first work set.",
+      zh: "约 40% 做 5 次，约 60% 做 3 次。动作要标准。不要力竭。然后开始正式组。",
+      py: "yuē 40% zuò 5 cì, yuē 60% zuò 3 cì. dòng zuò yào biāo zhǔn. bú yào lì jié.",
+    },
+  },
+};
+
+export function warmupCopy(locale: Locale, id: string) {
+  const row = WARMUPS[id];
+  if (!row) return { name: id, dose: "", cue: "" };
+  return {
+    name: t(locale, row.name),
+    dose: t(locale, row.dose),
+    cue: t(locale, row.cue),
+  };
+}
+
 export const TEMPLATES_I18N: Record<string, { name: Line; focus: Line }> = {
   "upper-a": {
     name: copy.upperA,

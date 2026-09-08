@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { emptySets, templateById } from "@/lib/workouts";
+import { emptySets, templateById, warmupFor } from "@/lib/workouts";
 import { formatDay, localDateKey, uid } from "@/lib/stats";
 import { useTracker } from "@/hooks/useTracker";
 import { useRestTimer } from "@/hooks/useRestTimer";
@@ -12,6 +12,7 @@ import {
   exerciseName,
   exerciseNotes,
   templateFocus,
+  warmupCopy,
 } from "@/lib/i18n/content";
 import { TEMPLATES_I18N } from "@/lib/i18n/content";
 import { BCP47, t, type Text } from "@/lib/i18n";
@@ -38,6 +39,7 @@ function toLog(
     focus,
     completed: false,
     analysis: null,
+    warmupDone: [],
     exercises: exercises.map((exercise) => {
       const last = lastByName.get(exercise.name);
       return {
@@ -68,6 +70,7 @@ function stripDifficulty(session: SessionLog): SessionLog {
   return {
     ...session,
     analysis: session.analysis ?? null,
+    warmupDone: session.warmupDone ?? [],
     exercises: session.exercises.map((exercise) => ({
       name: exercise.name,
       sets: exercise.sets.map((set) => ({
@@ -205,6 +208,15 @@ export function SessionBoard() {
     });
   }
 
+  function toggleWarmup(id: string) {
+    if (!log) return;
+    const done = log.warmupDone ?? [];
+    setLog({
+      ...log,
+      warmupDone: done.includes(id) ? done.filter((item) => item !== id) : [...done, id],
+    });
+  }
+
   function reopenSession() {
     if (!log) return;
     applyLog({ ...log, completed: false, analysis: null });
@@ -228,6 +240,10 @@ export function SessionBoard() {
     setReviewError(null);
   }
 
+  const warmupSteps = log ? warmupFor(log.focus) : [];
+  const warmupDoneCount = warmupSteps.filter((step) =>
+    (log?.warmupDone ?? []).includes(step.id),
+  ).length;
   const todayCount = state.sessions.filter((session) => session.date === localDateKey()).length;
   const templates = [
     ["upper-a", "upperA"],
@@ -293,6 +309,75 @@ export function SessionBoard() {
               </p>
             </div>
           </div>
+          {warmupSteps.length > 0 && (
+            <div className="mb-5 rounded-2xl bg-tile/50 p-3 sm:p-4">
+              <div className="mb-2 flex items-end justify-between gap-2">
+                <div className="min-w-0">
+                  <T
+                    text={msg(locale, "warmupTitle")}
+                    as="p"
+                    className="stamp text-[11px] text-ink-soft normal-case"
+                  />
+                  <T
+                    text={msg(locale, "warmupLead")}
+                    as="p"
+                    className="mt-1 text-xs leading-5 text-ink-soft"
+                  />
+                </div>
+                <span className="stamp shrink-0 text-[10px] text-ink-soft">
+                  {warmupDoneCount}/{warmupSteps.length}
+                </span>
+              </div>
+              <ul className="space-y-1.5">
+                {warmupSteps.map((step) => {
+                  const stepCopy = warmupCopy(locale, step.id);
+                  const on = (log.warmupDone ?? []).includes(step.id);
+                  return (
+                    <li key={step.id}>
+                      <button
+                        type="button"
+                        aria-pressed={on}
+                        onClick={() => toggleWarmup(step.id)}
+                        className={`flex w-full min-h-11 items-start gap-2 rounded-xl px-2 py-2 text-left text-sm transition ${
+                          on ? "bg-sesame/20" : "hover:bg-white/70"
+                        }`}
+                      >
+                        <span
+                          className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-sm border ${
+                            on
+                              ? "border-chili bg-chili text-[10px] text-chalk"
+                              : "border-ink/25"
+                          }`}
+                        >
+                          {on ? "✓" : ""}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="flex items-baseline justify-between gap-2">
+                            <T text={stepCopy.name} as="span" className="font-medium leading-5" />
+                            <T
+                              text={stepCopy.dose}
+                              as="span"
+                              className="shrink-0 font-[family-name:var(--font-data)] text-[11px] text-ink-soft"
+                            />
+                          </span>
+                          <T
+                            text={stepCopy.cue}
+                            as="span"
+                            className="mt-0.5 block text-[11px] leading-5 text-ink-soft"
+                          />
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+          <T
+            text={msg(locale, "warmupWork")}
+            as="p"
+            className="mb-3 stamp text-[11px] text-ink-soft normal-case"
+          />
           <ol className="space-y-5">
             {log.exercises.map((exercise, exIndex) => {
               const meta = notes[exIndex];
