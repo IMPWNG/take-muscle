@@ -2,7 +2,7 @@ import type { Locale } from "./i18n";
 import { plain, type Line } from "./i18n";
 import { exerciseName } from "./i18n/content";
 import type { Effort, LiftSet, SessionAdjustment, SessionAnalysis, SessionLog } from "./types";
-import { emptySets, templateById } from "./workouts";
+import { emptySets, TEMPLATES, templateById } from "./workouts";
 
 function num(value: string) {
   const parsed = Number(String(value).replace(",", "."));
@@ -22,10 +22,16 @@ function parseRange(reps: string | undefined) {
   return { min: Number(match[1]), max: Number(match[2]), timed };
 }
 
+function hasLoad(set: LiftSet) {
+  return num(set.kg) !== null || num(set.reps) !== null;
+}
+
 function usedSets(sets: LiftSet[]) {
+  const filled = sets.filter((set) => set.done || hasLoad(set));
+  if (filled.length === sets.length) return sets;
   const done = sets.filter((set) => set.done);
   if (done.length) return done;
-  return sets.filter((set) => num(set.kg) !== null || num(set.reps) !== null);
+  return filled;
 }
 
 function isNeck(name: string) {
@@ -36,10 +42,9 @@ function isConservative(name: string) {
   return /squat|deadlift|rdl|romanian|hip thrust|rowing|row|soulevé|硬拉|深蹲|划船|臀推/i.test(name);
 }
 
-function bumpKg(kg: number, direction: 1 | -1, conservative: boolean) {
+function bumpKg(kg: number, direction: 1 | -1) {
   const step = kg >= 20 ? 2.5 : kg >= 10 ? 2 : 1;
-  const extra = !conservative && direction > 0 && kg >= 40 ? step : 0;
-  return Math.max(0, kg + direction * (step + extra));
+  return Math.max(0, kg + direction * step);
 }
 
 function fmtKg(locale: Locale, kg: number) {
@@ -130,7 +135,7 @@ function adjustExercise(
     };
   }
 
-  if (now.done > 0 && now.done < now.total) {
+  if (now.used.length > 0 && now.used.length < now.total) {
     return {
       exercise: label(locale, name),
       change: "keep",
@@ -141,10 +146,10 @@ function adjustExercise(
         py: "bǎo chí",
       }),
       reason: txt(locale, {
-        fr: `${now.done}/${now.total} séries faites. Termine toutes les séries avant de monter.`,
-        en: `${now.done}/${now.total} sets done. Finish every set before adding load.`,
-        zh: `做了 ${now.done}/${now.total} 组。先做满所有组，再加重量。`,
-        py: `zuò le ${now.done}/${now.total} zǔ. xiān zuò mǎn suǒ yǒu zǔ, zài jiā zhòng liàng.`,
+        fr: `${now.used.length}/${now.total} séries notées. Note les séries manquantes avant de monter.`,
+        en: `${now.used.length}/${now.total} sets logged. Log the missing sets before adding load.`,
+        zh: `记了 ${now.used.length}/${now.total} 组。先把缺的组补上，再加重量。`,
+        py: `jì le ${now.used.length}/${now.total} zǔ. xiān bǔ shàng, zài jiā zhòng liàng.`,
       }),
     };
   }
@@ -176,7 +181,7 @@ function adjustExercise(
   const feel = lastFeel(current);
 
   if (kg !== null && prevKg !== null && kg < prevKg - 0.4) {
-    const next = bumpKg(kg, -1, conservative);
+    const next = bumpKg(kg, -1);
     return {
       exercise: label(locale, name),
       change: "drop_weight",
@@ -191,7 +196,7 @@ function adjustExercise(
   }
 
   if (effort === "hard" && kg !== null && range && minReps !== null && minReps < range.min) {
-    const next = bumpKg(kg, -1, conservative);
+    const next = bumpKg(kg, -1);
     return {
       exercise: label(locale, name),
       change: "drop_weight",
@@ -207,6 +212,19 @@ function adjustExercise(
 
   if (range?.timed && minReps !== null && maxReps !== null) {
     if (minReps >= range.max) {
+      if (effort === "hard" || feel === "hard") {
+        return {
+          exercise: label(locale, name),
+          change: "keep",
+          amount: txt(locale, { fr: "identique", en: "same", zh: "保持", py: "bǎo chí" }),
+          reason: txt(locale, {
+            fr: `Haut de fourchette (${minReps} s) mais tampon dur. Même temps, sans aller à l’échec.`,
+            en: `Top of the range (${minReps} s) but stamped hard. Same time, not to failure.`,
+            zh: `时间到了上限（${minReps} 秒），但标记为吃力。时间先不变。`,
+            py: `shí jiān dào le shàng xiàn, dàn biāo jì wéi chī lì. xiān bú biàn.`,
+          }),
+        };
+      }
       return {
         exercise: label(locale, name),
         change: "add_reps",
@@ -259,7 +277,7 @@ function adjustExercise(
         }),
       };
     }
-    const next = bumpKg(kg, 1, conservative);
+    const next = bumpKg(kg, 1);
     return {
       exercise: label(locale, name),
       change: "add_weight",
@@ -441,23 +459,45 @@ export function applyChangeToLoad(
   change: SessionAdjustment["change"],
   kg: string,
   reps: string,
-  conservative: boolean,
+  timed = false,
 ) {
   const k = num(kg);
   const r = num(reps);
   if (change === "add_weight" && k !== null) {
-    return { kg: fmtInputKg(bumpKg(k, 1, conservative)), reps };
+    return { kg: fmtInputKg(bumpKg(k, 1)), reps };
   }
   if (change === "drop_weight" && k !== null) {
-    return { kg: fmtInputKg(bumpKg(k, -1, conservative)), reps };
+    return { kg: fmtInputKg(bumpKg(k, -1)), reps };
   }
   if (change === "add_reps" && r !== null) {
-    return { kg, reps: String(r + 1) };
+    return { kg, reps: String(r + (timed ? 5 : 1)) };
   }
   if (change === "drop_reps" && r !== null) {
-    return { kg, reps: String(Math.max(1, r - 1)) };
+    const step = timed ? 5 : 1;
+    return { kg, reps: String(Math.max(timed ? 5 : 1, r - step)) };
   }
   return { kg, reps };
+}
+
+function rangeForExercise(name: string) {
+  for (const template of TEMPLATES) {
+    const meta = template.exercises.find((item) => item.name === name);
+    if (meta) return parseRange(meta.reps);
+  }
+  return null;
+}
+
+export function prepareForAnalysis(session: SessionLog): SessionLog {
+  return {
+    ...session,
+    exercises: session.exercises.map((exercise) => ({
+      ...exercise,
+      sets: exercise.sets.map((set) => ({
+        ...set,
+        done: set.done || hasLoad(set),
+      })),
+    })),
+  };
 }
 
 export function seedSetsFromPrevious(
@@ -468,14 +508,12 @@ export function seedSetsFromPrevious(
 ) {
   const last = previous?.exercises.find((exercise) => exercise.name === name);
   const adj = adjustmentFor(previous, name, locale);
-  const conservative = isConservative(name);
+  const timed = rangeForExercise(name)?.timed ?? false;
   return emptySets(setCount).map((set, index) => {
     const src = last?.sets[index] ?? last?.sets.at(-1);
     const kg = src?.kg ?? "";
     const reps = src?.reps ?? "";
-    const next = adj
-      ? applyChangeToLoad(adj.change, kg, reps, conservative)
-      : { kg, reps };
+    const next = adj ? applyChangeToLoad(adj.change, kg, reps, timed) : { kg, reps };
     return { ...set, ...next };
   });
 }

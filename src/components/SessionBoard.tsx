@@ -19,6 +19,7 @@ import { BCP47, t, type Locale, type Text } from "@/lib/i18n";
 import {
   adjustmentFor,
   analyzeSession,
+  prepareForAnalysis,
   previousCompleted,
   seedSetsFromPrevious,
 } from "@/lib/analyze";
@@ -295,11 +296,11 @@ export function SessionBoard() {
 
   function finishSession() {
     if (!log) return;
+    const prepared = prepareForAnalysis({ ...log, completed: true });
     applyLog({
-      ...log,
-      completed: true,
+      ...prepared,
       analysis: analyzeSession(
-        { ...log, completed: true },
+        prepared,
         previousCompleted(state.sessions, log.focus, log.id),
         locale,
       ),
