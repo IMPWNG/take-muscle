@@ -76,6 +76,7 @@ export function sessionReviewPayload(session: SessionLog, previous: SessionLog |
           kg: set.kg,
           reps: set.reps,
           done: set.done,
+          difficulty: set.difficulty,
         })),
       })),
     },
@@ -84,7 +85,11 @@ export function sessionReviewPayload(session: SessionLog, previous: SessionLog |
           date: previous.date,
           exercises: previous.exercises.map((exercise) => ({
             name: exercise.name,
-            sets: exercise.sets.map((set) => ({ kg: set.kg, reps: set.reps })),
+            sets: exercise.sets.map((set) => ({
+              kg: set.kg,
+              reps: set.reps,
+              difficulty: set.difficulty,
+            })),
           })),
         }
       : null,

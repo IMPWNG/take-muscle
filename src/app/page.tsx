@@ -36,8 +36,8 @@ export default function HomePage() {
     : null;
 
   return (
-    <div className="space-y-6 pt-2 sm:space-y-8 sm:pt-4">
-      <header className="flex flex-col gap-5 sm:gap-6 lg:flex-row lg:items-end lg:justify-between">
+    <div className="space-y-5 pt-1 sm:space-y-8 sm:pt-4">
+      <header className="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="stamp text-[11px] text-ink-soft">{formatDay(localDateKey(), BCP47[locale])}</p>
           <T
@@ -48,24 +48,24 @@ export default function HomePage() {
           <T
             text={homeSub(locale, currentBmi(current, state.profile.heightCm).toFixed(1))}
             as="p"
-            className="mt-3 max-w-lg text-sm leading-6 text-ink-soft"
+            className="mt-2 max-w-lg text-sm leading-5 text-ink-soft sm:mt-3 sm:leading-6"
           />
         </div>
         <PlateProgress start={state.profile.startKg} current={current} target={state.profile.targetKg} />
       </header>
 
-      <section className="grid gap-3 sm:grid-cols-3">
+      <section className="grid grid-cols-3 gap-2 sm:gap-3">
         {weeks.map((week) => (
-          <article key={week.start} className="rounded-2xl bg-chalk/80 p-4">
+          <article key={week.start} className="rounded-2xl bg-chalk/80 p-2.5 sm:p-4">
             {week.current ? (
-              <T text={msg(locale, "thisWeek")} as="p" className="stamp text-[10px] text-ink-soft normal-case" />
+              <T text={msg(locale, "thisWeek")} as="p" className="stamp text-[9px] text-ink-soft normal-case sm:text-[10px]" />
             ) : (
-              <p className="stamp text-[10px] text-ink-soft">{week.range}</p>
+              <p className="stamp text-[9px] text-ink-soft sm:text-[10px]">{week.range}</p>
             )}
-            <p className="mt-1 font-[family-name:var(--font-data)] text-2xl">
+            <p className="mt-1 font-[family-name:var(--font-data)] text-lg leading-none sm:text-2xl">
               {week.average ? `${week.average.toFixed(2)} kg` : "—"}
             </p>
-            <p className="text-xs text-ink-soft">
+            <p className="mt-1 text-[10px] leading-4 text-ink-soft sm:text-xs">
               {week.count} <TInlineWeek locale={locale} />
             </p>
           </article>
@@ -144,8 +144,8 @@ export default function HomePage() {
                 ] as const
               ).map(([food, use]) => (
                 <tr key={food} className="border-t border-ink/8 first:border-0">
-                  <T text={msg(locale, food)} as="th" className="px-4 py-3 text-left font-medium" />
-                  <T text={msg(locale, use)} as="td" className="px-4 py-3 text-ink-soft" />
+                  <T text={msg(locale, food)} as="th" className="px-3 py-2.5 text-left font-medium sm:px-4 sm:py-3" />
+                  <T text={msg(locale, use)} as="td" className="px-3 py-2.5 text-ink-soft sm:px-4 sm:py-3" />
                 </tr>
               ))}
             </tbody>

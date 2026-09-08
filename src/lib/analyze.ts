@@ -1,8 +1,8 @@
 import type { Locale } from "./i18n";
 import { plain, type Line } from "./i18n";
 import { exerciseName } from "./i18n/content";
-import type { LiftSet, SessionAdjustment, SessionAnalysis, SessionLog } from "./types";
-import { templateById } from "./workouts";
+import type { Effort, LiftSet, SessionAdjustment, SessionAnalysis, SessionLog } from "./types";
+import { emptySets, templateById } from "./workouts";
 
 function num(value: string) {
   const parsed = Number(String(value).replace(",", "."));
@@ -80,6 +80,26 @@ function stats(sets: LiftSet[]) {
   };
 }
 
+function effortOf(sets: LiftSet[]): Effort | null {
+  const stamps = usedSets(sets)
+    .map((set) => set.difficulty)
+    .filter((value): value is Effort => value !== null);
+  if (stamps.length === 0) return null;
+  const hard = stamps.filter((value) => value === "hard").length;
+  const easy = stamps.filter((value) => value === "easy").length;
+  if (hard * 2 >= stamps.length) return "hard";
+  if (easy * 2 >= stamps.length && hard === 0) return "easy";
+  return "normal";
+}
+
+function lastFeel(sets: LiftSet[]): Effort | null {
+  const used = usedSets(sets);
+  for (let i = used.length - 1; i >= 0; i -= 1) {
+    if (used[i].difficulty) return used[i].difficulty;
+  }
+  return effortOf(sets);
+}
+
 function adjustExercise(
   locale: Locale,
   name: string,
@@ -152,6 +172,8 @@ function adjustExercise(
   const kg = now.avgKg;
   const minReps = now.minReps;
   const maxReps = now.maxReps;
+  const effort = effortOf(current);
+  const feel = lastFeel(current);
 
   if (kg !== null && prevKg !== null && kg < prevKg - 0.4) {
     const next = bumpKg(kg, -1, conservative);
@@ -164,6 +186,21 @@ function adjustExercise(
         en: `Load dropped (${fmtKg(locale, prevKg)} → ${fmtKg(locale, kg)} kg). Step back one increment, leave 1–3 reps in reserve.`,
         zh: `重量下降（${fmtKg(locale, prevKg)} → ${fmtKg(locale, kg)} 公斤）。先减一档，每组留 1 到 3 次余力。`,
         py: `zhòng liàng xià jiàng. xiān jiǎn yì dǎng, měi zǔ liú 1 dào 3 cì yú lì.`,
+      }),
+    };
+  }
+
+  if (effort === "hard" && kg !== null && range && minReps !== null && minReps < range.min) {
+    const next = bumpKg(kg, -1, conservative);
+    return {
+      exercise: label(locale, name),
+      change: "drop_weight",
+      amount: amountWeight(locale, kg, next),
+      reason: txt(locale, {
+        fr: `Tampon dur et reps sous ${range.min} (min ${minReps}). Recule à ${fmtKg(locale, next)} kg.`,
+        en: `Stamped hard and reps under ${range.min} (low ${minReps}). Drop to ${fmtKg(locale, next)} kg.`,
+        zh: `标记为吃力，次数低于 ${range.min}（最低 ${minReps}）。减到 ${fmtKg(locale, next)} 公斤。`,
+        py: `biāo jì wéi chī lì, cì shù piān dī. xiān jiǎn zhòng liàng.`,
       }),
     };
   }
@@ -209,16 +246,41 @@ function adjustExercise(
   }
 
   if (range && minReps !== null && maxReps !== null && minReps >= range.max && kg !== null) {
+    if (effort === "hard" || feel === "hard") {
+      return {
+        exercise: label(locale, name),
+        change: "keep",
+        amount: txt(locale, { fr: "identique", en: "same", zh: "保持", py: "bǎo chí" }),
+        reason: txt(locale, {
+          fr: `Haut de fourchette (${minReps} reps) mais tampon dur. Même charge, 1–3 reps en réserve.`,
+          en: `Top of the range (${minReps} reps) but stamped hard. Same load, leave 1–3 reps in reserve.`,
+          zh: `次数到了上限（${minReps} 次），但标记为吃力。重量不变，留 1 到 3 次余力。`,
+          py: `cì shù dào le shàng xiàn, dàn biāo jì wéi chī lì. zhòng liàng bú biàn.`,
+        }),
+      };
+    }
     const next = bumpKg(kg, 1, conservative);
     return {
       exercise: label(locale, name),
       change: "add_weight",
       amount: amountWeight(locale, kg, next),
       reason: txt(locale, {
-        fr: `Toutes les séries à ${minReps} reps (haut de ${range.min}–${range.max}). Prochaine fois : ${fmtKg(locale, next)} kg, 1–3 reps en réserve.`,
-        en: `Every set hit ${minReps} reps (top of ${range.min}–${range.max}). Next time: ${fmtKg(locale, next)} kg, leave 1–3 reps in reserve.`,
-        zh: `每组都做满 ${minReps} 次（区间 ${range.min} 到 ${range.max} 的上限）。下次用 ${fmtKg(locale, next)} 公斤，留 1 到 3 次余力。`,
-        py: `měi zǔ dōu zuò mǎn ${minReps} cì. xià cì yòng ${fmtKg(locale, next)} gōng jīn, liú 1 dào 3 cì yú lì.`,
+        fr:
+          effort === "easy"
+            ? `Toutes les séries à ${minReps} reps, ressenti facile. Prochaine fois : ${fmtKg(locale, next)} kg, 1–3 reps en réserve.`
+            : `Toutes les séries à ${minReps} reps (haut de ${range.min}–${range.max}). Prochaine fois : ${fmtKg(locale, next)} kg, 1–3 reps en réserve.`,
+        en:
+          effort === "easy"
+            ? `Every set hit ${minReps} reps and felt easy. Next time: ${fmtKg(locale, next)} kg, leave 1–3 reps in reserve.`
+            : `Every set hit ${minReps} reps (top of ${range.min}–${range.max}). Next time: ${fmtKg(locale, next)} kg, leave 1–3 reps in reserve.`,
+        zh:
+          effort === "easy"
+            ? `每组都做满 ${minReps} 次，而且感觉轻松。下次用 ${fmtKg(locale, next)} 公斤，留 1 到 3 次余力。`
+            : `每组都做满 ${minReps} 次（区间 ${range.min} 到 ${range.max} 的上限）。下次用 ${fmtKg(locale, next)} 公斤，留 1 到 3 次余力。`,
+        py:
+          effort === "easy"
+            ? `měi zǔ dōu zuò mǎn ${minReps} cì, ér qiě gǎn jué qīng sōng. xià cì jiā zhòng liàng.`
+            : `měi zǔ dōu zuò mǎn ${minReps} cì. xià cì yòng ${fmtKg(locale, next)} gōng jīn.`,
       }),
     };
   }
@@ -229,9 +291,18 @@ function adjustExercise(
       change: "add_reps",
       amount: locale === "fr" ? "+1–2 reps" : locale === "en" ? "+1–2 reps" : "+1 到 2 次",
       reason: txt(locale, {
-        fr: `Reps encore dans ${range.min}–${range.max} (min ${minReps}). D’abord +1–2 reps, pas le poids.`,
-        en: `Reps still inside ${range.min}–${range.max} (low ${minReps}). Add 1–2 reps first, not load.`,
-        zh: `次数还在 ${range.min} 到 ${range.max}（最低 ${minReps}）。先加 1 到 2 次，不加重量。`,
+        fr:
+          effort === "easy"
+            ? `Ressenti facile, reps encore dans ${range.min}–${range.max} (min ${minReps}). D’abord +1–2 reps, pas le poids.`
+            : `Reps encore dans ${range.min}–${range.max} (min ${minReps}). D’abord +1–2 reps, pas le poids.`,
+        en:
+          effort === "easy"
+            ? `Felt easy, reps still inside ${range.min}–${range.max} (low ${minReps}). Add 1–2 reps first, not load.`
+            : `Reps still inside ${range.min}–${range.max} (low ${minReps}). Add 1–2 reps first, not load.`,
+        zh:
+          effort === "easy"
+            ? `感觉轻松，次数还在 ${range.min} 到 ${range.max}（最低 ${minReps}）。先加 1 到 2 次，不加重量。`
+            : `次数还在 ${range.min} 到 ${range.max}（最低 ${minReps}）。先加 1 到 2 次，不加重量。`,
         py: `cì shù hái zài qū jiān lǐ. xiān jiā 1 dào 2 cì, bù jiā zhòng liàng.`,
       }),
     };
@@ -314,16 +385,97 @@ export function analyzeSession(
   const prevByName = new Map((previous?.exercises ?? []).map((exercise) => [exercise.name, exercise.sets]));
   const adjustments = session.exercises.map((exercise) => {
     const meta = template?.exercises.find((item) => item.name === exercise.name);
-    return adjustExercise(
-      locale,
-      exercise.name,
-      exercise.sets,
-      prevByName.get(exercise.name),
-      parseRange(meta?.reps),
-    );
+    return {
+      ...adjustExercise(
+        locale,
+        exercise.name,
+        exercise.sets,
+        prevByName.get(exercise.name),
+        parseRange(meta?.reps),
+      ),
+      key: exercise.name,
+    };
   });
   return {
     summary: summarize(locale, session.name, adjustments),
     adjustments,
   };
+}
+
+export function previousCompleted(
+  sessions: SessionLog[],
+  templateId: string,
+  exceptId?: string,
+) {
+  return (
+    sessions.find(
+      (session) =>
+        session.focus === templateId &&
+        session.completed &&
+        session.id !== exceptId,
+    ) ?? null
+  );
+}
+
+export function adjustmentFor(
+  session: SessionLog | null | undefined,
+  name: string,
+  locale: Locale,
+) {
+  return (
+    session?.analysis?.adjustments.find(
+      (item) =>
+        item.key === name ||
+        item.exercise === name ||
+        item.exercise === label(locale, name),
+    ) ?? null
+  );
+}
+
+function fmtInputKg(kg: number) {
+  const rounded = Math.round(kg * 2) / 2;
+  return rounded % 1 === 0 ? String(rounded) : String(rounded);
+}
+
+export function applyChangeToLoad(
+  change: SessionAdjustment["change"],
+  kg: string,
+  reps: string,
+  conservative: boolean,
+) {
+  const k = num(kg);
+  const r = num(reps);
+  if (change === "add_weight" && k !== null) {
+    return { kg: fmtInputKg(bumpKg(k, 1, conservative)), reps };
+  }
+  if (change === "drop_weight" && k !== null) {
+    return { kg: fmtInputKg(bumpKg(k, -1, conservative)), reps };
+  }
+  if (change === "add_reps" && r !== null) {
+    return { kg, reps: String(r + 1) };
+  }
+  if (change === "drop_reps" && r !== null) {
+    return { kg, reps: String(Math.max(1, r - 1)) };
+  }
+  return { kg, reps };
+}
+
+export function seedSetsFromPrevious(
+  name: string,
+  setCount: number,
+  previous: SessionLog | null,
+  locale: Locale,
+) {
+  const last = previous?.exercises.find((exercise) => exercise.name === name);
+  const adj = adjustmentFor(previous, name, locale);
+  const conservative = isConservative(name);
+  return emptySets(setCount).map((set, index) => {
+    const src = last?.sets[index] ?? last?.sets.at(-1);
+    const kg = src?.kg ?? "";
+    const reps = src?.reps ?? "";
+    const next = adj
+      ? applyChangeToLoad(adj.change, kg, reps, conservative)
+      : { kg, reps };
+    return { ...set, ...next };
+  });
 }

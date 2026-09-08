@@ -16,7 +16,7 @@ export function CanteenTray({ date = localDateKey(), compact = false }) {
   const totals = totalsFor(todayIds(state, date));
 
   return (
-    <section className="tray rounded-[28px] p-4 sm:p-5">
+    <section className="tray rounded-[24px] p-3 sm:rounded-[28px] sm:p-5">
       <div className="mb-4 flex items-end justify-between gap-3">
         <div>
           <T text={msg(locale, "trayTitle")} as="p" className="stamp text-[11px] text-ink-soft normal-case" />

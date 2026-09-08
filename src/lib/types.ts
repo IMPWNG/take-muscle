@@ -55,10 +55,13 @@ export type WorkoutTemplate = {
   exercises: SessionExercise[];
 };
 
+export type Effort = "easy" | "normal" | "hard";
+
 export type LiftSet = {
   done: boolean;
   kg: string;
   reps: string;
+  difficulty: Effort | null;
 };
 
 export type SessionExerciseLog = {
@@ -67,6 +70,7 @@ export type SessionExerciseLog = {
 };
 
 export type SessionAdjustment = {
+  key?: string;
   exercise: string;
   change: "add_weight" | "drop_weight" | "add_reps" | "drop_reps" | "keep";
   amount: string;

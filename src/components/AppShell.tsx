@@ -44,10 +44,10 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div
-      className={`mx-auto flex min-h-full max-w-6xl flex-col px-4 pt-4 sm:px-6 sm:pt-6 lg:flex-row lg:gap-10 lg:px-8 lg:pb-10 ${
+      className={`mx-auto flex min-h-full max-w-6xl flex-col px-3 pt-3 sm:px-6 sm:pt-6 lg:flex-row lg:gap-10 lg:px-8 lg:pb-10 ${
         remaining > 0
-          ? "pb-[calc(9.75rem+env(safe-area-inset-bottom))]"
-          : "pb-[calc(5.75rem+env(safe-area-inset-bottom))]"
+          ? "pb-[calc(9.5rem+env(safe-area-inset-bottom))]"
+          : "pb-[calc(5.5rem+env(safe-area-inset-bottom))]"
       } ${localeClass}`}
     >
       <aside className="mb-8 hidden w-56 shrink-0 lg:block">
@@ -84,7 +84,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      <div className="mb-4 flex items-center justify-between gap-3 lg:hidden">
+      <div className="mb-3 flex items-center justify-between gap-3 lg:hidden">
         <Link href="/" className="min-w-0">
           <p className="stamp text-[10px] text-ink-soft">{goalStamp}</p>
           <p className="font-[family-name:var(--font-display)] text-2xl leading-none">Take Muscle</p>
@@ -99,14 +99,14 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <RestClock />
 
-      <nav className="fixed inset-x-3 bottom-[max(0.65rem,env(safe-area-inset-bottom))] z-20 grid grid-cols-4 gap-1 rounded-[28px] bg-rubber/95 p-1.5 text-chalk shadow-xl backdrop-blur lg:hidden">
+      <nav className="fixed inset-x-2 bottom-[max(0.5rem,env(safe-area-inset-bottom))] z-20 grid grid-cols-4 gap-1 rounded-[24px] bg-rubber/95 p-1 text-chalk shadow-xl backdrop-blur lg:hidden">
         {LINKS.map((link) => {
           const active = pathname === link.href;
           return (
             <Link
               key={link.href}
               href={link.href}
-              className={`grid min-h-12 place-items-center rounded-2xl px-1 text-center text-[12px] leading-tight ${
+              className={`grid min-h-12 place-items-center rounded-2xl px-1 text-center text-[11px] leading-tight ${
                 active ? "bg-sesame text-ink" : "text-chalk/85"
               }`}
             >

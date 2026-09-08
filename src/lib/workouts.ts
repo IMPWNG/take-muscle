@@ -300,5 +300,6 @@ export function emptySets(count: number) {
     done: false,
     kg: "",
     reps: "",
+    difficulty: null,
   }));
 }

@@ -1,4 +1,16 @@
-import type { SessionAnalysis, SessionLog } from "./types";
+import type { Effort, LiftSet, SessionAnalysis, SessionLog } from "./types";
+
+const EFFORTS = new Set<Effort>(["easy", "normal", "hard"]);
+
+function normalizeSet(set: LiftSet): LiftSet {
+  return {
+    done: Boolean(set.done),
+    kg: set.kg ?? "",
+    reps: set.reps ?? "",
+    difficulty:
+      set.difficulty && EFFORTS.has(set.difficulty) ? set.difficulty : null,
+  };
+}
 
 type StoredAnalysis = {
   summary?: unknown;
@@ -51,5 +63,9 @@ export function normalizeSession(session: SessionLog): SessionLog {
     ...session,
     analysis: session.analysis ?? null,
     warmupDone: Array.isArray(session.warmupDone) ? session.warmupDone : [],
+    exercises: (session.exercises ?? []).map((exercise) => ({
+      name: exercise.name,
+      sets: (exercise.sets ?? []).map((set) => normalizeSet(set)),
+    })),
   };
 }
