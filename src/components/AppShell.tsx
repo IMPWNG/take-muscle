@@ -15,7 +15,6 @@ import { msg } from "@/lib/i18n/copy";
 
 const LINKS = [
   { href: "/", label: "navHome", short: "navHomeShort" },
-  { href: "/nutrition", label: "navFood", short: "navFoodShort" },
   { href: "/entrainement", label: "navGym", short: "navGymShort" },
   { href: "/poids", label: "navWeight", short: "navWeightShort" },
 ] as const;
@@ -99,7 +98,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <RestClock />
 
-      <nav className="fixed inset-x-2 bottom-[max(0.5rem,env(safe-area-inset-bottom))] z-20 grid grid-cols-4 gap-1 rounded-[24px] bg-rubber/95 p-1 text-chalk shadow-xl backdrop-blur lg:hidden">
+      <nav className="fixed inset-x-2 bottom-[max(0.5rem,env(safe-area-inset-bottom))] z-20 grid grid-cols-3 gap-1 rounded-[24px] bg-rubber/95 p-1 text-chalk shadow-xl backdrop-blur lg:hidden">
         {LINKS.map((link) => {
           const active = pathname === link.href;
           return (

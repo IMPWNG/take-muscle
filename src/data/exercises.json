@@ -1,0 +1,954 @@
+[
+  {
+    "id": "0025",
+    "name": "barbell bench press",
+    "equipment": "barbell",
+    "bodyPart": "chest",
+    "gif": "videos/0025-EIeI8Vf.gif",
+    "image": "images/0025-EIeI8Vf.jpg",
+    "steps": {
+      "en": [
+        "Lie flat on a bench with your feet flat on the ground and your back pressed against the bench.",
+        "Grasp the barbell with an overhand grip slightly wider than shoulder-width apart.",
+        "Lift the barbell off the rack and hold it directly above your chest with your arms fully extended.",
+        "Lower the barbell slowly towards your chest, keeping your elbows tucked in."
+      ],
+      "fr": [
+        "Allonge-toi à plat sur un banc, les pieds à plat au sol et le dos plaqué contre le banc.",
+        "Saisis la barre avec une prise en pronation un peu plus large que la largeur des épaules.",
+        "Soulève la barre du rack et maintiens-la directement au-dessus de ta poitrine, les bras complètement tendus.",
+        "Abaisse lentement la barre vers ta poitrine, en gardant tes coudes serrés."
+      ],
+      "zh": [
+        "平躺在长凳上，双脚平放在地上，背部紧贴长凳。",
+        "正手握住杠铃，握距略宽于肩宽。",
+        "将杠铃从架子上提起，并将其直接放在胸部上方，双臂完全伸展。",
+        "将杠铃慢慢降低到胸部，保持肘部内收。"
+      ]
+    }
+  },
+  {
+    "id": "0652",
+    "name": "pull-up",
+    "equipment": "body weight",
+    "bodyPart": "back",
+    "gif": "videos/0652-lBDjFxJ.gif",
+    "image": "images/0652-lBDjFxJ.jpg",
+    "steps": {
+      "en": [
+        "Hang from a pull-up bar with your palms facing away from you and your arms fully extended.",
+        "Engage your core and squeeze your shoulder blades together.",
+        "Pull your body up towards the bar by bending your elbows and bringing your chest towards the bar.",
+        "Pause at the top of the movement, then slowly lower your body back down to the starting position."
+      ],
+      "fr": [
+        "Suspends-toi à une barre de traction, les paumes tournées vers l'extérieur et les bras complètement étendus.",
+        "Gaine ta sangle abdominale et resserre tes omoplates.",
+        "Tire ton corps vers le haut en direction de la barre en fléchissant tes coudes et en amenant ta poitrine vers la barre.",
+        "Marque une pause en haut du mouvement, puis abaisse lentement ton corps jusqu'à la position de départ."
+      ],
+      "zh": [
+        "悬挂在引体向上杆上，手掌背向自己，手臂完全伸展。",
+        "启动你的核心并将肩胛骨挤压在一起。",
+        "弯曲肘部并将胸部拉向杠铃杆，将身体向上拉向杠铃杆。",
+        "在动作的最高点暂停，然后慢慢降低身体回到起始位置。"
+      ]
+    }
+  },
+  {
+    "id": "0049",
+    "name": "barbell incline row",
+    "equipment": "barbell",
+    "bodyPart": "back",
+    "gif": "videos/0049-dmgMp3n.gif",
+    "image": "images/0049-dmgMp3n.jpg",
+    "steps": {
+      "en": [
+        "Set up an incline bench at a 45-degree angle.",
+        "Lie face down on the bench with your chest against the pad and your feet flat on the ground.",
+        "Grasp the barbell with an overhand grip, slightly wider than shoulder-width apart.",
+        "Keep your back straight and your core engaged."
+      ],
+      "fr": [
+        "Installe un banc incliné à un angle de 45 degrés.",
+        "Allonge-toi face vers le bas sur le banc, la poitrine contre le coussinet et les pieds à plat au sol.",
+        "Saisis la barre avec une prise en pronation, un peu plus large que la largeur des épaules.",
+        "Garde le dos droit et ta sangle abdominale gainée."
+      ],
+      "zh": [
+        "设置一个 45 度角的上斜凳。",
+        "脸朝下躺在长凳上，胸部靠在垫子上，双脚平放在地上。",
+        "正手握住杠铃，握距略宽于肩宽。",
+        "保持背部挺直，核心肌群参与。"
+      ]
+    }
+  },
+  {
+    "id": "0314",
+    "name": "dumbbell incline bench press",
+    "equipment": "dumbbell",
+    "bodyPart": "chest",
+    "gif": "videos/0314-ns0SIbU.gif",
+    "image": "images/0314-ns0SIbU.jpg",
+    "steps": {
+      "en": [
+        "Set up an incline bench at a 45-degree angle.",
+        "Sit on the bench with your feet flat on the ground and your back pressed firmly against the bench.",
+        "Hold a dumbbell in each hand, palms facing forward, and lift them to shoulder height.",
+        "Slowly lower the dumbbells to the sides of your chest, keeping your elbows at a 90-degree angle."
+      ],
+      "fr": [
+        "Installe un banc incliné à un angle de 45 degrés.",
+        "Assieds-toi sur le banc, les pieds à plat sur le sol et le dos pressé fermement contre le banc.",
+        "Tiens un haltère dans chaque main, les paumes tournées vers l'avant, et lève-les à hauteur des épaules.",
+        "Abaisse lentement les haltères vers les côtés de ta poitrine, en gardant tes coudes à un angle de 90 degrés."
+      ],
+      "zh": [
+        "设置一个 45 度角的上斜凳。",
+        "坐在长凳上，双脚平放在地上，背部紧贴长凳。",
+        "双手各握一个哑铃，掌心向前，将哑铃举至肩高。",
+        "慢慢地将哑铃降低到胸部两侧，保持肘部呈 90 度角。"
+      ]
+    }
+  },
+  {
+    "id": "0334",
+    "name": "dumbbell lateral raise",
+    "equipment": "dumbbell",
+    "bodyPart": "shoulders",
+    "gif": "videos/0334-DsgkuIt.gif",
+    "image": "images/0334-DsgkuIt.jpg",
+    "steps": {
+      "en": [
+        "Stand with your feet shoulder-width apart and hold a dumbbell in each hand, palms facing your body.",
+        "Keep your back straight and engage your core.",
+        "Raise your arms out to the sides until they are parallel to the floor, keeping a slight bend in your elbows.",
+        "Pause for a moment at the top, then slowly lower your arms back down to the starting position."
+      ],
+      "fr": [
+        "Tiens-toi debout, les pieds écartés à la largeur des épaules et tiens un haltère dans chaque main, paumes tournées vers ton corps.",
+        "Garde le dos droit et gaine ta sangle abdominale.",
+        "Lève tes bras sur les côtés jusqu'à ce qu'ils soient parallèles au sol, en gardant une légère flexion dans tes coudes.",
+        "Marque une pause en haut, puis abaisse lentement tes bras pour revenir à la position de départ."
+      ],
+      "zh": [
+        "双脚分开与肩同宽站立，双手各握一个哑铃，手掌朝向身体。",
+        "保持背部挺直并启动核心肌群。",
+        "将手臂向两侧抬起，直到与地板平行，保持肘部稍微弯曲。",
+        "在顶部暂停片刻，然后慢慢将手臂放回起始位置。"
+      ]
+    }
+  },
+  {
+    "id": "0294",
+    "name": "dumbbell biceps curl",
+    "equipment": "dumbbell",
+    "bodyPart": "upper arms",
+    "gif": "videos/0294-NbVPDMW.gif",
+    "image": "images/0294-NbVPDMW.jpg",
+    "steps": {
+      "en": [
+        "Stand up straight with a dumbbell in each hand, palms facing forward and arms fully extended.",
+        "Keeping your upper arms stationary, exhale and curl the weights while contracting your biceps.",
+        "Continue to raise the weights until your biceps are fully contracted and the dumbbells are at shoulder level.",
+        "Hold the contracted position for a brief pause as you squeeze your biceps."
+      ],
+      "fr": [
+        "Tiens-toi bien droit avec un haltère dans chaque main, les paumes tournées vers l'avant et les bras complètement tendus.",
+        "En gardant le haut des bras immobile, expire et fléchis les poids en contractant tes biceps.",
+        "Continue à lever les poids jusqu'à ce que tes biceps soient complètement contractés et que les haltères soient à hauteur d'épaule.",
+        "Maintiens la position contractée pendant une brève pause en contractant tes biceps."
+      ],
+      "zh": [
+        "站直，双手各握一个哑铃，手掌朝前，双臂完全伸展。",
+        "保持上臂静止，呼气并弯举哑铃，同时收缩二头肌。",
+        "继续举重，直到二头肌完全收缩并且哑铃与肩部齐平。",
+        "挤压二头肌时，保持收缩位置短暂停顿。"
+      ]
+    }
+  },
+  {
+    "id": "0201",
+    "name": "cable pushdown",
+    "equipment": "cable",
+    "bodyPart": "upper arms",
+    "gif": "videos/0201-3ZflifB.gif",
+    "image": "images/0201-3ZflifB.jpg",
+    "steps": {
+      "en": [
+        "Attach a straight bar to a high pulley cable machine.",
+        "Stand facing the machine with your feet shoulder-width apart and a slight bend in your knees.",
+        "Grasp the bar with an overhand grip, hands shoulder-width apart.",
+        "Keep your elbows close to your sides and your upper arms stationary."
+      ],
+      "fr": [
+        "Fixe une barre droite à une machine à câble à poulie haute.",
+        "Tiens-toi face à la machine, les pieds écartés à la largeur des épaules et les genoux légèrement fléchis.",
+        "Saisis la barre avec une prise en pronation, les mains écartées à la largeur des épaules.",
+        "Garde tes coudes près de tes flancs et le haut de tes bras immobile."
+      ],
+      "zh": [
+        "将直杆连接到高滑轮电缆机上。",
+        "面向机器站立，双脚分开与肩同宽，膝盖稍微弯曲。",
+        "正手握住杠铃，双手与肩同宽。",
+        "保持肘部靠近身体两侧，上臂保持静止。"
+      ]
+    }
+  },
+  {
+    "id": "0043",
+    "name": "barbell full squat",
+    "equipment": "barbell",
+    "bodyPart": "upper legs",
+    "gif": "videos/0043-qXTaZnJ.gif",
+    "image": "images/0043-qXTaZnJ.jpg",
+    "steps": {
+      "en": [
+        "Stand with your feet shoulder-width apart, toes slightly turned out.",
+        "Hold the barbell across your upper back, resting it on your traps or rear delts.",
+        "Engage your core and keep your chest up as you begin to lower your body down.",
+        "Bend at the knees and hips, pushing your hips back and down as if sitting into a chair."
+      ],
+      "fr": [
+        "Tiens-toi debout, les pieds écartés à la largeur des épaules, les orteils légèrement tournés vers l'extérieur.",
+        "Tiens la barre en travers du haut de ton dos, en la faisant reposer sur tes trapèzes ou tes deltoïdes postérieurs.",
+        "Gaine ta sangle abdominale et garde ta poitrine relevée pendant que tu commences à abaisser ton corps.",
+        "Fléchis les genoux et les hanches en poussant tes hanches vers l'arrière et vers le bas comme si tu t'asseyais sur une chaise."
+      ],
+      "zh": [
+        "站立，双脚分开与肩同宽，脚趾稍微向外。",
+        "将杠铃放在上背部，将其放在斜方肌或三角肌后束上。",
+        "当你开始降低身体时，启动你的核心并保持胸部挺直。",
+        "弯曲膝盖和臀部，向后和向下推臀部，就像坐在椅子上一样。"
+      ]
+    }
+  },
+  {
+    "id": "0085",
+    "name": "barbell romanian deadlift",
+    "equipment": "barbell",
+    "bodyPart": "upper legs",
+    "gif": "videos/0085-wQ2c4XD.gif",
+    "image": "images/0085-wQ2c4XD.jpg",
+    "steps": {
+      "en": [
+        "Stand with your feet shoulder-width apart and your toes pointing forward.",
+        "Hold the barbell with an overhand grip, hands slightly wider than shoulder-width apart.",
+        "Bend at the hips, keeping your back straight and your knees slightly bent.",
+        "Lower the barbell towards the ground, keeping it close to your body."
+      ],
+      "fr": [
+        "Tiens-toi debout, les pieds écartés à la largeur des épaules et les orteils pointés vers l'avant.",
+        "Tiens la barre en prise pronation, les mains un peu plus écartées que la largeur des épaules.",
+        "Fléchis les hanches en gardant ton dos droit et tes genoux légèrement fléchis.",
+        "Abaisse la barre vers le sol, en la gardant près de ton corps."
+      ],
+      "zh": [
+        "站立，双脚分开与肩同宽，脚趾指向前方。",
+        "正手握住杠铃，双手分开略宽于肩宽。",
+        "弯曲臀部，保持背部挺直，膝盖稍微弯曲。",
+        "将杠铃向地面降低，使其靠近身体。"
+      ]
+    }
+  },
+  {
+    "id": "0743",
+    "name": "sled hack squat",
+    "equipment": "sled machine",
+    "bodyPart": "upper legs",
+    "gif": "videos/0743-Qa55kX1.gif",
+    "image": "images/0743-Qa55kX1.jpg",
+    "steps": {
+      "en": [
+        "Adjust the sled machine to a comfortable position for your height.",
+        "Stand with your feet shoulder-width apart on the platform, toes slightly pointed outwards.",
+        "Hold onto the handles or bars for stability.",
+        "Lower your body by bending your knees and hips, keeping your back straight and chest up."
+      ],
+      "fr": [
+        "Règle la machine à traîneau dans une position confortable pour ta taille.",
+        "Tiens-toi debout, les pieds écartés à la largeur des épaules sur la plateforme, les orteils légèrement tournés vers l'extérieur.",
+        "Tiens-toi aux poignées ou aux barres pour la stabilité.",
+        "Abaisse ton corps en fléchissant tes genoux et tes hanches, en gardant ton dos droit et ta poitrine relevée."
+      ],
+      "zh": [
+        "将雪橇机调整到适合您身高的舒适位置。",
+        "双脚与肩同宽站立在平台上，脚趾稍微向外。",
+        "握住手柄或杆以保持稳定性。",
+        "弯曲膝盖和臀部，降低身体，保持背部挺直，挺胸。"
+      ]
+    }
+  },
+  {
+    "id": "0586",
+    "name": "lever lying leg curl",
+    "equipment": "leverage machine",
+    "bodyPart": "upper legs",
+    "gif": "videos/0586-17lJ1kr.gif",
+    "image": "images/0586-17lJ1kr.jpg",
+    "steps": {
+      "en": [
+        "Adjust the machine to fit your body and select the desired weight.",
+        "Lie face down on the machine with your legs straight and your heels against the padded lever.",
+        "Grasp the handles or the sides of the machine for stability.",
+        "Keeping your upper body stationary, exhale and curl your legs up as far as possible without lifting your hips off the pad."
+      ],
+      "fr": [
+        "Règle la machine pour l'adapter à ton corps et sélectionne le poids souhaité.",
+        "Allonge-toi face vers le bas sur la machine, les jambes droites et les talons contre le levier rembourré.",
+        "Saisis les poignées ou les côtés de la machine pour te stabiliser.",
+        "En gardant le haut de ton corps immobile, expire et fléchis tes jambes le plus loin possible sans soulever tes hanches du coussin."
+      ],
+      "zh": [
+        "调整机器以适合您的身体并选择所需的重量。",
+        "面朝下躺在机器上，双腿伸直，脚跟靠在带衬垫的杠杆上。",
+        "抓住机器的手柄或侧面以保持稳定性。",
+        "保持上半身静止，呼气并尽可能向上弯曲双腿，但不要将臀部抬离垫子。"
+      ]
+    }
+  },
+  {
+    "id": "1372",
+    "name": "barbell standing calf raise",
+    "equipment": "barbell",
+    "bodyPart": "lower legs",
+    "gif": "videos/1372-8ozhUIZ.gif",
+    "image": "images/1372-8ozhUIZ.jpg",
+    "steps": {
+      "en": [
+        "Stand with your feet shoulder-width apart and place a barbell across your upper back.",
+        "Raise your heels off the ground as high as possible, using only your toes.",
+        "Pause for a moment at the top, then slowly lower your heels back down to the starting position.",
+        "Repeat for the desired number of repetitions."
+      ],
+      "fr": [
+        "Tiens-toi debout, les pieds écartés à la largeur des épaules et place une barre en travers du haut de ton dos.",
+        "Lève tes talons du sol aussi haut que possible en utilisant uniquement la pointe des pieds.",
+        "Marque une pause en haut, puis abaisse lentement tes talons pour revenir à la position de départ.",
+        "Répète le nombre de répétitions souhaité."
+      ],
+      "zh": [
+        "双脚分开与肩同宽站立，将杠铃放在上背部。",
+        "仅用脚趾将脚后跟抬离地面，尽可能高。",
+        "在顶部停顿片刻，然后慢慢降低脚后跟回到起始位置。",
+        "重复所需的重复次数。"
+      ]
+    }
+  },
+  {
+    "id": "0857",
+    "name": "wheel rollerout",
+    "equipment": "wheel roller",
+    "bodyPart": "waist",
+    "gif": "videos/0857-NAgVB3t.gif",
+    "image": "images/0857-NAgVB3t.jpg",
+    "steps": {
+      "en": [
+        "Kneel on the floor and place the wheel roller in front of you.",
+        "Place your hands on the handles of the wheel roller and extend your arms straight out in front of you.",
+        "Engage your core muscles and slowly roll the wheel forward, keeping your back straight and your abs tight.",
+        "Continue rolling forward until your body is fully extended and your arms are overhead."
+      ],
+      "fr": [
+        "Mets-toi à genoux au sol et place la roue abdominale devant toi.",
+        "Place tes mains sur les poignées de la roue abdominale et étends tes bras droit devant toi.",
+        "Gaine tes muscles abdominaux et fais rouler lentement la roue vers l'avant, en gardant le dos droit et les abdominaux contractés.",
+        "Continue à rouler vers l'avant jusqu'à ce que ton corps soit complètement étendu et que tes bras soient au-dessus de ta tête."
+      ],
+      "zh": [
+        "跪在地板上，将滚轮放在您面前。",
+        "将双手放在滚轮的手柄上，并将手臂伸直至前方。",
+        "调动你的核心肌肉，慢慢向前滚动轮子，保持背部挺直，腹肌紧张。",
+        "继续向前滚动，直到身体完全伸展并且手臂举过头顶。"
+      ]
+    }
+  },
+  {
+    "id": "0472",
+    "name": "hanging leg raise",
+    "equipment": "body weight",
+    "bodyPart": "waist",
+    "gif": "videos/0472-I3tsCnC.gif",
+    "image": "images/0472-I3tsCnC.jpg",
+    "steps": {
+      "en": [
+        "Hang from a pull-up bar with your arms fully extended and your palms facing away from you.",
+        "Engage your core and lift your legs up in front of you, keeping them straight.",
+        "Continue lifting until your legs are parallel to the ground or as high as you can comfortably go.",
+        "Pause for a moment at the top, then slowly lower your legs back down to the starting position."
+      ],
+      "fr": [
+        "Suspends-toi à une barre de traction, les bras complètement étendus et les paumes tournées vers l'extérieur.",
+        "Gaine ta sangle abdominale et lève tes jambes devant toi, en les gardant droites.",
+        "Continue à soulever jusqu'à ce que tes jambes soient parallèles au sol ou aussi haut que tu peux confortablement aller.",
+        "Marque une pause en haut, puis abaisse lentement tes jambes pour revenir à la position de départ."
+      ],
+      "zh": [
+        "悬挂在引体向上杆上，双臂完全伸展，手掌背向自己。",
+        "启动你的核心并将双腿抬起到你面前，保持伸直。",
+        "继续抬起，直到双腿与地面平行或达到您可以舒适地达到的高度。",
+        "在顶部暂停片刻，然后慢慢将双腿放回起始位置。"
+      ]
+    }
+  },
+  {
+    "id": "1403",
+    "name": "neck side stretch",
+    "equipment": "body weight",
+    "bodyPart": "neck",
+    "gif": "videos/1403-x2chWLO.gif",
+    "image": "images/1403-x2chWLO.jpg",
+    "steps": {
+      "en": [
+        "Stand or sit up straight with your shoulders relaxed.",
+        "Tilt your head to one side, bringing your ear towards your shoulder.",
+        "Hold the stretch for 15-30 seconds.",
+        "Repeat on the other side."
+      ],
+      "fr": [
+        "Tiens-toi debout ou assis bien droit, les épaules détendues.",
+        "Incline la tête d'un côté, en amenant ton oreille vers ton épaule.",
+        "Maintiens l'étirement pendant 15 à 30 secondes.",
+        "Répète de l'autre côté."
+      ],
+      "zh": [
+        "站直或坐直，肩膀放松。",
+        "将头向一侧倾斜，将耳朵靠近肩膀。",
+        "保持拉伸 15-30 秒。",
+        "在另一侧重复。"
+      ]
+    }
+  },
+  {
+    "id": "1456",
+    "name": "barbell standing close grip military press",
+    "equipment": "barbell",
+    "bodyPart": "shoulders",
+    "gif": "videos/1456-wdRZISl.gif",
+    "image": "images/1456-wdRZISl.jpg",
+    "steps": {
+      "en": [
+        "Stand with your feet shoulder-width apart and hold the barbell with an overhand grip, hands slightly closer than shoulder-width apart.",
+        "Lift the barbell to shoulder height, keeping your elbows close to your body.",
+        "Press the barbell overhead, extending your arms fully.",
+        "Lower the barbell back to shoulder height."
+      ],
+      "fr": [
+        "Tiens-toi debout, les pieds écartés à la largeur des épaules et tiens la barre en prise pronation, les mains légèrement plus rapprochées que la largeur des épaules.",
+        "Soulève la barre à hauteur des épaules, en gardant tes coudes près de ton corps.",
+        "Développe la barre au-dessus de ta tête, en tendant complètement tes bras.",
+        "Abaisse la barre à hauteur des épaules."
+      ],
+      "zh": [
+        "双脚分开与肩同宽站立，正手握住杠铃，双手距离略小于肩宽。",
+        "将杠铃举至肩膀高度，保持肘部靠近身体。",
+        "将杠铃推过头顶，充分伸展双臂。",
+        "将杠铃降低回肩部高度。"
+      ]
+    }
+  },
+  {
+    "id": "0651",
+    "name": "pull up (neutral grip)",
+    "equipment": "body weight",
+    "bodyPart": "back",
+    "gif": "videos/0651-0V2YQjW.gif",
+    "image": "images/0651-0V2YQjW.jpg",
+    "steps": {
+      "en": [
+        "Hang from a pull-up bar with a neutral grip (palms facing each other) and your arms fully extended.",
+        "Engage your core and squeeze your shoulder blades together.",
+        "Pull your body up towards the bar by bending your elbows and driving your elbows down towards your hips.",
+        "Continue pulling until your chin is above the bar."
+      ],
+      "fr": [
+        "Suspends-toi à une barre de traction avec une prise neutre (paumes tournées l'une vers l'autre) et les bras complètement étendus.",
+        "Gaine ta sangle abdominale et resserre tes omoplates.",
+        "Tire ton corps vers le haut en direction de la barre en fléchissant tes coudes et en les entraînant vers le bas en direction de tes hanches.",
+        "Continue à tirer jusqu'à ce que ton menton soit au-dessus de la barre."
+      ],
+      "zh": [
+        "用中立握法（手掌相对）悬挂在引体向上杆上，双臂完全伸展。",
+        "启动你的核心并将肩胛骨挤压在一起。",
+        "弯曲肘部并将肘部向下推向臀部，将身体向上拉向杠铃。",
+        "继续拉，直到下巴位于杠铃上方。"
+      ]
+    }
+  },
+  {
+    "id": "0027",
+    "name": "barbell bent over row",
+    "equipment": "barbell",
+    "bodyPart": "back",
+    "gif": "videos/0027-eZyBC3j.gif",
+    "image": "images/0027-eZyBC3j.jpg",
+    "steps": {
+      "en": [
+        "Stand with your feet shoulder-width apart and knees slightly bent.",
+        "Bend forward at the hips while keeping your back straight and chest up.",
+        "Grasp the barbell with an overhand grip, hands slightly wider than shoulder-width apart.",
+        "Pull the barbell towards your lower chest by retracting your shoulder blades and squeezing your back muscles."
+      ],
+      "fr": [
+        "Tiens-toi debout, les pieds écartés à la largeur des épaules et les genoux légèrement fléchis.",
+        "Penche-toi vers l'avant au niveau des hanches en gardant ton dos droit et ta poitrine haute.",
+        "Saisis la barre avec une prise en pronation, les mains un peu plus larges que la largeur des épaules.",
+        "Tire la barre vers le bas de ta poitrine en rétractant tes omoplates et en contractant les muscles de ton dos."
+      ],
+      "zh": [
+        "站立，双脚分开与肩同宽，膝盖稍微弯曲。",
+        "臀部向前弯曲，同时保持背部挺直、挺胸。",
+        "正手握住杠铃，双手间距略宽于肩宽。",
+        "通过收缩肩胛骨并挤压背部肌肉，将杠铃拉向下胸部。"
+      ]
+    }
+  },
+  {
+    "id": "0289",
+    "name": "dumbbell bench press",
+    "equipment": "dumbbell",
+    "bodyPart": "chest",
+    "gif": "videos/0289-SpYC0Kp.gif",
+    "image": "images/0289-SpYC0Kp.jpg",
+    "steps": {
+      "en": [
+        "Lie flat on a bench with your feet flat on the ground and your back pressed against the bench.",
+        "Hold a dumbbell in each hand, with your palms facing forward and your arms extended above your chest.",
+        "Lower the dumbbells slowly to the sides of your chest, keeping your elbows at a 90-degree angle.",
+        "Pause for a moment, then push the dumbbells back up to the starting position, fully extending your arms."
+      ],
+      "fr": [
+        "Allonge-toi à plat sur un banc, les pieds à plat au sol et le dos plaqué contre le banc.",
+        "Tiens un haltère dans chaque main, les paumes tournées vers l'avant et les bras étendus au-dessus de ta poitrine.",
+        "Abaisse lentement les haltères sur les côtés de ta poitrine, en gardant tes coudes à un angle de 90 degrés.",
+        "Marque une pause, puis repousse les haltères vers le haut jusqu'à la position de départ, en tendant complètement tes bras."
+      ],
+      "zh": [
+        "平躺在长凳上，双脚平放在地上，背部紧贴长凳。",
+        "双手各握一个哑铃，手掌朝前，双臂伸至胸部上方。",
+        "慢慢地将哑铃降低到胸部两侧，保持肘部呈 90 度角。",
+        "暂停片刻，然后将哑铃推回起始位置，完全伸展双臂。"
+      ]
+    }
+  },
+  {
+    "id": "0171",
+    "name": "cable incline fly",
+    "equipment": "cable",
+    "bodyPart": "chest",
+    "gif": "videos/0171-tBWXbIT.gif",
+    "image": "images/0171-tBWXbIT.jpg",
+    "steps": {
+      "en": [
+        "Adjust the cable machine to a low position and attach the handles.",
+        "Sit on an incline bench with your back against the pad and feet flat on the floor.",
+        "Grasp the handles with an overhand grip and extend your arms straight out in front of you.",
+        "Keeping a slight bend in your elbows, open your arms out to the sides in a controlled motion."
+      ],
+      "fr": [
+        "Règle la machine à câble en position basse et attache les poignées.",
+        "Assieds-toi sur un banc incliné, le dos contre le coussin et les pieds à plat sur le sol.",
+        "Saisis les poignées avec une prise en pronation et étends les bras droit devant toi.",
+        "En gardant une légère flexion des coudes, ouvre les bras sur les côtés dans un mouvement contrôlé."
+      ],
+      "zh": [
+        "将电缆机调整至较低位置并安装手柄。",
+        "坐在倾斜的长凳上，背部靠在垫子上，双脚平放在地板上。",
+        "正手握住手柄，并将双臂伸直至身前。",
+        "保持肘部轻微弯曲，以受控的动作向两侧张开双臂。"
+      ]
+    }
+  },
+  {
+    "id": "0383",
+    "name": "dumbbell reverse fly",
+    "equipment": "dumbbell",
+    "bodyPart": "shoulders",
+    "gif": "videos/0383-EAs3xL9.gif",
+    "image": "images/0383-EAs3xL9.jpg",
+    "steps": {
+      "en": [
+        "Stand with your feet shoulder-width apart and hold a dumbbell in each hand.",
+        "Bend your knees slightly and hinge forward at the hips, keeping your back straight.",
+        "Extend your arms straight down in front of you, palms facing each other.",
+        "Keeping a slight bend in your elbows, raise your arms out to the sides until they are parallel to the ground."
+      ],
+      "fr": [
+        "Tiens-toi debout, les pieds écartés à la largeur des épaules et tiens un haltère dans chaque main.",
+        "Fléchis légèrement les genoux et bascule vers l'avant au niveau des hanches en gardant le dos droit.",
+        "Étends les bras droit vers le bas devant toi, les paumes tournées l'une vers l'autre.",
+        "En gardant une légère flexion des coudes, lève les bras sur les côtés jusqu'à ce qu'ils soient parallèles au sol."
+      ],
+      "zh": [
+        "双脚分开与肩同宽站立，每只手各握一个哑铃。",
+        "稍微弯曲膝盖，髋部向前转动，保持背部挺直。",
+        "将双臂伸直在身前，手掌相对。",
+        "保持肘部轻微弯曲，将手臂向两侧抬起，直到与地面平行。"
+      ]
+    }
+  },
+  {
+    "id": "0318",
+    "name": "dumbbell incline curl",
+    "equipment": "dumbbell",
+    "bodyPart": "upper arms",
+    "gif": "videos/0318-ae9UoXQ.gif",
+    "image": "images/0318-ae9UoXQ.jpg",
+    "steps": {
+      "en": [
+        "Set an incline bench to a 45-degree angle and sit on it with a dumbbell in each hand, palms facing forward.",
+        "Rest your upper arms on the incline bench and let your elbows hang down, fully extending your arms.",
+        "Keeping your upper arms stationary, exhale and curl the weights while contracting your biceps.",
+        "Continue to raise the dumbbells until your biceps are fully contracted and the dumbbells are at shoulder level."
+      ],
+      "fr": [
+        "Règle un banc incliné à un angle de 45 degrés et assieds-toi dessus avec un haltère dans chaque main, paumes tournées vers l'avant.",
+        "Pose le haut de tes bras sur le banc incliné et laisse tes coudes pendre vers le bas, en étendant complètement tes bras.",
+        "En gardant le haut des bras immobile, expire et fléchis les poids en contractant tes biceps.",
+        "Continue à lever les haltères jusqu'à ce que tes biceps soient complètement contractés et que les haltères soient à hauteur d'épaule."
+      ],
+      "zh": [
+        "将上斜凳摆成 45 度角，坐在上面，双手各握一个哑铃，掌心向前。",
+        "将上臂放在上斜凳上，让肘部下垂，充分伸展手臂。",
+        "保持上臂静止，呼气并弯举哑铃，同时收缩二头肌。",
+        "继续举起哑铃，直到二头肌完全收缩并且哑铃与肩部齐平。"
+      ]
+    }
+  },
+  {
+    "id": "0032",
+    "name": "barbell deadlift",
+    "equipment": "barbell",
+    "bodyPart": "upper legs",
+    "gif": "videos/0032-ila4NZS.gif",
+    "image": "images/0032-ila4NZS.jpg",
+    "steps": {
+      "en": [
+        "Stand with your feet shoulder-width apart and the barbell on the ground in front of you.",
+        "Bend your knees and hinge at the hips to lower your torso and grip the barbell with an overhand grip, hands slightly wider than shoulder-width apart.",
+        "Keep your back straight and chest lifted as you drive through your heels to lift the barbell off the ground, extending your hips and knees.",
+        "As you stand up straight, squeeze your glutes and keep your core engaged."
+      ],
+      "fr": [
+        "Tiens-toi debout, les pieds écartés à la largeur des épaules et la barre au sol devant toi.",
+        "Fléchis les genoux et bascule au niveau des hanches pour abaisser ton torse et saisir la barre en prise pronation, les mains légèrement plus écartées que la largeur des épaules.",
+        "Garde le dos droit et la poitrine relevée pendant que tu pousses sur tes talons pour soulever la barre du sol, en étendant tes hanches et tes genoux.",
+        "En te redressant, contracte tes fessiers et garde ta sangle abdominale gainée."
+      ],
+      "zh": [
+        "双脚分开与肩同宽站立，杠铃放在你面前的地面上。",
+        "弯曲膝盖并以臀部为铰链，降低躯干，正手握住杠铃，双手分开略宽于肩宽。",
+        "当你通过脚后跟将杠铃抬离地面时，保持背部挺直，胸部抬起，伸展臀部和膝盖。",
+        "当你站直时，挤压你的臀部并保持你的核心参与。"
+      ]
+    }
+  },
+  {
+    "id": "0811",
+    "name": "trap bar deadlift",
+    "equipment": "trap bar",
+    "bodyPart": "upper legs",
+    "gif": "videos/0811-jQGwmxN.gif",
+    "image": "images/0811-jQGwmxN.jpg",
+    "steps": {
+      "en": [
+        "Stand with your feet shoulder-width apart and the trap bar on the ground in front of you.",
+        "Bend at the hips and knees to lower yourself down and grip the handles of the trap bar with an overhand grip.",
+        "Keep your back straight and chest up as you begin to lift the trap bar off the ground by extending your hips and knees.",
+        "As you lift, focus on driving through your heels and squeezing your glutes at the top of the movement."
+      ],
+      "fr": [
+        "Tiens-toi debout, les pieds écartés à la largeur des épaules et la barre trap au sol devant toi.",
+        "Fléchis les hanches et les genoux pour descendre et saisis les poignées de la barre trap en prise pronation.",
+        "Garde le dos droit et la poitrine relevée pendant que tu commences à soulever la barre trap du sol en étendant tes hanches et tes genoux.",
+        "En soulevant, concentre-toi sur la poussée dans tes talons et contracte tes fessiers en haut du mouvement."
+      ],
+      "zh": [
+        "双脚分开与肩同宽站立，将陷阱杆放在你面前的地面上。",
+        "弯曲臀部和膝盖，降低身体高度，并用正手握住陷阱杆的手柄。",
+        "当你开始通过伸展臀部和膝盖将陷阱杆抬离地面时，保持背部挺直，挺胸。",
+        "当你举起时，专注于通过脚后跟发力，并在运动的最高点挤压臀部。"
+      ]
+    }
+  },
+  {
+    "id": "0042",
+    "name": "barbell front squat",
+    "equipment": "barbell",
+    "bodyPart": "upper legs",
+    "gif": "videos/0042-zG0zs85.gif",
+    "image": "images/0042-zG0zs85.jpg",
+    "steps": {
+      "en": [
+        "Start by standing with your feet shoulder-width apart, toes slightly turned out.",
+        "Hold the barbell in front of your shoulders, resting it on your collarbone and shoulders.",
+        "Engage your core and keep your chest up as you lower your body down into a squat position, pushing your hips back and bending your knees.",
+        "Lower until your thighs are parallel to the ground, or as low as you can comfortably go."
+      ],
+      "fr": [
+        "Commence debout, les pieds écartés à la largeur des épaules, les orteils légèrement tournés vers l'extérieur.",
+        "Tiens la barre devant tes épaules, en la faisant reposer sur ta clavicule et tes épaules.",
+        "Gaine ta sangle abdominale et garde ta poitrine relevée pendant que tu abaisses ton corps en position de squat, en poussant tes hanches vers l'arrière et en pliant tes genoux.",
+        "Descends jusqu'à ce que tes cuisses soient parallèles au sol, ou aussi bas que tu peux confortablement aller."
+      ],
+      "zh": [
+        "首先站立，双脚分开与肩同宽，脚趾稍微向外。",
+        "将杠铃放在肩膀前面，将其放在锁骨和肩膀上。",
+        "当你将身体降低到蹲姿时，收紧核心并保持挺胸，将臀部向后推并弯曲膝盖。",
+        "降低直到大腿与地面平行，或者尽可能降低到您能舒服的高度。"
+      ]
+    }
+  },
+  {
+    "id": "0410",
+    "name": "dumbbell single leg split squat",
+    "equipment": "dumbbell",
+    "bodyPart": "upper legs",
+    "gif": "videos/0410-qx4fgX7.gif",
+    "image": "images/0410-qx4fgX7.jpg",
+    "steps": {
+      "en": [
+        "Stand with your feet shoulder-width apart, holding a dumbbell in each hand.",
+        "Take a step forward with one foot and position your feet so that your front foot is flat on the ground and your back foot is elevated on a bench or step.",
+        "Lower your body by bending your front knee and hip, keeping your back knee slightly bent and your back heel off the ground.",
+        "Continue lowering until your front thigh is parallel to the ground, then push through your front heel to return to the starting position."
+      ],
+      "fr": [
+        "Tiens-toi debout, les pieds écartés à la largeur des épaules, en tenant un haltère dans chaque main.",
+        "Fais un pas en avant avec un pied et positionne tes pieds de sorte que le pied avant soit à plat sur le sol et le pied arrière surélevé sur un banc ou une marche.",
+        "Abaisse ton corps en fléchissant ton genou et ta hanche avant, en gardant ton genou arrière légèrement fléchi et ton talon arrière décollé du sol.",
+        "Continue à descendre jusqu'à ce que ta cuisse avant soit parallèle au sol, puis pousse sur ton talon avant pour revenir à la position de départ."
+      ],
+      "zh": [
+        "双脚分开与肩同宽站立，每只手各握一个哑铃。",
+        "一只脚向前迈出一步，调整双脚的位置，使前脚平放在地面上，后脚抬高在长凳或台阶上。",
+        "弯曲前膝盖和臀部，降低身体，保持后膝盖稍微弯曲，后脚跟离开地面。",
+        "继续降低，直到大腿前部与地面平行，然后通过前脚跟推回到起始位置。"
+      ]
+    }
+  },
+  {
+    "id": "1409",
+    "name": "barbell glute bridge",
+    "equipment": "barbell",
+    "bodyPart": "upper legs",
+    "gif": "videos/1409-qKBpF7I.gif",
+    "image": "images/1409-qKBpF7I.jpg",
+    "steps": {
+      "en": [
+        "Start by lying flat on your back on the ground with your knees bent and feet flat on the floor.",
+        "Place a barbell across your hips, holding it securely with both hands.",
+        "Engage your glutes and core muscles, then lift your hips off the ground until your body forms a straight line from your knees to your shoulders.",
+        "Pause for a moment at the top, squeezing your glutes."
+      ],
+      "fr": [
+        "Commence allongé sur le dos sur le sol, les genoux fléchis et les pieds à plat sur le sol.",
+        "Place une barre sur tes hanches, en la tenant fermement des deux mains.",
+        "Contracte tes fessiers et tes muscles abdominaux, puis soulève tes hanches du sol jusqu'à ce que ton corps forme une ligne droite de tes genoux à tes épaules.",
+        "Marque une pause en haut, en contractant tes fessiers."
+      ],
+      "zh": [
+        "首先平躺在地上，膝盖弯曲，双脚平放在地板上。",
+        "将杠铃放在臀部上，用双手牢牢握住它。",
+        "锻炼臀部和核心肌肉，然后将臀部抬离地面，直到身体从膝盖到肩膀形成一条直线。",
+        "在顶部暂停片刻，挤压臀部。"
+      ]
+    }
+  },
+  {
+    "id": "1379",
+    "name": "dumbbell seated calf raise",
+    "equipment": "dumbbell",
+    "bodyPart": "lower legs",
+    "gif": "videos/1379-r29jP7S.gif",
+    "image": "images/1379-r29jP7S.jpg",
+    "steps": {
+      "en": [
+        "Sit on a bench or chair with your feet flat on the ground and a dumbbell resting on your thighs.",
+        "Place the balls of your feet on a raised surface such as a step or block, with your heels hanging off the edge.",
+        "Hold onto the dumbbell for stability.",
+        "Raise your heels as high as possible, lifting your body weight onto the balls of your feet."
+      ],
+      "fr": [
+        "Assieds-toi sur un banc ou une chaise, les pieds à plat sur le sol et un haltère posé sur tes cuisses.",
+        "Place l'avant de tes pieds sur une surface surélevée comme une marche ou un bloc, avec tes talons dans le vide au bord.",
+        "Tiens-toi à l'haltère pour la stabilité.",
+        "Lève tes talons aussi haut que possible en reportant le poids de ton corps sur la plante de tes pieds."
+      ],
+      "zh": [
+        "坐在长凳或椅子上，双脚平放在地面上，并将哑铃放在大腿上。",
+        "将脚掌放在升高的表面（例如台阶或木块）上，脚跟悬在边缘外。",
+        "握住哑铃以保持稳定。",
+        "尽可能高地抬高脚后跟，将身体重量转移到脚掌上。"
+      ]
+    }
+  },
+  {
+    "id": "1775",
+    "name": "side plank hip adduction",
+    "equipment": "body weight",
+    "bodyPart": "upper legs",
+    "gif": "videos/1775-VO2qeJg.gif",
+    "image": "images/1775-VO2qeJg.jpg",
+    "steps": {
+      "en": [
+        "Start by lying on your side with your legs extended and stacked on top of each other.",
+        "Prop yourself up on your forearm, keeping your elbow directly below your shoulder.",
+        "Engage your core and lift your hips off the ground, creating a straight line from your head to your feet.",
+        "While maintaining the side plank position, lift your top leg towards the ceiling, keeping it straight."
+      ],
+      "fr": [
+        "Commence allongé sur le côté, les jambes tendues et superposées l'une sur l'autre.",
+        "Redresse-toi sur ton avant-bras, en gardant ton coude directement sous ton épaule.",
+        "Gaine ta sangle abdominale et lève tes hanches du sol, en créant une ligne droite de ta tête à tes pieds.",
+        "Tout en maintenant la position de planche latérale, lève ta jambe supérieure vers le plafond en la gardant tendue."
+      ],
+      "zh": [
+        "首先侧躺，双腿伸展并叠放在一起。",
+        "用前臂支撑自己，将肘部保持在肩膀正下方。",
+        "启动你的核心并将臀部抬离地面，从头到脚形成一条直线。",
+        "在保持侧平板支撑位置的同时，将上面的腿抬向天花板，保持笔直。"
+      ]
+    }
+  },
+  {
+    "id": "3544",
+    "name": "bodyweight incline side plank",
+    "equipment": "body weight",
+    "bodyPart": "waist",
+    "gif": "videos/3544-5VXmnV5.gif",
+    "image": "images/3544-5VXmnV5.jpg",
+    "steps": {
+      "en": [
+        "Start by lying on your side with your legs extended and stacked on top of each other.",
+        "Place your forearm on the ground directly below your shoulder, with your elbow bent at a 90-degree angle.",
+        "Engage your core and lift your hips off the ground, creating a straight line from your head to your feet.",
+        "Hold this position for the desired amount of time."
+      ],
+      "fr": [
+        "Commence allongé sur le côté, les jambes tendues et superposées l'une sur l'autre.",
+        "Place ton avant-bras au sol directement sous ton épaule, avec ton coude plié à un angle de 90 degrés.",
+        "Gaine ta sangle abdominale et lève tes hanches du sol, en créant une ligne droite de ta tête à tes pieds.",
+        "Maintiens cette position pendant la durée souhaitée."
+      ],
+      "zh": [
+        "首先侧躺，双腿伸展并叠放在一起。",
+        "将前臂放在肩膀正下方的地面上，肘部弯曲成 90 度角。",
+        "启动你的核心并将臀部抬离地面，从头到脚形成一条直线。",
+        "保持此位置所需的时间。"
+      ]
+    }
+  },
+  {
+    "id": "0979",
+    "name": "band horizontal pallof press",
+    "equipment": "band",
+    "bodyPart": "waist",
+    "gif": "videos/0979-9pa4H5m.gif",
+    "image": "images/0979-9pa4H5m.jpg",
+    "steps": {
+      "en": [
+        "Attach the band to a sturdy anchor point at waist height.",
+        "Stand perpendicular to the anchor point with your feet shoulder-width apart.",
+        "Grasp the band handle with both hands and step away from the anchor point to create tension in the band.",
+        "Bring your hands to your chest, keeping your elbows bent and close to your body."
+      ],
+      "fr": [
+        "Fixe l'élastique à un point d'ancrage solide à hauteur de la taille.",
+        "Tiens-toi perpendiculaire au point d'ancrage, les pieds écartés à la largeur des épaules.",
+        "Saisis la poignée de l'élastique avec les deux mains et éloigne-toi du point d'ancrage pour créer de la tension dans l'élastique.",
+        "Amène tes mains vers ta poitrine en gardant tes coudes fléchis et proches de ton corps."
+      ],
+      "zh": [
+        "将带子固定在腰部高度的坚固锚点上。",
+        "垂直于锚点站立，双脚分开与肩同宽。",
+        "用双手抓住带子手柄并远离锚点以在带子中产生张力。",
+        "将双手放在胸前，保持肘部弯曲并靠近身体。"
+      ]
+    }
+  },
+  {
+    "id": "0198",
+    "name": "cable pulldown",
+    "equipment": "cable",
+    "bodyPart": "back",
+    "gif": "videos/0198-RVwzP10.gif",
+    "image": "images/0198-RVwzP10.jpg",
+    "steps": {
+      "en": [
+        "Adjust the cable pulldown machine so that the seat is at a comfortable height and the knee pad is secured.",
+        "Sit on the seat with your back straight and your feet flat on the ground.",
+        "Grasp the cable bar with an overhand grip, slightly wider than shoulder-width apart.",
+        "Lean back slightly and engage your core."
+      ],
+      "fr": [
+        "Règle la machine de tirage à câble de sorte que le siège soit à une hauteur confortable et que la cale-genoux soit bien fixée.",
+        "Assieds-toi sur le siège, le dos droit et les pieds à plat sur le sol.",
+        "Saisis la barre du câble avec une prise en pronation, un peu plus large que la largeur des épaules.",
+        "Penche-toi légèrement en arrière et gaine ta sangle abdominale."
+      ],
+      "zh": [
+        "调整拉索下拉机，使座椅处于舒适的高度并固定护膝。",
+        "坐在座位上，背部挺直，双脚平放在地面上。",
+        "正手握住电缆杆，握距略宽于肩宽。",
+        "稍微向后倾斜并启动你的核心。"
+      ]
+    }
+  },
+  {
+    "id": "1350",
+    "name": "lever seated row",
+    "equipment": "leverage machine",
+    "bodyPart": "back",
+    "gif": "videos/1350-7I6LNUG.gif",
+    "image": "images/1350-7I6LNUG.jpg",
+    "steps": {
+      "en": [
+        "Adjust the seat height and footrests to a comfortable position.",
+        "Sit on the machine with your chest against the pad and your feet on the footrests.",
+        "Grasp the handles with an overhand grip, shoulder-width apart.",
+        "Keep your back straight and your core engaged."
+      ],
+      "fr": [
+        "Règle la hauteur du siège et les repose-pieds dans une position confortable.",
+        "Assieds-toi sur la machine, la poitrine contre le coussinet et les pieds sur les repose-pieds.",
+        "Saisis les poignées avec une prise en pronation, écartées à la largeur des épaules.",
+        "Garde le dos droit et ta sangle abdominale gainée."
+      ],
+      "zh": [
+        "将座椅高度和脚踏板调整到舒适的位置。",
+        "坐在机器上，胸部靠在垫子上，双脚放在脚踏板上。",
+        "正手握住手柄，距离与肩同宽。",
+        "保持背部挺直，核心肌群参与。"
+      ]
+    }
+  },
+  {
+    "id": "0464",
+    "name": "front plank with twist",
+    "equipment": "body weight",
+    "bodyPart": "waist",
+    "gif": "videos/0464-CosupLu.gif",
+    "image": "images/0464-CosupLu.jpg",
+    "steps": {
+      "en": [
+        "Start in a high plank position with your hands directly under your shoulders and your body in a straight line from head to toe.",
+        "Engage your core and glutes to maintain a stable position.",
+        "Rotate your torso to the right, lifting your right arm and extending it towards the ceiling.",
+        "Keep your hips and legs stable as you twist."
+      ],
+      "fr": [
+        "Commence en position de planche haute, les mains directement sous les épaules et le corps aligné de la tête aux pieds.",
+        "Gaine ta sangle abdominale et tes fessiers pour maintenir une position stable.",
+        "Fais pivoter ton torse vers la droite, en levant ton bras droit et en l'étendant vers le plafond.",
+        "Garde tes hanches et tes jambes stables pendant que tu effectues la rotation."
+      ],
+      "zh": [
+        "从高平板支撑位置开始，双手直接放在肩膀下方，身体从头到脚成一条直线。",
+        "调动你的核心和臀部以保持稳定的位置。",
+        "将躯干向右旋转，抬起右臂并向天花板延伸。",
+        "扭转时保持臀部和腿部稳定。"
+      ]
+    }
+  }
+]

@@ -34,10 +34,15 @@ export type MealSlot = {
   items: FoodItem[];
 };
 
+export type LiftKind = "load" | "bodyweight" | "timed";
+
 export type SessionExercise = {
+  id: string;
+  catalogId: string | null;
   name: string;
+  kind: LiftKind;
   sets: number;
-  reps: string;
+  prescription: string;
   restSeconds: number;
   notes: string;
 };
@@ -61,24 +66,38 @@ export type LiftSet = {
   done: boolean;
   kg: string;
   reps: string;
+  seconds: string;
   difficulty: Effort | null;
 };
 
 export type SessionExerciseLog = {
+  id: string;
+  catalogId: string | null;
   name: string;
+  kind: LiftKind;
   sets: LiftSet[];
 };
+
+export type AdjustmentChange =
+  | "add_weight"
+  | "drop_weight"
+  | "add_reps"
+  | "drop_reps"
+  | "add_time"
+  | "drop_time"
+  | "keep";
 
 export type SessionAdjustment = {
   key?: string;
   exercise: string;
-  change: "add_weight" | "drop_weight" | "add_reps" | "drop_reps" | "keep";
+  change: AdjustmentChange;
   amount: string;
   reason: string;
 };
 
 export type SessionAnalysis = {
   summary: string;
+  source?: "mammouth" | "local";
   adjustments: SessionAdjustment[];
 };
 

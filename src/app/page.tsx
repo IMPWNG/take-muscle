@@ -1,12 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { CanteenTray } from "@/components/CanteenTray";
 import { PlateProgress } from "@/components/PlateProgress";
 import { T } from "@/components/T";
-import { todayIds, useTracker } from "@/hooks/useTracker";
+import { useTracker } from "@/hooks/useTracker";
 import { useLocale } from "@/hooks/useLocale";
-import { totalsFor } from "@/lib/program";
 import {
   currentBmi,
   formatDay,
@@ -26,7 +24,6 @@ export default function HomePage() {
   if (!ready) return <T text={msg(locale, "loadingLog")} as="p" className="pt-10 text-ink-soft" />;
 
   const current = latestWeight(state.weights, state.profile.startKg);
-  const today = totalsFor(todayIds(state));
   const plateau = plateauStatus(state.weights, state.profile);
   const copy = plateauCopy(locale, plateau.kind, plateau.delta);
   const weeks = lastNWeekAverages(state.weights, 3);
@@ -34,6 +31,7 @@ export default function HomePage() {
   const todayTemplate = weekday.templateId
     ? TEMPLATES.find((item) => item.id === weekday.templateId)
     : null;
+  const lastSession = state.sessions.find((session) => session.completed) ?? state.sessions[0];
 
   return (
     <div className="space-y-5 pt-1 sm:space-y-8 sm:pt-4">
@@ -114,43 +112,40 @@ export default function HomePage() {
           </div>
         </article>
         <article className="rounded-3xl bg-chalk p-5">
-          <T text={msg(locale, "todayPlate")} as="p" className="stamp text-[11px] text-ink-soft normal-case" />
-          <p className="font-[family-name:var(--font-data)] text-3xl">
-            {today.proteinG}
-            <span className="ml-1 text-base text-ink-soft">
-              <T text={msg(locale, "proteinUnit")} as="span" />
-            </span>
-          </p>
-          <p className="text-sm text-ink-soft">
-            {today.kcal} <T text={msg(locale, "kcalChecked")} as="span" />
-          </p>
-          <T text={msg(locale, "proteinHint")} as="p" className="mt-3 text-xs leading-5 text-ink-soft" />
+          <T text={msg(locale, "loggedSessions")} as="p" className="stamp text-[11px] text-ink-soft normal-case" />
+          {lastSession ? (
+            <>
+              <p className="font-[family-name:var(--font-data)] text-sm text-ink-soft">
+                {formatDay(lastSession.date, BCP47[locale])}
+              </p>
+              <T
+                text={templateName(locale, lastSession.focus)}
+                as="h2"
+                className="font-[family-name:var(--font-display)] text-2xl"
+              />
+              {lastSession.analysis ? (
+                <p className="mt-2 line-clamp-4 text-sm leading-5 text-ink-soft">
+                  {lastSession.analysis.summary}
+                </p>
+              ) : (
+                <T text={msg(locale, "carnetLead")} as="p" className="mt-2 text-sm leading-5 text-ink-soft" />
+              )}
+            </>
+          ) : (
+            <>
+              <T
+                text={msg(locale, "carnetEmpty")}
+                as="p"
+                className="mt-1 font-[family-name:var(--font-display)] text-xl leading-6"
+              />
+            </>
+          )}
+          <div className="mt-4">
+            <Link href="/entrainement" className="inline-flex min-h-11 items-center rounded-full bg-white px-5 py-2.5 text-sm shadow-[inset_0_0_0_1px_rgba(28,33,30,0.12)]">
+              <T text={msg(locale, "consultSession")} />
+            </Link>
+          </div>
         </article>
-      </section>
-
-      <CanteenTray compact />
-
-      <section>
-        <T text={msg(locale, "denseTitle")} as="h2" className="font-[family-name:var(--font-display)] text-2xl" />
-        <T text={msg(locale, "denseLead")} as="p" className="mt-1 text-sm text-ink-soft" />
-        <div className="mt-4 overflow-hidden rounded-3xl bg-chalk">
-          <table className="w-full text-sm">
-            <tbody>
-              {(
-                [
-                  ["rice", "riceUse"],
-                  ["oats", "oatsUse"],
-                  ["nutsFood", "nutsUse"],
-                ] as const
-              ).map(([food, use]) => (
-                <tr key={food} className="border-t border-ink/8 first:border-0">
-                  <T text={msg(locale, food)} as="th" className="px-3 py-2.5 text-left font-medium sm:px-4 sm:py-3" />
-                  <T text={msg(locale, use)} as="td" className="px-3 py-2.5 text-ink-soft sm:px-4 sm:py-3" />
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </section>
     </div>
   );

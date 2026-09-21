@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { templateById, warmupFor } from "@/lib/workouts";
+import { catalogCues, gifUrl } from "@/lib/exercises";
 import { formatDay, localDateKey, uid } from "@/lib/stats";
 import { useTracker } from "@/hooks/useTracker";
 import { useRestTimer } from "@/hooks/useRestTimer";
@@ -13,18 +14,21 @@ import {
   exerciseNotes,
   templateFocus,
   warmupCopy,
+  TEMPLATES_I18N,
 } from "@/lib/i18n/content";
-import { TEMPLATES_I18N } from "@/lib/i18n/content";
 import { BCP47, t, type Locale, type Text } from "@/lib/i18n";
 import {
   adjustmentFor,
-  analyzeSession,
-  prepareForAnalysis,
   previousCompleted,
+  prepareForAnalysis,
   seedSetsFromPrevious,
 } from "@/lib/analyze";
+import { normalizeSession } from "@/lib/session-log";
 import type {
   Effort,
+  LiftKind,
+  LiftSet,
+  SessionAnalysis,
   SessionExercise,
   SessionExerciseLog,
   SessionLog,
@@ -54,8 +58,11 @@ function toLog(
     analysis: null,
     warmupDone: [],
     exercises: exercises.map((exercise) => ({
+      id: exercise.id,
+      catalogId: exercise.catalogId,
       name: exercise.name,
-      sets: seedSetsFromPrevious(exercise.name, exercise.sets, previous, locale),
+      kind: exercise.kind,
+      sets: seedSetsFromPrevious(exercise, previous, locale),
     })),
   };
 }
@@ -70,23 +77,6 @@ function sessionTitle(locale: Locale, name: string): Text {
 
 function notesFor(session: SessionLog): SessionExercise[] {
   return templateById(session.focus)?.exercises ?? [];
-}
-
-function normalizeLog(session: SessionLog): SessionLog {
-  return {
-    ...session,
-    analysis: session.analysis ?? null,
-    warmupDone: session.warmupDone ?? [],
-    exercises: session.exercises.map((exercise) => ({
-      name: exercise.name,
-      sets: exercise.sets.map((set) => ({
-        done: set.done,
-        kg: set.kg,
-        reps: set.reps,
-        difficulty: set.difficulty ?? null,
-      })),
-    })),
-  };
 }
 
 function EffortStamps({
@@ -126,6 +116,117 @@ function EffortStamps({
   );
 }
 
+function KindBadge({ kind, locale }: { kind: LiftKind; locale: Locale }) {
+  const key = kind === "timed" ? "kindTimed" : kind === "bodyweight" ? "kindBody" : "kindLoad";
+  return (
+    <span className="stamp rounded-full bg-rubber/10 px-2 py-0.5 text-[9px] text-ink-soft normal-case">
+      <TInline text={msg(locale, key)} />
+    </span>
+  );
+}
+
+function SetFields({
+  kind,
+  set,
+  locale,
+  onChange,
+}: {
+  kind: LiftKind;
+  set: LiftSet;
+  locale: Locale;
+  onChange: (field: "kg" | "reps" | "seconds", value: string) => void;
+}) {
+  const fieldClass =
+    "h-11 w-full rounded-xl border border-ink/10 bg-white px-2.5 font-[family-name:var(--font-data)] text-base sm:px-3";
+  if (kind === "timed") {
+    return (
+      <label className="min-w-0">
+        <span className="sr-only">
+          <TInline text={msg(locale, "seconds")} />
+        </span>
+        <input
+          value={set.seconds}
+          onChange={(event) => onChange("seconds", event.target.value)}
+          placeholder={locale === "zh" ? "秒" : "s"}
+          inputMode="numeric"
+          className={fieldClass}
+        />
+      </label>
+    );
+  }
+  if (kind === "bodyweight") {
+    return (
+      <>
+        <label className="min-w-0">
+          <span className="sr-only">
+            <TInline text={msg(locale, "reps")} />
+          </span>
+          <input
+            value={set.reps}
+            onChange={(event) => onChange("reps", event.target.value)}
+            placeholder={locale === "zh" ? "次" : "reps"}
+            inputMode="numeric"
+            className={fieldClass}
+          />
+        </label>
+        <label className="min-w-0">
+          <span className="sr-only">
+            <TInline text={msg(locale, "addedKg")} />
+          </span>
+          <input
+            value={set.kg}
+            onChange={(event) => onChange("kg", event.target.value)}
+            placeholder={locale === "zh" ? "负重kg" : "kg+"}
+            inputMode="decimal"
+            className={fieldClass}
+          />
+        </label>
+      </>
+    );
+  }
+  return (
+    <>
+      <label className="min-w-0">
+        <span className="sr-only">kg</span>
+        <input
+          value={set.kg}
+          onChange={(event) => onChange("kg", event.target.value)}
+          placeholder="kg"
+          inputMode="decimal"
+          className={fieldClass}
+        />
+      </label>
+      <label className="min-w-0">
+        <span className="sr-only">reps</span>
+        <input
+          value={set.reps}
+          onChange={(event) => onChange("reps", event.target.value)}
+          placeholder={locale === "zh" ? "次" : "reps"}
+          inputMode="numeric"
+          className={fieldClass}
+        />
+      </label>
+    </>
+  );
+}
+
+function LiftMedia({ catalogId, name }: { catalogId: string | null; name: string }) {
+  const src = gifUrl(catalogId);
+  if (!src) return null;
+  return (
+    <div className="relative aspect-square w-[5.5rem] shrink-0 overflow-hidden rounded-2xl bg-rubber sm:w-28">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt=""
+        className="h-full w-full object-cover"
+        loading="lazy"
+      />
+      <span className="sr-only">{name}</span>
+    </div>
+  );
+}
+
 export function SessionBoard() {
   const { saveSession, deleteSession, state } = useTracker();
   const { startRest } = useRestTimer();
@@ -133,6 +234,8 @@ export function SessionBoard() {
   const [log, setLog] = useState<SessionLog | null>(null);
   const [notes, setNotes] = useState<SessionExercise[]>([]);
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
+  const [reviewing, setReviewing] = useState(false);
+  const [reviewError, setReviewError] = useState<"auth" | "fail" | null>(null);
   const skipPersist = useRef(true);
   const boardRef = useRef<HTMLElement>(null);
   const carnetRef = useRef<HTMLElement>(null);
@@ -145,13 +248,9 @@ export function SessionBoard() {
     () => log?.exercises.reduce((n, ex) => n + ex.sets.length, 0) ?? 0,
     [log],
   );
-  const previousPlan = log
-    ? previousCompleted(state.sessions, log.focus, log.id)
-    : null;
+  const previousPlan = log ? previousCompleted(state.sessions, log.focus, log.id) : null;
   const warmupSteps = log ? warmupFor(log.focus) : [];
-  const warmupDoneCount = warmupSteps.filter((step) =>
-    (log?.warmupDone ?? []).includes(step.id),
-  ).length;
+  const warmupDoneCount = warmupSteps.filter((step) => (log?.warmupDone ?? []).includes(step.id)).length;
   const todayCount = state.sessions.filter((session) => session.date === localDateKey()).length;
 
   useEffect(() => {
@@ -164,11 +263,7 @@ export function SessionBoard() {
     return () => window.clearTimeout(timer);
   }, [log, saveSession]);
 
-  function applyLog(
-    next: SessionLog,
-    templateExercises?: SessionExercise[],
-    scroll = false,
-  ) {
+  function applyLog(next: SessionLog, templateExercises?: SessionExercise[], scroll = false) {
     skipPersist.current = true;
     setNotes(templateExercises ?? notesFor(next));
     setLog(next);
@@ -187,7 +282,7 @@ export function SessionBoard() {
       (session) => session.focus === id && session.date === today && !session.completed,
     );
     if (open) {
-      applyLog(normalizeLog(open), template.exercises, true);
+      applyLog(normalizeSession(open), template.exercises, true);
       return;
     }
     applyLog(
@@ -205,13 +300,14 @@ export function SessionBoard() {
 
   function openSession(session: SessionLog) {
     setPendingDelete(null);
-    applyLog(normalizeLog(session), undefined, true);
+    applyLog(normalizeSession(session), undefined, true);
   }
 
   function closeLog() {
     skipPersist.current = true;
     setLog(null);
     setPendingDelete(null);
+    setReviewError(null);
   }
 
   function removeSession(id: string) {
@@ -238,24 +334,26 @@ export function SessionBoard() {
   function toggleSet(exIndex: number, setIndex: number, restSeconds: number) {
     if (!log) return;
     const exercise = log.exercises[exIndex];
-    const turningOn = !exercise.sets[setIndex].done;
+    const current = exercise.sets[setIndex];
+    const turningOn = !current.done;
     patchExercise(exIndex, {
       ...exercise,
-      sets: exercise.sets.map((set, j) =>
-        j !== setIndex ? set : { ...set, done: !set.done },
-      ),
+      sets: exercise.sets.map((set, i) => (i === setIndex ? { ...set, done: !set.done } : set)),
     });
     if (turningOn) startRest(restSeconds);
   }
 
-  function updateSet(exIndex: number, setIndex: number, field: "kg" | "reps", value: string) {
+  function updateSet(
+    exIndex: number,
+    setIndex: number,
+    field: "kg" | "reps" | "seconds",
+    value: string,
+  ) {
     if (!log) return;
     const exercise = log.exercises[exIndex];
     patchExercise(exIndex, {
       ...exercise,
-      sets: exercise.sets.map((set, j) =>
-        j !== setIndex ? set : { ...set, [field]: value },
-      ),
+      sets: exercise.sets.map((set, i) => (i === setIndex ? { ...set, [field]: value } : set)),
     });
   }
 
@@ -267,14 +365,10 @@ export function SessionBoard() {
     const turningOn = !current.done;
     patchExercise(exIndex, {
       ...exercise,
-      sets: exercise.sets.map((set, j) =>
-        j !== setIndex
-          ? set
-          : {
-              ...set,
-              difficulty: same ? null : effort,
-              done: same ? set.done : true,
-            },
+      sets: exercise.sets.map((set, i) =>
+        i === setIndex
+          ? { ...set, difficulty: same ? null : effort, done: true }
+          : set,
       ),
     });
     if (!same && turningOn) startRest(restSeconds);
@@ -291,20 +385,41 @@ export function SessionBoard() {
 
   function reopenSession() {
     if (!log) return;
+    setReviewError(null);
     applyLog({ ...log, completed: false, analysis: null });
   }
 
-  function finishSession() {
+  async function finishSession() {
     if (!log) return;
     const prepared = prepareForAnalysis({ ...log, completed: true });
-    applyLog({
-      ...prepared,
-      analysis: analyzeSession(
-        prepared,
-        previousCompleted(state.sessions, log.focus, log.id),
-        locale,
-      ),
-    });
+    applyLog({ ...prepared, analysis: null });
+    setReviewing(true);
+    setReviewError(null);
+    try {
+      const response = await fetch("/api/session-review", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          locale,
+          session: prepared,
+          previous: previousCompleted(state.sessions, log.focus, log.id),
+        }),
+      });
+      if (response.status === 401) {
+        setReviewError("auth");
+        return;
+      }
+      if (!response.ok) {
+        setReviewError("fail");
+        return;
+      }
+      const analysis = (await response.json()) as SessionAnalysis;
+      applyLog({ ...prepared, analysis });
+    } catch {
+      setReviewError("fail");
+    } finally {
+      setReviewing(false);
+    }
   }
 
   return (
@@ -436,9 +551,7 @@ export function SessionBoard() {
                       >
                         <span
                           className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-sm border ${
-                            on
-                              ? "border-chili bg-chili text-[10px] text-chalk"
-                              : "border-ink/25"
+                            on ? "border-chili bg-chili text-[10px] text-chalk" : "border-ink/25"
                           }`}
                         >
                           {on ? "✓" : ""}
@@ -482,37 +595,67 @@ export function SessionBoard() {
             {log.exercises.map((exercise, exIndex) => {
               const meta = notes[exIndex];
               const adj = !log.completed
-                ? adjustmentFor(previousPlan, exercise.name, locale)
+                ? adjustmentFor(previousPlan, { id: exercise.id, name: exercise.name }, locale)
                 : null;
+              const cues = catalogCues(exercise.catalogId, locale).slice(0, 3);
+              const grid =
+                exercise.kind === "timed"
+                  ? "grid-cols-[2.5rem_1fr]"
+                  : "grid-cols-[2.5rem_1fr_1fr]";
               return (
-                <li
-                  key={`${exercise.name}-${exIndex}`}
-                  className="rounded-2xl bg-tile/50 p-2.5 sm:p-4"
-                >
-                  <div className="mb-2.5">
-                    <T text={exerciseName(locale, exercise.name)} as="p" className="font-medium leading-tight" />
-                    {adj ? (
-                      <p className="mt-1 text-xs leading-5">
-                        <span className="font-[family-name:var(--font-data)] text-chili">
-                          {adj.amount}
-                        </span>
-                        <span className="ml-2 text-ink-soft">{adj.reason}</span>
-                      </p>
-                    ) : null}
-                    {meta ? (
-                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-ink-soft sm:line-clamp-none">
-                        {meta.sets} × {meta.reps} · {meta.restSeconds}s ·{" "}
-                        <T text={exerciseNotes(locale, exercise.name, meta.notes)} as="span" />
-                      </p>
-                    ) : null}
+                <li key={`${exercise.id}-${exIndex}`} className="rounded-2xl bg-tile/50 p-2.5 sm:p-4">
+                  <div className="mb-2.5 flex gap-3">
+                    <LiftMedia catalogId={exercise.catalogId} name={exercise.name} />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <T
+                          text={exerciseName(locale, exercise.name)}
+                          as="p"
+                          className="font-medium leading-tight"
+                        />
+                        <KindBadge kind={exercise.kind} locale={locale} />
+                      </div>
+                      {adj ? (
+                        <p className="mt-1 text-xs leading-5">
+                          <span className="font-[family-name:var(--font-data)] text-chili">
+                            {adj.amount}
+                          </span>
+                          <span className="ml-2 text-ink-soft">{adj.reason}</span>
+                        </p>
+                      ) : null}
+                      {meta ? (
+                        <p className="mt-1 font-[family-name:var(--font-data)] text-[11px] text-ink-soft">
+                          {meta.sets} × {meta.prescription} · {meta.restSeconds}s
+                        </p>
+                      ) : null}
+                      {cues.length > 0 ? (
+                        <ul className="mt-1.5 hidden space-y-0.5 sm:block">
+                          {cues.map((cue) => (
+                            <li key={cue} className="text-[11px] leading-4 text-ink-soft">
+                              {cue}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                      {meta ? (
+                        <p className="mt-1 line-clamp-2 text-xs leading-5 text-ink-soft sm:line-clamp-none">
+                          <T text={exerciseNotes(locale, exercise.name, meta.notes)} as="span" />
+                        </p>
+                      ) : null}
+                    </div>
                   </div>
+                  {cues.length > 0 ? (
+                    <p className="mb-2 line-clamp-2 text-[11px] leading-4 text-ink-soft sm:hidden">
+                      {cues[0]}
+                    </p>
+                  ) : null}
                   <div className="grid gap-2">
                     {exercise.sets.map((set, setIndex) => (
                       <div
                         key={setIndex}
                         className="rounded-xl bg-white/80 p-2 shadow-[inset_0_0_0_1px_rgba(28,33,30,0.06)]"
                       >
-                        <div className="grid grid-cols-[2.5rem_1fr_1fr] items-center gap-1.5">
+                        <div className={`grid items-center gap-1.5 ${grid}`}>
                           <button
                             type="button"
                             onClick={() => toggleSet(exIndex, setIndex, meta?.restSeconds ?? 90)}
@@ -522,30 +665,12 @@ export function SessionBoard() {
                           >
                             {setIndex + 1}
                           </button>
-                          <label className="min-w-0">
-                            <span className="sr-only">kg</span>
-                            <input
-                              value={set.kg}
-                              onChange={(event) =>
-                                updateSet(exIndex, setIndex, "kg", event.target.value)
-                              }
-                              placeholder="kg"
-                              inputMode="decimal"
-                              className="h-11 w-full rounded-xl border border-ink/10 bg-white px-2.5 font-[family-name:var(--font-data)] text-base sm:px-3"
-                            />
-                          </label>
-                          <label className="min-w-0">
-                            <span className="sr-only">reps</span>
-                            <input
-                              value={set.reps}
-                              onChange={(event) =>
-                                updateSet(exIndex, setIndex, "reps", event.target.value)
-                              }
-                              placeholder="reps"
-                              inputMode="numeric"
-                              className="h-11 w-full rounded-xl border border-ink/10 bg-white px-2.5 font-[family-name:var(--font-data)] text-base sm:px-3"
-                            />
-                          </label>
+                          <SetFields
+                            kind={exercise.kind}
+                            set={set}
+                            locale={locale}
+                            onChange={(field, value) => updateSet(exIndex, setIndex, field, value)}
+                          />
                         </div>
                         <div className="mt-1.5">
                           <EffortStamps
@@ -563,14 +688,45 @@ export function SessionBoard() {
               );
             })}
           </ol>
+          <p className="mt-2 text-[10px] leading-4 text-ink-soft">
+            <T text={msg(locale, "gifCredit")} />
+          </p>
 
-          {log.analysis ? (
-            <div className="mt-5 rounded-2xl bg-rubber p-3 text-chalk sm:p-4">
+          {reviewing ? (
+            <div className="mt-5 rounded-2xl bg-rubber p-4 text-chalk">
               <T
-                text={msg(locale, "debriefTitle")}
+                text={msg(locale, "analyzing")}
                 as="p"
                 className="stamp text-[11px] text-chalk/60 normal-case"
               />
+              <T text={msg(locale, "analyzingLead")} as="p" className="mt-2 text-sm leading-6" />
+            </div>
+          ) : null}
+
+          {reviewError ? (
+            <div className="mt-5 rounded-2xl bg-chili p-4 text-chalk">
+              <T
+                text={msg(locale, reviewError === "auth" ? "reviewAuth" : "reviewFail")}
+                as="p"
+                className="text-sm leading-6"
+              />
+            </div>
+          ) : null}
+
+          {log.analysis ? (
+            <div className="mt-5 rounded-2xl bg-rubber p-3 text-chalk sm:p-4">
+              <div className="flex items-center justify-between gap-2">
+                <T
+                  text={msg(locale, "debriefTitle")}
+                  as="p"
+                  className="stamp text-[11px] text-chalk/60 normal-case"
+                />
+                <span className="stamp text-[9px] text-chalk/45">
+                  <TInline
+                    text={msg(locale, log.analysis.source === "mammouth" ? "coachAi" : "coachLocal")}
+                  />
+                </span>
+              </div>
               <p className="mt-2 text-sm leading-6">{log.analysis.summary}</p>
               <ul className="mt-3 space-y-2">
                 {log.analysis.adjustments.map((item) => (
@@ -601,20 +757,21 @@ export function SessionBoard() {
                 </button>
                 <button
                   type="button"
+                  disabled={reviewing}
                   onClick={() => finishSession()}
-                  className="min-h-12 rounded-full bg-rubber px-5 py-3 text-sm text-chalk"
+                  className="min-h-12 rounded-full bg-rubber px-5 py-3 text-sm text-chalk disabled:opacity-60"
                 >
-                  <T text={msg(locale, "retryAnalysis")} />
+                  <T text={msg(locale, reviewing ? "analyzing" : "retryAnalysis")} />
                 </button>
               </>
             ) : (
               <button
                 type="button"
-                disabled={totalSets === 0}
+                disabled={totalSets === 0 || reviewing}
                 onClick={() => finishSession()}
                 className="min-h-12 rounded-full bg-rubber px-5 py-3 text-sm text-chalk disabled:opacity-60"
               >
-                <T text={msg(locale, "markDone")} />
+                <T text={msg(locale, reviewing ? "analyzing" : "markDone")} />
               </button>
             )}
             <button

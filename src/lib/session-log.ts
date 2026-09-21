@@ -1,20 +1,78 @@
-import type { Effort, LiftSet, SessionAnalysis, SessionLog } from "./types";
+import { liftByName, templateById } from "./workouts";
+import type { Effort, LiftKind, LiftSet, SessionAnalysis, SessionExerciseLog, SessionLog } from "./types";
 
 const EFFORTS = new Set<Effort>(["easy", "normal", "hard"]);
 
-function normalizeSet(set: LiftSet): LiftSet {
+function isTimedPrescription(value: string | undefined) {
+  return Boolean(value && /\bs\b|sec|秒/i.test(value));
+}
+
+export function inferKind(exercise: {
+  kind?: LiftKind;
+  name?: string;
+  prescription?: string;
+}): LiftKind {
+  if (exercise.kind === "load" || exercise.kind === "bodyweight" || exercise.kind === "timed") {
+    return exercise.kind;
+  }
+  const meta = exercise.name ? liftByName(exercise.name) : null;
+  if (meta?.kind) return meta.kind;
+  if (isTimedPrescription(exercise.prescription) || isTimedPrescription(exercise.name)) {
+    return "timed";
+  }
+  if (/traction|pull-?up|ab wheel|relevé|hanging leg/i.test(exercise.name ?? "")) {
+    return "bodyweight";
+  }
+  return "load";
+}
+
+function normalizeSet(set: LiftSet, kind: LiftKind): LiftSet {
+  const kg = set.kg ?? "";
+  let reps = set.reps ?? "";
+  let seconds = set.seconds ?? "";
+  if (kind === "timed" && !seconds && reps) {
+    seconds = reps;
+    reps = "";
+  }
   return {
     done: Boolean(set.done),
-    kg: set.kg ?? "",
-    reps: set.reps ?? "",
+    kg: kind === "timed" ? "" : kg,
+    reps: kind === "timed" ? "" : reps,
+    seconds: kind === "timed" ? seconds : seconds,
     difficulty:
       set.difficulty && EFFORTS.has(set.difficulty) ? set.difficulty : null,
+  };
+}
+
+function hydrateExercise(
+  exercise: SessionExerciseLog,
+  index: number,
+  focus: string,
+): SessionExerciseLog {
+  const template = templateById(focus);
+  const byId = exercise.id
+    ? template?.exercises.find((item) => item.id === exercise.id)
+    : undefined;
+  const byName = template?.exercises.find((item) => item.name === exercise.name);
+  const meta = byId ?? byName ?? template?.exercises[index] ?? liftByName(exercise.name);
+  const kind = inferKind({
+    kind: exercise.kind ?? meta?.kind,
+    name: exercise.name,
+    prescription: meta?.prescription,
+  });
+  return {
+    id: exercise.id || meta?.id || `ex-${index}`,
+    catalogId: exercise.catalogId ?? meta?.catalogId ?? null,
+    name: exercise.name,
+    kind,
+    sets: (exercise.sets ?? []).map((set) => normalizeSet(set, kind)),
   };
 }
 
 type StoredAnalysis = {
   summary?: unknown;
   adjustments?: unknown;
+  source?: unknown;
   warmupDone?: unknown;
 };
 
@@ -33,6 +91,7 @@ export function unpackStoredAnalysis(raw: unknown): {
     return {
       analysis: {
         summary: stored.summary,
+        source: stored.source === "mammouth" || stored.source === "local" ? stored.source : undefined,
         adjustments: Array.isArray(stored.adjustments)
           ? (stored.adjustments as SessionAnalysis["adjustments"])
           : [],
@@ -49,6 +108,7 @@ export function packStoredAnalysis(session: SessionLog) {
     return {
       summary: session.analysis.summary,
       adjustments: session.analysis.adjustments,
+      source: session.analysis.source,
       warmupDone,
     };
   }
@@ -63,9 +123,8 @@ export function normalizeSession(session: SessionLog): SessionLog {
     ...session,
     analysis: session.analysis ?? null,
     warmupDone: Array.isArray(session.warmupDone) ? session.warmupDone : [],
-    exercises: (session.exercises ?? []).map((exercise) => ({
-      name: exercise.name,
-      sets: (exercise.sets ?? []).map((set) => normalizeSet(set)),
-    })),
+    exercises: (session.exercises ?? []).map((exercise, index) =>
+      hydrateExercise(exercise, index, session.focus),
+    ),
   };
 }

@@ -11,10 +11,10 @@ export const copy = {
   navGymShort: { fr: "Séance", en: "Train", zh: "练", py: "liàn" },
   navWeightShort: { fr: "Poids", en: "Scale", zh: "秤", py: "chèng" },
   tagline: {
-    fr: "Objectif 90 kg. Nutrition, pesées, Upper/Lower 4 jours.",
-    en: "Target 90 kg. Nutrition, weigh-ins, Upper/Lower 4 days.",
-    zh: "目标 90 公斤。饮食、体重、上肢/下肢每周 4 练。",
-    py: "mù biāo 90 gōng jīn. yǐn shí, tǐ zhòng, shàng zhī / xià zhī měi zhōu 4 liàn.",
+    fr: "Objectif 90 kg. Pesées, Upper/Lower 4 jours, coach IA.",
+    en: "Target 90 kg. Weigh-ins, Upper/Lower 4 days, AI coach.",
+    zh: "目标 90 公斤。体重、上肢/下肢每周 4 练、AI 教练。",
+    py: "mù biāo 90 gōng jīn. tǐ zhòng, shàng zhī / xià zhī měi zhōu 4 liàn, AI jiào liàn.",
   },
   authSignInTitle: {
     fr: "Connexion",
@@ -29,10 +29,10 @@ export const copy = {
     py: "chuàng jiàn zhàng hào",
   },
   authLead: {
-    fr: "Repas, pesées et séances sont enregistrés en ligne. Un compte, tous tes appareils.",
-    en: "Meals, weigh-ins, and sessions are saved online. One account, every device.",
-    zh: "饮食、体重和训练都会存到网上。一个账号，所有设备都能看。",
-    py: "yǐn shí, tǐ zhòng hé xùn liàn dōu huì cún dào wǎng shàng. yí gè zhàng hào, suǒ yǒu shè bèi dōu néng kàn.",
+    fr: "Pesées et séances sont enregistrées en ligne. Un compte, tous tes appareils.",
+    en: "Weigh-ins and sessions are saved online. One account, every device.",
+    zh: "体重和训练都会存到网上。一个账号，所有设备都能看。",
+    py: "tǐ zhòng hé xùn liàn dōu huì cún dào wǎng shàng. yí gè zhàng hào, suǒ yǒu shè bèi dōu néng kàn.",
   },
   authEmail: { fr: "Email", en: "Email", zh: "邮箱", py: "yóu xiāng" },
   authPassword: { fr: "Mot de passe", en: "Password", zh: "密码", py: "mì mǎ" },
@@ -316,10 +316,10 @@ export const copy = {
   normal: { fr: "Normale", en: "Normal", zh: "正常", py: "zhèng cháng" },
   hard: { fr: "Dure", en: "Hard", zh: "吃力", py: "chī lì" },
   effortHint: {
-    fr: "Après chaque série : facile, normale ou dure. L’analyse s’en sert.",
-    en: "After each set: easy, normal, or hard. The review uses it.",
-    zh: "每组结束后：轻松、正常或吃力。分析会用到。",
-    py: "měi zǔ jié shù hòu: qīng sōng, zhèng cháng huò chī lì. fēn xī huì yòng dào.",
+    fr: "Après chaque série : facile, normale ou dure. Le coach s’aligne là-dessus. Holds : note les secondes, pas les kg.",
+    en: "After each set: easy, normal, or hard. The coach follows that. Holds: log seconds, not kg.",
+    zh: "每组结束后：轻松、正常或吃力。教练按这个调。支撑动作记秒数，不要记公斤。",
+    py: "měi zǔ jié shù hòu: qīng sōng, zhèng cháng huò chī lì. zhī chēng jì miǎo, bú yào jì gōng jīn.",
   },
   planTitle: {
     fr: "Plan de cette séance",
@@ -378,10 +378,35 @@ export const copy = {
     py: "xià cì zhè yàng gǎi",
   },
   analyzing: {
-    fr: "Analyse de la séance…",
-    en: "Reviewing your session…",
-    zh: "正在分析这次训练…",
-    py: "zhèng zài fēn xī zhè cì xùn liàn",
+    fr: "Le coach lit tes séries…",
+    en: "The coach is reading your sets…",
+    zh: "教练正在看你的组数…",
+    py: "jiào liàn zhèng zài kàn nǐ de zǔ shù",
+  },
+  analyzingLead: {
+    fr: "Il lit kg, reps, secondes et Facile/Normale/Dure. Pas une grille automatique.",
+    en: "It reads kg, reps, seconds, and Easy/Normal/Hard. Not a fixed grid.",
+    zh: "它会看公斤、次数、秒数，以及轻松/正常/吃力。不是死板套公式。",
+    py: "tā huì kàn gōng jīn, cì shù, miǎo shù, yǐ jí qīng sōng / zhèng cháng / chī lì.",
+  },
+  coachAi: { fr: "Coach IA", en: "AI coach", zh: "AI 教练", py: "AI jiào liàn" },
+  coachLocal: {
+    fr: "Règles de secours",
+    en: "Fallback rules",
+    zh: "备用规则",
+    py: "bèi yòng guī zé",
+  },
+  seconds: { fr: "secondes", en: "seconds", zh: "秒", py: "miǎo" },
+  addedKg: { fr: "lest kg", en: "added kg", zh: "负重公斤", py: "fù zhòng gōng jīn" },
+  reps: { fr: "reps", en: "reps", zh: "次", py: "cì" },
+  kindLoad: { fr: "kg × reps", en: "kg × reps", zh: "公斤 × 次数", py: "gōng jīn × cì shù" },
+  kindBody: { fr: "poids de corps", en: "bodyweight", zh: "自重", py: "zì zhòng" },
+  kindTimed: { fr: "hold / secondes", en: "hold / seconds", zh: "支撑 / 秒", py: "zhī chēng / miǎo" },
+  gifCredit: {
+    fr: "Démos : exercises-dataset · © Gym visual",
+    en: "Demos: exercises-dataset · © Gym visual",
+    zh: "动作演示：exercises-dataset · © Gym visual",
+    py: "dòng zuò yǎn shì: exercises-dataset · © Gym visual",
   },
   reviewTimeout: {
     fr: "L’analyse a dépassé 40 s. Relance-la.",
@@ -710,10 +735,10 @@ export function msg(locale: Locale, key: CopyKey) {
 
 export function homeSub(locale: Locale, bmi: string) {
   return t(locale, {
-    fr: `1,92 m · IMC ${bmi} · protéines 120–165 g · surplus +300–500 kcal · Upper/Lower 4 jours.`,
-    en: `1.92 m · BMI ${bmi} · protein 120–165 g · surplus +300–500 kcal · Upper/Lower 4 days.`,
-    zh: `身高 1.92 米 · BMI ${bmi} · 蛋白质 120 到 165 克 · 每天多 300 到 500 千卡 · 上肢/下肢每周 4 练。`,
-    py: `shēn gāo 1.92 mǐ · BMI ${bmi} · dàn bái zhì 120 dào 165 kè · měi tiān duō 300 dào 500 qiān kǎ · shàng zhī / xià zhī měi zhōu 4 liàn.`,
+    fr: `1,92 m · IMC ${bmi} · Upper/Lower 4 jours · coach IA après chaque séance.`,
+    en: `1.92 m · BMI ${bmi} · Upper/Lower 4 days · AI coach after every session.`,
+    zh: `身高 1.92 米 · BMI ${bmi} · 上肢/下肢每周 4 练 · 每次训练后有 AI 教练。`,
+    py: `shēn gāo 1.92 mǐ · BMI ${bmi} · shàng zhī / xià zhī měi zhōu 4 liàn · měi cì xùn liàn hòu yǒu AI jiào liàn.`,
   });
 }
 
