@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { templateById, warmupFor } from "@/lib/workouts";
-import { catalogCues, gifUrl } from "@/lib/exercises";
+import { activeVariant, templateById, variantsFor, warmupFor } from "@/lib/workouts";
+import { catalogCues, gifUrl, thumbUrl } from "@/lib/exercises";
 import { formatDay, localDateKey, uid } from "@/lib/stats";
 import { useTracker } from "@/hooks/useTracker";
 import { useRestTimer } from "@/hooks/useRestTimer";
@@ -26,6 +26,7 @@ import {
 import { normalizeSession } from "@/lib/session-log";
 import type {
   Effort,
+  ExerciseVariant,
   LiftKind,
   LiftSet,
   SessionAnalysis,
@@ -57,13 +58,21 @@ function toLog(
     completed: false,
     analysis: null,
     warmupDone: [],
-    exercises: exercises.map((exercise) => ({
-      id: exercise.id,
-      catalogId: exercise.catalogId,
-      name: exercise.name,
-      kind: exercise.kind,
-      sets: seedSetsFromPrevious(exercise, previous, locale),
-    })),
+    exercises: exercises.map((exercise) => {
+      const last = previous?.exercises.find((item) => item.id === exercise.id);
+      const variant = last ? activeVariant(exercise, last) : exercise;
+      return {
+        id: exercise.id,
+        catalogId: variant.catalogId,
+        name: variant.name,
+        kind: variant.kind,
+        sets: seedSetsFromPrevious(
+          { ...exercise, name: variant.name, kind: variant.kind },
+          previous,
+          locale,
+        ),
+      };
+    }),
   };
 }
 
@@ -210,6 +219,84 @@ function SetFields({
   );
 }
 
+function remapSets(sets: LiftSet[], from: LiftKind, to: LiftKind): LiftSet[] {
+  if (from === to) return sets;
+  return sets.map((set) => ({
+    ...set,
+    done: false,
+    kg: to === "timed" ? "" : set.kg,
+    reps: to === "timed" ? "" : set.reps || (from === "timed" ? set.seconds : ""),
+    seconds: to === "timed" ? set.seconds || set.reps : "",
+  }));
+}
+
+function AltPicker({
+  locale,
+  slot,
+  current,
+  onPick,
+}: {
+  locale: Locale;
+  slot: SessionExercise;
+  current: { catalogId: string | null; name: string };
+  onPick: (variant: ExerciseVariant) => void;
+}) {
+  const variants = variantsFor(slot);
+  const active = activeVariant(slot, current);
+  return (
+    <ul className="mt-2 space-y-1 rounded-2xl bg-white/90 p-1.5 shadow-[inset_0_0_0_1px_rgba(28,33,30,0.08)]">
+      {variants.map((variant, index) => {
+        const on =
+          (variant.catalogId && variant.catalogId === active.catalogId) ||
+          variant.name === active.name;
+        const src = thumbUrl(variant.catalogId) ?? gifUrl(variant.catalogId);
+        return (
+          <li key={`${variant.catalogId ?? variant.name}-${index}`}>
+            <button
+              type="button"
+              aria-pressed={on}
+              onClick={() => onPick(variant)}
+              className={`flex w-full min-h-12 items-center gap-2 rounded-xl px-2 py-1.5 text-left ${
+                on ? "bg-sesame/25" : "hover:bg-tile/70"
+              }`}
+            >
+              {src ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={src}
+                  alt=""
+                  className="h-11 w-11 shrink-0 rounded-lg object-cover bg-rubber"
+                />
+              ) : (
+                <span className="h-11 w-11 shrink-0 rounded-lg bg-tile" />
+              )}
+              <span className="min-w-0 flex-1">
+                <span className="flex items-baseline justify-between gap-2">
+                  <T
+                    text={exerciseName(locale, variant.name)}
+                    as="span"
+                    className="block text-sm font-medium leading-5"
+                  />
+                  {index === 0 ? (
+                    <span className="stamp shrink-0 text-[9px] text-ink-soft">
+                      <TInline text={msg(locale, "prescribed")} />
+                    </span>
+                  ) : null}
+                </span>
+                <T
+                  text={exerciseNotes(locale, variant.name, variant.notes)}
+                  as="span"
+                  className="mt-0.5 block line-clamp-2 text-[11px] leading-4 text-ink-soft"
+                />
+              </span>
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 function LiftMedia({ catalogId, name }: { catalogId: string | null; name: string }) {
   const src = gifUrl(catalogId);
   if (!src) return null;
@@ -236,6 +323,7 @@ export function SessionBoard() {
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
   const [reviewing, setReviewing] = useState(false);
   const [reviewError, setReviewError] = useState<"auth" | "fail" | null>(null);
+  const [pickerId, setPickerId] = useState<string | null>(null);
   const skipPersist = useRef(true);
   const boardRef = useRef<HTMLElement>(null);
   const carnetRef = useRef<HTMLElement>(null);
@@ -308,6 +396,7 @@ export function SessionBoard() {
     setLog(null);
     setPendingDelete(null);
     setReviewError(null);
+    setPickerId(null);
   }
 
   function removeSession(id: string) {
@@ -329,6 +418,19 @@ export function SessionBoard() {
       ...log,
       exercises: log.exercises.map((exercise, i) => (i === exIndex ? next : exercise)),
     });
+  }
+
+  function applyVariant(exIndex: number, variant: ExerciseVariant) {
+    if (!log) return;
+    const exercise = log.exercises[exIndex];
+    patchExercise(exIndex, {
+      ...exercise,
+      catalogId: variant.catalogId,
+      name: variant.name,
+      kind: variant.kind,
+      sets: remapSets(exercise.sets, exercise.kind, variant.kind),
+    });
+    setPickerId(null);
   }
 
   function toggleSet(exIndex: number, setIndex: number, restSeconds: number) {
@@ -593,7 +695,8 @@ export function SessionBoard() {
           </div>
           <ol className="space-y-4">
             {log.exercises.map((exercise, exIndex) => {
-              const meta = notes[exIndex];
+              const slot = notes[exIndex];
+              const variant = slot ? activeVariant(slot, exercise) : null;
               const adj = !log.completed
                 ? adjustmentFor(previousPlan, { id: exercise.id, name: exercise.name }, locale)
                 : null;
@@ -602,6 +705,9 @@ export function SessionBoard() {
                 exercise.kind === "timed"
                   ? "grid-cols-[2.5rem_1fr]"
                   : "grid-cols-[2.5rem_1fr_1fr]";
+              const swapped = Boolean(slot && variant && variant.name !== slot.name);
+              const open = pickerId === exercise.id;
+              const hasAlts = (slot?.alternatives.length ?? 0) > 0;
               return (
                 <li key={`${exercise.id}-${exIndex}`} className="rounded-2xl bg-tile/50 p-2.5 sm:p-4">
                   <div className="mb-2.5 flex gap-3">
@@ -615,6 +721,18 @@ export function SessionBoard() {
                         />
                         <KindBadge kind={exercise.kind} locale={locale} />
                       </div>
+                      {hasAlts ? (
+                        <button
+                          type="button"
+                          aria-expanded={open}
+                          onClick={() => setPickerId(open ? null : exercise.id)}
+                          className="mt-1.5 stamp min-h-9 rounded-full bg-white px-3 text-[10px] text-ink shadow-[inset_0_0_0_1px_rgba(28,33,30,0.12)]"
+                        >
+                          <TInline text={msg(locale, "alternative")} />
+                          {swapped ? " · " : null}
+                          {swapped ? <TInline text={exerciseName(locale, slot.name)} /> : null}
+                        </button>
+                      ) : null}
                       {adj ? (
                         <p className="mt-1 text-xs leading-5">
                           <span className="font-[family-name:var(--font-data)] text-chili">
@@ -623,9 +741,9 @@ export function SessionBoard() {
                           <span className="ml-2 text-ink-soft">{adj.reason}</span>
                         </p>
                       ) : null}
-                      {meta ? (
+                      {slot ? (
                         <p className="mt-1 font-[family-name:var(--font-data)] text-[11px] text-ink-soft">
-                          {meta.sets} × {meta.prescription} · {meta.restSeconds}s
+                          {slot.sets} × {variant?.prescription ?? slot.prescription} · {slot.restSeconds}s
                         </p>
                       ) : null}
                       {cues.length > 0 ? (
@@ -637,13 +755,28 @@ export function SessionBoard() {
                           ))}
                         </ul>
                       ) : null}
-                      {meta ? (
+                      {slot ? (
                         <p className="mt-1 line-clamp-2 text-xs leading-5 text-ink-soft sm:line-clamp-none">
-                          <T text={exerciseNotes(locale, exercise.name, meta.notes)} as="span" />
+                          <T
+                            text={exerciseNotes(
+                              locale,
+                              exercise.name,
+                              variant?.notes ?? slot.notes,
+                            )}
+                            as="span"
+                          />
                         </p>
                       ) : null}
                     </div>
                   </div>
+                  {open && slot ? (
+                    <AltPicker
+                      locale={locale}
+                      slot={slot}
+                      current={exercise}
+                      onPick={(next) => applyVariant(exIndex, next)}
+                    />
+                  ) : null}
                   {cues.length > 0 ? (
                     <p className="mb-2 line-clamp-2 text-[11px] leading-4 text-ink-soft sm:hidden">
                       {cues[0]}
@@ -658,7 +791,7 @@ export function SessionBoard() {
                         <div className={`grid items-center gap-1.5 ${grid}`}>
                           <button
                             type="button"
-                            onClick={() => toggleSet(exIndex, setIndex, meta?.restSeconds ?? 90)}
+                            onClick={() => toggleSet(exIndex, setIndex, slot?.restSeconds ?? 90)}
                             className={`h-11 w-10 rounded-full text-sm font-medium sm:w-11 ${
                               set.done ? "bg-chili text-chalk" : "bg-tile text-ink"
                             }`}
@@ -677,7 +810,7 @@ export function SessionBoard() {
                             value={set.difficulty}
                             locale={locale}
                             onPick={(effort) =>
-                              stampSet(exIndex, setIndex, effort, meta?.restSeconds ?? 90)
+                              stampSet(exIndex, setIndex, effort, slot?.restSeconds ?? 90)
                             }
                           />
                         </div>

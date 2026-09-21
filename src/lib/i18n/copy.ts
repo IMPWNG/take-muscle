@@ -402,6 +402,14 @@ export const copy = {
   kindLoad: { fr: "kg × reps", en: "kg × reps", zh: "公斤 × 次数", py: "gōng jīn × cì shù" },
   kindBody: { fr: "poids de corps", en: "bodyweight", zh: "自重", py: "zì zhòng" },
   kindTimed: { fr: "hold / secondes", en: "hold / seconds", zh: "支撑 / 秒", py: "zhī chēng / miǎo" },
+  alternative: { fr: "Alternative", en: "Swap", zh: "替换", py: "tì huàn" },
+  prescribed: { fr: "Prescrit", en: "Programmed", zh: "原计划", py: "yuán jì huà" },
+  altLead: {
+    fr: "Si tu ne peux pas faire ce mouvement, ouvre une variante. Même slot, autre exo.",
+    en: "If you cannot do this lift, open a swap. Same slot, different exercise.",
+    zh: "做不了这个动作，就打开替换。位置不变，换成另一个。",
+    py: "zuò bù liǎo zhè ge dòng zuò, jiù dǎ kāi tì huàn.",
+  },
   gifCredit: {
     fr: "Démos : exercises-dataset · © Gym visual",
     en: "Demos: exercises-dataset · © Gym visual",

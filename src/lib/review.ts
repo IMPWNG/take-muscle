@@ -1,5 +1,5 @@
 import type { AdjustmentChange, SessionAnalysis, SessionLog } from "./types";
-import { liftByName, templateById } from "./workouts";
+import { activeVariant, liftByName, templateById } from "./workouts";
 
 const ALLOWED = new Set<AdjustmentChange>([
   "add_weight",
@@ -165,15 +165,18 @@ export function sessionReviewPayload(session: SessionLog, previous: SessionLog |
       focus: session.focus,
       date: session.date,
       exercises: session.exercises.map((exercise) => {
-        const meta =
+        const slot =
           template?.exercises.find((item) => item.id === exercise.id) ??
           template?.exercises.find((item) => item.name === exercise.name) ??
           liftByName(exercise.name);
+        const variant = slot ? activeVariant(slot, exercise) : null;
         return {
           key: exercise.id,
+          slot: slot?.name ?? exercise.name,
           name: exercise.name,
+          swapped: Boolean(slot && variant && variant.name !== slot.name),
           kind: exercise.kind,
-          prescription: meta?.prescription ?? null,
+          prescription: variant?.prescription ?? slot?.prescription ?? null,
           catalogId: exercise.catalogId,
           sets: exercise.sets.map((set, index) => setPayload(set, exercise.kind, index)),
         };

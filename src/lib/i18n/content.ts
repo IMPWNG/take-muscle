@@ -935,6 +935,294 @@ export const EXERCISES: Record<string, { name: Line; notes: Line }> = {
       py: "kàng xuán zhuǎn. cè píng bǎn nòng dào jiān bǎng jiù bù shū fu, jiù gǎi pà luò fū tuī.",
     },
   },
+  "Presse pectoraux": {
+    name: { fr: "Presse pectoraux", en: "Chest press machine", zh: "推胸机", py: "tuī xiōng jī" },
+    notes: {
+      fr: "Si la barre ou les haltères gênent l’épaule. Même fourchette, 1–3 reps en réserve.",
+      en: "If the bar or dumbbells bother the shoulder. Same range, leave 1–3 reps in reserve.",
+      zh: "杠铃或哑铃弄到肩膀就不舒服。区间一样，留 1 到 3 次余力。",
+      py: "gàng líng huò yǎ líng nòng dào jiān bǎng jiù bù shū fu.",
+    },
+  },
+  "Tirage vertical": {
+    name: { fr: "Tirage vertical", en: "Lat pulldown", zh: "高位下拉", py: "gāo wèi xià lā" },
+    notes: {
+      fr: "Si tu n’as pas la barre, ou moins de 6 tractions propres.",
+      en: "If you have no bar, or fewer than 6 clean pull-ups.",
+      zh: "没有单杠，或引体做不满 6 次。",
+      py: "méi yǒu dān gàng, huò yǐn tǐ zuò bù mǎn 6 cì.",
+    },
+  },
+  "Tractions assistées": {
+    name: { fr: "Tractions assistées", en: "Assisted pull-ups", zh: "助力引体", py: "zhù lì yǐn tǐ" },
+    notes: {
+      fr: "Machine ou élastique. Même schéma, sans aller à l’échec.",
+      en: "Machine or band. Same pattern, not to failure.",
+      zh: "助力器或弹力带。同样的拉法，不要力竭。",
+      py: "zhù lì qì huò tán lì dài. tóng yàng de lā fǎ.",
+    },
+  },
+  "Rowing machine": {
+    name: { fr: "Rowing machine", en: "Seated row machine", zh: "坐姿划船机", py: "zuò zī huá chuán jī" },
+    notes: {
+      fr: "Torse collé au pad, coudes près du corps.",
+      en: "Chest on the pad, elbows close.",
+      zh: "胸口贴住垫子，手肘靠近身体。",
+      py: "xiōng kǒu tiē zhù diàn zi, shǒu zhǒu kào jìn shēn tǐ.",
+    },
+  },
+  "Rowing haltère unilatéral": {
+    name: {
+      fr: "Rowing haltère unilatéral",
+      en: "One-arm dumbbell row",
+      zh: "单臂哑铃划船",
+      py: "dān bì yǎ líng huá chuán",
+    },
+    notes: {
+      fr: "Un bras à la fois, dos plat.",
+      en: "One arm at a time, flat back.",
+      zh: "一次一只手，背保持平。",
+      py: "yí cì yì zhī shǒu, bèi bǎo chí píng.",
+    },
+  },
+  "Développé incliné barre": {
+    name: {
+      fr: "Développé incliné barre",
+      en: "Barbell incline press",
+      zh: "上斜杠铃卧推",
+      py: "shàng xié gàng líng wò tuī",
+    },
+    notes: {
+      fr: "Banc ~30°. 1–3 reps en réserve.",
+      en: "Bench ~30°. Leave 1–3 reps in reserve.",
+      zh: "凳子约 30 度。留 1 到 3 次余力。",
+      py: "dèng zi yuē 30 dù. liú 1 dào 3 cì yú lì.",
+    },
+  },
+  "Élévations latérales poulie": {
+    name: {
+      fr: "Élévations latérales poulie",
+      en: "Cable lateral raise",
+      zh: "绳索侧平举",
+      py: "shéng suǒ cè píng jǔ",
+    },
+    notes: {
+      fr: "Tension continue. Coudes mous, pas d’élan.",
+      en: "Constant tension. Soft elbows, no swing.",
+      zh: "全程有张力。手肘微屈，不要甩。",
+      py: "quán chéng yǒu zhāng lì. shǒu zhǒu wēi qū.",
+    },
+  },
+  "Curl marteau": {
+    name: { fr: "Curl marteau", en: "Hammer curl", zh: "锤式弯举", py: "chuí shì wān jǔ" },
+    notes: {
+      fr: "Prise neutre, plus doux pour le coude.",
+      en: "Neutral grip, kinder on the elbow.",
+      zh: "对握，对肘更友好。",
+      py: "duì wò, duì zhǒu gèng yǒu hǎo.",
+    },
+  },
+  "Pushdown corde": {
+    name: { fr: "Pushdown corde", en: "Rope pushdown", zh: "绳索下压", py: "shéng suǒ xià yā" },
+    notes: {
+      fr: "Ouvre un peu les mains en bas. Coudes fixes.",
+      en: "Open the hands a little at the bottom. Elbows fixed.",
+      zh: "底部稍稍打开手。手肘固定。",
+      py: "dǐ bù shāo shāo dǎ kāi shǒu. shǒu zhǒu gù dìng.",
+    },
+  },
+  "Goblet squat": {
+    name: { fr: "Goblet squat", en: "Goblet squat", zh: "高脚杯深蹲", py: "gāo jiǎo bēi shēn dūn" },
+    notes: {
+      fr: "Haltère contre la poitrine. Si tu n’as pas de squat rack.",
+      en: "Dumbbell at the chest. If you have no squat rack.",
+      zh: "哑铃贴胸。没有深蹲架就做这个。",
+      py: "yǎ líng tiē xiōng. méi yǒu shēn dūn jià jiù zuò.",
+    },
+  },
+  "RDL haltère une jambe": {
+    name: {
+      fr: "RDL haltère une jambe",
+      en: "Single-leg dumbbell RDL",
+      zh: "单腿哑铃罗马尼亚硬拉",
+      py: "dān tuǐ yǎ líng luó mǎ ní yà yìng lā",
+    },
+    notes: {
+      fr: "Moins de charge lombaire. Hanche en arrière, dos plat.",
+      en: "Less lower-back load. Hips back, flat back.",
+      zh: "腰部负担更小。髋往后坐，背保持平。",
+      py: "yāo bù fù dān gèng xiǎo. kuān wǎng hòu zuò.",
+    },
+  },
+  "Extension lombaire": {
+    name: { fr: "Extension lombaire", en: "Back extension", zh: "背伸展", py: "bèi shēn zhǎn" },
+    notes: {
+      fr: "Léger. Jamais à l’échec.",
+      en: "Keep it light. Never to failure.",
+      zh: "要轻。不要力竭。",
+      py: "yào qīng. bú yào lì jié.",
+    },
+  },
+  "Leg curl assis": {
+    name: { fr: "Leg curl assis", en: "Seated leg curl", zh: "坐姿腿弯举", py: "zuò zī tuǐ wān jǔ" },
+    notes: {
+      fr: "Même ischios, autre angle. Contrôle 2 s à la descente.",
+      en: "Same hamstrings, different angle. Control 2 s on the way down.",
+      zh: "同样练腘绳，角度不同。下放控制 2 秒。",
+      py: "tóng yàng liàn guó shéng. xià fàng kòng zhì 2 miǎo.",
+    },
+  },
+  "Relevés de jambes": {
+    name: { fr: "Relevés de jambes", en: "Hanging leg raise", zh: "悬垂举腿", py: "xuán chuí jǔ tuǐ" },
+    notes: {
+      fr: "Bassin serré, pas de balancier.",
+      en: "Ribs down, no swinging.",
+      zh: "收紧骨盆，不要晃。",
+      py: "shōu jǐn gǔ pén, bú yào huàng.",
+    },
+  },
+  "Neck side stretch": {
+    name: { fr: "Neck side stretch", en: "Neck side stretch", zh: "颈部侧伸", py: "jǐng bù cè shēn" },
+    notes: {
+      fr: "Très léger, lent, sans douleur.",
+      en: "Very light, slow, no pain.",
+      zh: "非常轻，慢做，不能疼。",
+      py: "fēi cháng qīng, màn zuò, bù néng téng.",
+    },
+  },
+  "Développé épaules haltères": {
+    name: {
+      fr: "Développé épaules haltères",
+      en: "Dumbbell shoulder press",
+      zh: "哑铃推肩",
+      py: "yǎ líng tuī jiān",
+    },
+    notes: {
+      fr: "Assis, dos calé, 1–3 reps en réserve.",
+      en: "Seated, back supported, leave 1–3 reps in reserve.",
+      zh: "坐着，背靠住，留 1 到 3 次余力。",
+      py: "zuò zhe, bèi kào zhù. liú 1 dào 3 cì yú lì.",
+    },
+  },
+  "Développé militaire assis": {
+    name: {
+      fr: "Développé militaire assis",
+      en: "Seated overhead press",
+      zh: "坐姿推举",
+      py: "zuò zī tuī jǔ",
+    },
+    notes: {
+      fr: "Moins de bas du dos. Pas de cambrure.",
+      en: "Less lower back. Do not over-arch.",
+      zh: "腰部负担更小。不要后仰。",
+      py: "yāo bù fù dān gèng xiǎo. bú yào hòu yǎng.",
+    },
+  },
+  "Tirage prise neutre": {
+    name: { fr: "Tirage prise neutre", en: "Neutral-grip pulldown", zh: "对握下拉", py: "duì wò xià lā" },
+    notes: {
+      fr: "Poulie en V. Si tu n’as pas 6 tractions propres.",
+      en: "V-bar pulldown. If you do not have 6 clean pull-ups.",
+      zh: "对握下拉。引体做不满 6 次就做这个。",
+      py: "duì wò xià lā. yǐn tǐ zuò bù mǎn 6 cì jiù zuò.",
+    },
+  },
+  "Rowing poulie": {
+    name: { fr: "Rowing poulie", en: "Cable seated row", zh: "绳索划船", py: "shéng suǒ huá chuán" },
+    notes: {
+      fr: "Si le rowing barre charge trop les lombaires.",
+      en: "If the barbell row loads the lower back too much.",
+      zh: "杠铃划船腰太累就改这个。",
+      py: "gàng líng huá chuán yāo tài lèi jiù gǎi.",
+    },
+  },
+  "Rowing haltères penché": {
+    name: {
+      fr: "Rowing haltères penché",
+      en: "Dumbbell bent-over row",
+      zh: "哑铃俯身划船",
+      py: "yǎ líng fǔ shēn huá chuán",
+    },
+    notes: {
+      fr: "Dos plat. Alternative si pas de barre.",
+      en: "Flat back. Use if you have no barbell.",
+      zh: "背保持平。没有杠铃就做这个。",
+      py: "bèi bǎo chí píng. méi yǒu gàng líng jiù zuò.",
+    },
+  },
+  "Face pull": {
+    name: { fr: "Face pull", en: "Face pull", zh: "面拉", py: "miàn lā" },
+    notes: {
+      fr: "Poulie haute, corde vers le visage. Épaules arrière.",
+      en: "High pulley, rope to the face. Rear delts.",
+      zh: "高位绳子拉向脸。练后肩。",
+      py: "gāo wèi shéng zi lā xiàng liǎn. liàn hòu jiān.",
+    },
+  },
+  "Trap-bar deadlift": {
+    name: { fr: "Trap-bar deadlift", en: "Trap-bar deadlift", zh: "六角杠硬拉", py: "liù jiǎo gàng yìng lā" },
+    notes: {
+      fr: "Moins de contrainte lombaire. 2–3 reps en réserve.",
+      en: "Less lower-back stress. Leave 2–3 reps in reserve.",
+      zh: "腰部压力更小。留 2 到 3 次余力。",
+      py: "yāo bù yā lì gèng xiǎo. liú 2 dào 3 cì yú lì.",
+    },
+  },
+  "Fentes haltères": {
+    name: { fr: "Fentes haltères", en: "Dumbbell lunges", zh: "哑铃弓步", py: "yǎ líng gōng bù" },
+    notes: {
+      fr: "Si l’arrière-pied surélevé irrite le genou. Petit pas, buste droit.",
+      en: "If the rear foot elevated bothers the knee. Short steps, upright torso.",
+      zh: "后脚垫高弄到膝盖就不舒服。步子小，上身直立。",
+      py: "hòu jiǎo diàn gāo nòng dào xī gài jiù bù shū fu.",
+    },
+  },
+  "Pont fessier": {
+    name: { fr: "Pont fessier", en: "Glute bridge", zh: "臀桥", py: "tún qiáo" },
+    notes: {
+      fr: "Sans barre. Pause 1 s en haut, hanches pas dos.",
+      en: "No bar. Pause 1 s at the top, hips not lower back.",
+      zh: "不用杠铃。顶部停 1 秒，用髋不要用腰。",
+      py: "bú yòng gàng líng. dǐng bù tíng 1 miǎo.",
+    },
+  },
+  "Adduction couché": {
+    name: {
+      fr: "Adduction couché",
+      en: "Side-lying hip adduction",
+      zh: "侧卧髋内收",
+      py: "cè wò kuān nèi shōu",
+    },
+    notes: {
+      fr: "Si le Copenhagen est trop dur. Hold en secondes.",
+      en: "If Copenhagen is too hard. Hold in seconds.",
+      zh: "哥本哈根太难就做这个。记秒数。",
+      py: "gē běn hā gēn tài nán jiù zuò. jì miǎo shù.",
+    },
+  },
+  "Adduction machine": {
+    name: {
+      fr: "Adduction machine",
+      en: "Hip adduction machine",
+      zh: "内收肌训练器",
+      py: "nèi shōu jī xùn liàn qì",
+    },
+    notes: {
+      fr: "Si tu ne peux pas tenir le hold. Stoppe 1–2 reps avant l’échec.",
+      en: "If you cannot hold the position. Stop 1–2 reps before failure.",
+      zh: "撑不住就改器械。力竭前留 1 到 2 次。",
+      py: "chēng bú zhù jiù gǎi qì xiè.",
+    },
+  },
+  "Pallof press": {
+    name: { fr: "Pallof press", en: "Pallof press", zh: "帕洛夫推", py: "pà luò fū tuī" },
+    notes: {
+      fr: "Si le side plank irrite l’épaule. Anti-rotation.",
+      en: "If the side plank bothers the shoulder. Anti-rotation.",
+      zh: "侧平板弄到肩膀就不舒服。抗旋转。",
+      py: "cè píng bǎn nòng dào jiān bǎng jiù bù shū fu.",
+    },
+  },
 };
 
 export function exerciseName(locale: Locale, name: string): Text {

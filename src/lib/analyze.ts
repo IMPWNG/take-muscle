@@ -11,7 +11,7 @@ import type {
   SessionExerciseLog,
   SessionLog,
 } from "./types";
-import { emptySets, liftByName, templateById } from "./workouts";
+import { emptySets, liftByName, templateById, activeVariant } from "./workouts";
 
 function num(value: string) {
   const parsed = Number(String(value).replace(",", "."));
@@ -483,16 +483,17 @@ export function analyzeSession(
   );
   const prevByName = new Map((previous?.exercises ?? []).map((exercise) => [exercise.name, exercise.sets]));
   const adjustments = session.exercises.map((exercise) => {
-    const meta =
+    const slot =
       template?.exercises.find((item) => item.id === exercise.id) ??
       template?.exercises.find((item) => item.name === exercise.name) ??
       liftByName(exercise.name);
+    const variant = slot ? activeVariant(slot, exercise) : null;
     return {
       ...adjustExercise(
         locale,
         exercise,
         prevByKey.get(exercise.id) ?? prevByName.get(exercise.name),
-        meta?.prescription,
+        variant?.prescription ?? slot?.prescription,
       ),
       key: exercise.id || exercise.name,
     };

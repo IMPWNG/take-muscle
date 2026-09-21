@@ -36,6 +36,14 @@ export type MealSlot = {
 
 export type LiftKind = "load" | "bodyweight" | "timed";
 
+export type ExerciseVariant = {
+  catalogId: string | null;
+  name: string;
+  kind: LiftKind;
+  notes: string;
+  prescription?: string;
+};
+
 export type SessionExercise = {
   id: string;
   catalogId: string | null;
@@ -45,6 +53,7 @@ export type SessionExercise = {
   prescription: string;
   restSeconds: number;
   notes: string;
+  alternatives: ExerciseVariant[];
 };
 
 export type WarmupStep = {
