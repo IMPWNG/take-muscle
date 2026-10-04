@@ -58,6 +58,8 @@ export type SessionExercise = {
 
 export type WarmupStep = {
   id: string;
+  kg?: number;
+  reps?: string;
 };
 
 export type WorkoutTemplate = {
@@ -67,6 +69,7 @@ export type WorkoutTemplate = {
   durationMin: number;
   warmup: WarmupStep[];
   exercises: SessionExercise[];
+  ramp?: "barbell" | "hinge" | "db" | "machine" | "row";
 };
 
 export type Effort = "easy" | "normal" | "hard";

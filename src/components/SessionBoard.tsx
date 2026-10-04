@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { activeVariant, templateById, variantsFor, warmupFor } from "@/lib/workouts";
+import { activeVariant, templateById, variantsFor, warmupPlan } from "@/lib/workouts";
+import { phaseFor, programWeek, scaleTemplate } from "@/lib/cycle";
+import { findRememberedLift, rampForLift, rampKindFor, workKgFromSets } from "@/lib/loads";
 import { catalogCues, gifUrl, thumbUrl } from "@/lib/exercises";
 import { formatDay, localDateKey, uid } from "@/lib/stats";
 import { useTracker } from "@/hooks/useTracker";
@@ -10,6 +12,7 @@ import { useLocale } from "@/hooks/useLocale";
 import { T, TInline } from "@/components/T";
 import { msg } from "@/lib/i18n/copy";
 import {
+  cycleBanner,
   exerciseName,
   exerciseNotes,
   templateFocus,
@@ -19,6 +22,7 @@ import {
 import { BCP47, t, type Locale, type Text } from "@/lib/i18n";
 import {
   adjustmentFor,
+  mobilityDebrief,
   previousCompleted,
   prepareForAnalysis,
   seedSetsFromPrevious,
@@ -33,21 +37,37 @@ import type {
   SessionExercise,
   SessionExerciseLog,
   SessionLog,
+  WarmupStep,
 } from "@/lib/types";
 
 const EFFORTS: Effort[] = ["easy", "normal", "hard"];
 const TEMPLATES = [
-  ["upper-a", "upperA"],
-  ["lower-a", "lowerA"],
-  ["upper-b", "upperB"],
-  ["lower-b", "lowerB"],
+  ["session-a", "sessionA"],
+  ["session-b", "sessionB"],
+  ["session-c", "sessionC"],
+  ["session-d", "sessionD"],
 ] as const;
+
+function rememberedVariant(exercise: SessionExercise, previous: SessionLog | null, history: SessionLog[]) {
+  const last =
+    previous?.exercises.find((item) => item.id === exercise.id) ??
+    previous?.exercises.find((item) => item.name === exercise.name) ??
+    findRememberedLift(history, exercise.id, exercise.catalogId, exercise.name, previous?.id);
+  return last &&
+    variantsFor(exercise).some(
+      (item) =>
+        (item.catalogId && item.catalogId === last.catalogId) || item.name === last.name,
+    )
+    ? activeVariant(exercise, last)
+    : exercise;
+}
 
 function toLog(
   name: string,
   focus: string,
   exercises: SessionExercise[],
   previous: SessionLog | null,
+  history: SessionLog[],
   locale: Locale,
 ): SessionLog {
   return {
@@ -59,21 +79,45 @@ function toLog(
     analysis: null,
     warmupDone: [],
     exercises: exercises.map((exercise) => {
-      const last = previous?.exercises.find((item) => item.id === exercise.id);
-      const variant = last ? activeVariant(exercise, last) : exercise;
+      const variant = rememberedVariant(exercise, previous, history);
       return {
         id: exercise.id,
         catalogId: variant.catalogId,
         name: variant.name,
         kind: variant.kind,
         sets: seedSetsFromPrevious(
-          { ...exercise, name: variant.name, kind: variant.kind },
+          { ...exercise, catalogId: variant.catalogId, name: variant.name, kind: variant.kind },
           previous,
+          history,
           locale,
         ),
       };
     }),
   };
+}
+
+function rampLabel(exercise: { id: string; name: string; kind: LiftKind; sets: LiftSet[] }) {
+  const kind = rampKindFor(exercise.id, exercise.name, exercise.kind);
+  const kg = workKgFromSets(exercise.sets);
+  if (!kind || !kg) return "";
+  const steps = rampForLift(exercise.id, kind, kg);
+  return steps.length ? ` · ${steps.map((step) => `${step.kg}×${step.reps}`).join(" → ")}` : "";
+}
+
+function stepView(locale: Locale, step: WarmupStep) {
+  if (step.kg != null) {
+    return {
+      name: t(locale, {
+        fr: "Montée en charge",
+        en: "Load ramp",
+        zh: "热身加重",
+        py: "rè shēn jiā zhòng",
+      }),
+      dose: `${step.kg} kg × ${step.reps}`,
+      cue: msg(locale, "warmupRampCue"),
+    };
+  }
+  return warmupCopy(locale, step.id);
 }
 
 function sessionTitle(locale: Locale, name: string): Text {
@@ -337,7 +381,11 @@ export function SessionBoard() {
     [log],
   );
   const previousPlan = log ? previousCompleted(state.sessions, log.focus, log.id) : null;
-  const warmupSteps = log ? warmupFor(log.focus) : [];
+  const week = programWeek(state.sessions);
+  const phase = phaseFor(week);
+  const template = log ? templateById(log.focus) : null;
+  const firstKg = log?.exercises[0] ? workKgFromSets(log.exercises[0].sets) : null;
+  const warmupSteps = template ? warmupPlan(template, firstKg) : [];
   const warmupDoneCount = warmupSteps.filter((step) => (log?.warmupDone ?? []).includes(step.id)).length;
   const todayCount = state.sessions.filter((session) => session.date === localDateKey()).length;
 
@@ -365,23 +413,25 @@ export function SessionBoard() {
   function startTemplate(id: string) {
     const template = templateById(id);
     if (!template) return;
+    const scaled = scaleTemplate(template, programWeek(state.sessions));
     const today = localDateKey();
     const open = state.sessions.find(
       (session) => session.focus === id && session.date === today && !session.completed,
     );
     if (open) {
-      applyLog(normalizeSession(open), template.exercises, true);
+      applyLog(normalizeSession(open), scaled.exercises, true);
       return;
     }
     applyLog(
       toLog(
         template.name,
         template.id,
-        template.exercises,
+        scaled.exercises,
         previousCompleted(state.sessions, id),
+        state.sessions,
         locale,
       ),
-      template.exercises,
+      scaled.exercises,
       true,
     );
   }
@@ -493,6 +543,10 @@ export function SessionBoard() {
 
   async function finishSession() {
     if (!log) return;
+    if (log.focus === "session-d") {
+      applyLog({ ...log, completed: true, analysis: mobilityDebrief(locale) });
+      return;
+    }
     const prepared = prepareForAnalysis({ ...log, completed: true });
     applyLog({ ...prepared, analysis: null });
     setReviewing(true);
@@ -540,6 +594,13 @@ export function SessionBoard() {
           </button>
         ))}
       </div>
+
+      <p className="rounded-2xl bg-tile/60 px-3 py-2.5 text-sm leading-5">
+        <span className="stamp text-[10px] text-ink-soft normal-case">
+          <TInline text={cycleBanner(locale, week, phase).title} />
+        </span>
+        <T text={cycleBanner(locale, week, phase).detail} as="span" className="mt-1 block text-ink-soft" />
+      </p>
 
       {log ? null : (
         <p className="text-sm leading-5 text-ink-soft">
@@ -639,7 +700,7 @@ export function SessionBoard() {
               </div>
               <ul className="space-y-1">
                 {warmupSteps.map((step) => {
-                  const stepCopy = warmupCopy(locale, step.id);
+                  const stepCopy = stepView(locale, step);
                   const on = (log.warmupDone ?? []).includes(step.id);
                   return (
                     <li key={step.id}>
@@ -681,6 +742,8 @@ export function SessionBoard() {
             </div>
           ) : null}
 
+          {log.exercises.length > 0 ? (
+          <>
           <div className="mb-3 flex items-end justify-between gap-2">
             <T
               text={msg(locale, "warmupWork")}
@@ -744,6 +807,7 @@ export function SessionBoard() {
                       {slot ? (
                         <p className="mt-1 font-[family-name:var(--font-data)] text-[11px] text-ink-soft">
                           {slot.sets} × {variant?.prescription ?? slot.prescription} · {slot.restSeconds}s
+                          {rampLabel(exercise)}
                         </p>
                       ) : null}
                       {cues.length > 0 ? (
@@ -824,6 +888,8 @@ export function SessionBoard() {
           <p className="mt-2 text-[10px] leading-4 text-ink-soft">
             <T text={msg(locale, "gifCredit")} />
           </p>
+          </>
+          ) : null}
 
           {reviewing ? (
             <div className="mt-5 rounded-2xl bg-rubber p-4 text-chalk">
@@ -888,6 +954,7 @@ export function SessionBoard() {
                 >
                   <T text={msg(locale, "reopenSession")} />
                 </button>
+                {log.focus === "session-d" ? null : (
                 <button
                   type="button"
                   disabled={reviewing}
@@ -896,15 +963,21 @@ export function SessionBoard() {
                 >
                   <T text={msg(locale, reviewing ? "analyzing" : "retryAnalysis")} />
                 </button>
+                )}
               </>
             ) : (
               <button
                 type="button"
-                disabled={totalSets === 0 || reviewing}
+                disabled={(log.focus !== "session-d" && totalSets === 0) || reviewing}
                 onClick={() => finishSession()}
                 className="min-h-12 rounded-full bg-rubber px-5 py-3 text-sm text-chalk disabled:opacity-60"
               >
-                <T text={msg(locale, reviewing ? "analyzing" : "markDone")} />
+                <T
+                  text={msg(
+                    locale,
+                    reviewing ? "analyzing" : log.focus === "session-d" ? "markDoneLight" : "markDone",
+                  )}
+                />
               </button>
             )}
             <button

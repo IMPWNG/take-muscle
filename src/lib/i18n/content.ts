@@ -1,6 +1,7 @@
 import type { Line, Locale, Text } from "./index";
 import { t } from "./index";
 import { copy, msg, thisWeekGain } from "./copy";
+import type { CyclePhase } from "../cycle";
 
 export const FOODS: Record<string, Line> = {
   "b-eggs": { fr: "3 œufs", en: "3 eggs", zh: "3 个鸡蛋", py: "sān gè jī dàn" },
@@ -193,6 +194,116 @@ export function dayNote(locale: Locale, note: keyof typeof NOTE_KEYS) {
 }
 
 export const WARMUPS: Record<string, { name: Line; dose: Line; cue: Line }> = {
+  "wu-cardio": {
+    name: { fr: "Cardio léger", en: "Easy cardio", zh: "轻松有氧", py: "qīng sōng yǒu yǎng" },
+    dose: { fr: "5–8 min", en: "5–8 min", zh: "5 到 8 分钟", py: "5 dào 8 fēn zhōng" },
+    cue: {
+      fr: "Marche, vélo ou rameur. Respiration nasale, pas d’essoufflement.",
+      en: "Walk, bike, or rower. Nasal breathing. Do not get out of breath.",
+      zh: "走路、单车或划船机。用鼻子呼吸，不要喘。",
+      py: "zǒu lù, dān chē huò huá chuán jī. yòng bí zi hū xī, bú yào chuǎn.",
+    },
+  },
+  "wu-dyn-lower": {
+    name: { fr: "Mobilité jambes", en: "Lower-body mobility", zh: "下肢活动", py: "xià zhī huó dòng" },
+    dose: { fr: "2–3 min", en: "2–3 min", zh: "2 到 3 分钟", py: "2 dào 3 fēn zhōng" },
+    cue: {
+      fr: "Cercles de hanches, fentes dynamiques, quelques squats au poids du corps. Lent, sans douleur.",
+      en: "Hip circles, dynamic lunges, a few bodyweight squats. Slow, no pain.",
+      zh: "转髋、动态弓步、几个徒手深蹲。慢做，不能疼。",
+      py: "zhuǎn kuān, dòng tài gōng bù, jǐ gè tú shǒu shēn dūn. màn zuò, bù néng téng.",
+    },
+  },
+  "wu-dyn-upper": {
+    name: { fr: "Mobilité épaules", en: "Upper-body mobility", zh: "肩活动", py: "jiān huó dòng" },
+    dose: { fr: "2–3 min", en: "2–3 min", zh: "2 到 3 分钟", py: "2 dào 3 fēn zhōng" },
+    cue: {
+      fr: "Cercles d’épaules, pull-aparts légers, face pulls très légers. Réveille, ne fatigue pas.",
+      en: "Arm circles, light pull-aparts, very light face pulls. Wake the joints. Do not fatigue them.",
+      zh: "绕肩、轻轻面拉。把关节唤醒，不要练累。",
+      py: "rào jiān, qīng qīng miàn lā. bǎ guān jié huàn xǐng, bú yào liàn lèi.",
+    },
+  },
+  "wu-bw-squat": {
+    name: { fr: "Squat au poids du corps", en: "Bodyweight squat", zh: "徒手深蹲", py: "tú shǒu shēn dūn" },
+    dose: { fr: "2 × 8", en: "2 × 8", zh: "2 × 8", py: "2 × 8" },
+    cue: {
+      fr: "Lent, genoux dans l’axe, profondeur confortable. Pas de charge.",
+      en: "Slow, knees in line, comfortable depth. No load.",
+      zh: "慢做，膝盖对准脚尖，深度舒服即可。不要负重。",
+      py: "màn zuò, xī gài duì zhǔn jiǎo jiān, shēn dù shū fu. bú yào fù zhòng.",
+    },
+  },
+  "d-walk": {
+    name: { fr: "Marche ou vélo facile", en: "Easy walk or bike", zh: "轻松走或骑", py: "qīng sōng zǒu huò qí" },
+    dose: { fr: "5 min", en: "5 min", zh: "5 分钟", py: "5 fēn zhōng" },
+    cue: {
+      fr: "Très facile. Ce jour doit te laisser plus frais, pas t’épuiser.",
+      en: "Very easy. This day should leave you fresher, not drained.",
+      zh: "非常轻松。今天应该更轻松，不要累。",
+      py: "fēi cháng qīng sōng. jīn tiān yīng gāi gèng qīng sōng, bú yào lèi.",
+    },
+  },
+  "d-ankle": {
+    name: { fr: "Mobilité de cheville", en: "Ankle mobility", zh: "脚踝活动", py: "jiǎo huái huó dòng" },
+    dose: { fr: "2 × 8 / côté", en: "2 × 8 / side", zh: "每侧 2 × 8", py: "měi cè 2 × 8" },
+    cue: {
+      fr: "Contre un mur. Genou vers l’avant, talon au sol. Confortable, sans forcer.",
+      en: "Against a wall. Knee forward, heel down. Comfortable. Do not force it.",
+      zh: "靠墙。膝盖往前，脚跟不离地。舒服即可，不要硬撑。",
+      py: "kào qiáng. xī gài wǎng qián, jiǎo gēn bù lí dì. shū fu jí kě.",
+    },
+  },
+  "d-hip": {
+    name: { fr: "Fléchisseurs de hanche", en: "Hip flexors", zh: "髋屈肌", py: "kuān qū jī" },
+    dose: { fr: "2 × 8 / côté", en: "2 × 8 / side", zh: "每侧 2 × 8", py: "měi cè 2 × 8" },
+    cue: {
+      fr: "Étirement dynamique. Bassin serré. N’essaie pas de forcer l’amplitude.",
+      en: "Dynamic stretch. Ribs down. Do not force the range.",
+      zh: "动态拉伸。收紧骨盆。不要硬拉开。",
+      py: "dòng tài lā shēn. shōu jǐn gǔ pén. bú yào yìng lā kāi.",
+    },
+  },
+  "d-tspine": {
+    name: { fr: "Rotations thoraciques", en: "Thoracic rotations", zh: "胸椎旋转", py: "xiōng zhuī xuán zhuǎn" },
+    dose: { fr: "2 × 8 / côté", en: "2 × 8 / side", zh: "每侧 2 × 8", py: "měi cè 2 × 8" },
+    cue: {
+      fr: "Au sol. Ouvre la poitrine vers le plafond. Lent et confortable.",
+      en: "On the floor. Open the chest to the ceiling. Slow and comfortable.",
+      zh: "躺在地上。胸口朝天花板打开。慢、舒服。",
+      py: "tǎng zài dì shàng. xiōng kǒu cháo tiān huā bǎn dǎ kāi. màn, shū fu.",
+    },
+  },
+  "d-squat": {
+    name: { fr: "Squat lent", en: "Slow squat", zh: "慢速深蹲", py: "màn sù shēn dūn" },
+    dose: { fr: "2 × 8", en: "2 × 8", zh: "2 × 8", py: "2 × 8" },
+    cue: {
+      fr: "Poids du corps, lent et confortable. Pas de charge.",
+      en: "Bodyweight, slow and comfortable. No load.",
+      zh: "徒手，慢、舒服。不要负重。",
+      py: "tú shǒu, màn, shū fu. bú yào fù zhòng.",
+    },
+  },
+  "d-pec": {
+    name: { fr: "Pectoraux et dorsaux", en: "Chest and lats", zh: "胸和背阔", py: "xiōng hé bèi kuò" },
+    dose: { fr: "2 × 20–30 s", en: "2 × 20–30 s", zh: "2 × 20 到 30 秒", py: "2 × 20 dào 30 miǎo" },
+    cue: {
+      fr: "Étirement léger. Respire. N’essaie pas de forcer les amplitudes.",
+      en: "Light stretch. Breathe. Do not force the range.",
+      zh: "轻轻拉伸。呼吸。不要硬撑幅度。",
+      py: "qīng qīng lā shēn. hū xī. bú yào yìng chēng fú dù.",
+    },
+  },
+  "d-walk2": {
+    name: { fr: "Marche tranquille", en: "Easy walk", zh: "轻松走路", py: "qīng sōng zǒu lù" },
+    dose: { fr: "10–20 min", en: "10–20 min", zh: "10 到 20 分钟", py: "10 dào 20 fēn zhōng" },
+    cue: {
+      fr: "Optionnel. Si tu le souhaites. Toujours facile.",
+      en: "Optional. Only if you want it. Keep it easy.",
+      zh: "可选。想走再走。始终轻松。",
+      py: "kě xuǎn. xiǎng zǒu zài zǒu. shǐ zhōng qīng sōng.",
+    },
+  },
   "ua-pulse": {
     name: { fr: "Cardio facile", en: "Easy cardio", zh: "轻松有氧", py: "qīng sōng yǒu yǎng" },
     dose: { fr: "4 min", en: "4 min", zh: "4 分钟", py: "4 fēn zhōng" },
@@ -406,6 +517,42 @@ export function warmupCopy(locale: Locale, id: string) {
 }
 
 export const TEMPLATES_I18N: Record<string, { name: Line; focus: Line }> = {
+  "session-a": {
+    name: copy.sessionA,
+    focus: {
+      fr: "Jambes, priorité force",
+      en: "Legs, strength first",
+      zh: "腿，优先力量",
+      py: "tuǐ, yōu xiān lì liàng",
+    },
+  },
+  "session-b": {
+    name: copy.sessionB,
+    focus: {
+      fr: "Pecs et dos, priorité force",
+      en: "Chest and back, strength first",
+      zh: "胸和背，优先力量",
+      py: "xiōng hé bèi, yōu xiān lì liàng",
+    },
+  },
+  "session-c": {
+    name: copy.sessionC,
+    focus: {
+      fr: "Jambes, dos et pecs, priorité volume",
+      en: "Legs, back and chest, volume first",
+      zh: "腿、背、胸，优先容量",
+      py: "tuǐ, bèi, xiōng, yōu xiān róng liàng",
+    },
+  },
+  "session-d": {
+    name: copy.sessionD,
+    focus: {
+      fr: "Mobilité / récupération, 20–30 min",
+      en: "Mobility / recovery, 20–30 min",
+      zh: "活动 / 恢复，20 到 30 分钟",
+      py: "huó dòng / huī fù, 20 dào 30 fēn zhōng",
+    },
+  },
   "upper-a": {
     name: copy.upperA,
     focus: {
@@ -444,7 +591,43 @@ export const TEMPLATES_I18N: Record<string, { name: Line; focus: Line }> = {
   },
 };
 
+export function cycleBanner(locale: Locale, week: number, phase: CyclePhase) {
+  const title = t(locale, {
+    fr: `Semaine ${week} / 12`,
+    en: `Week ${week} / 12`,
+    zh: `第 ${week} / 12 周`,
+    py: `dì ${week} / 12 zhōu`,
+  });
+  const detail =
+    phase === "deload"
+      ? msg(locale, "cycleDeload")
+      : phase === "taper"
+        ? msg(locale, "cycleTaper")
+        : phase === "start"
+          ? msg(locale, "cycleStart")
+          : msg(locale, "cycleBuild");
+  return { title, detail };
+}
+
 export const EXERCISES: Record<string, { name: Line; notes: Line }> = {
+  Pompes: {
+    name: { fr: "Pompes", en: "Push-ups", zh: "俯卧撑", py: "fǔ wò chēng" },
+    notes: {
+      fr: "Amplitude complète. Si trop facile : pieds surélevés.",
+      en: "Full range. If too easy: elevate the feet.",
+      zh: "幅度做满。太轻松就把脚垫高。",
+      py: "fú dù zuò mǎn. tài qīng sōng jiù bǎ jiǎo diàn gāo.",
+    },
+  },
+  "Front squat": {
+    name: { fr: "Front squat", en: "Front squat", zh: "前蹲", py: "qián dūn" },
+    notes: {
+      fr: "Torse droit. Si le trap-bar est nouveau, prends celui-ci. Pas de max.",
+      en: "Upright torso. If the trap bar is new, use this. No max test.",
+      zh: "躯干直立。六角杠不熟就做这个。不要测最大重量。",
+      py: "qū gān zhí lì. liù jiǎo gàng bù shú jiù zuò zhè ge. bú yào cè zuì dà zhòng liàng.",
+    },
+  },
   "Développé couché": {
     name: { fr: "Développé couché", en: "Bench press", zh: "杠铃卧推", py: "gàng líng wò tuī" },
     notes: {

@@ -21,7 +21,7 @@ export function reviewSystem(locale: "fr" | "en" | "zh") {
 
   return `Tu es le coach musculation de Take Muscle. Tu lis UNE séance déjà faite et tu prescris la séance IDENTIQUE suivante.
 
-Athlète : homme, 1,92 m, bulk 83 → 90 kg, Upper/Lower 4 jours, 1–3 reps en réserve. Jamais un lourd à l’échec.
+Athlète : homme, 1,92 m, bulk 83 → 90 kg. Cycle 12 semaines, 3 séances (A jambes force, B pecs/dos force, C hypertrophie) + D mobilité facultative. Semaines 4 et 8 : décharge (~½ séries). Semaine 12 : taper. ~2 reps en réserve. Jamais un lourd à l’échec. Pas de test de max.
 
 Tu dois t’aligner SUR CE QUI EST NOTÉ, pas sur un programme théorique.
 Chaque série a : kg, reps, seconds, difficulty (easy | normal | hard).
@@ -157,8 +157,8 @@ export function sessionReviewPayload(session: SessionLog, previous: SessionLog |
       heightCm: 192,
       startKg: 83,
       targetKg: 90,
-      split: "Upper/Lower 4 days",
-      rir: "1–3",
+      split: "12-week A/B/C + optional D",
+      rir: "~2",
     },
     session: {
       name: session.name,

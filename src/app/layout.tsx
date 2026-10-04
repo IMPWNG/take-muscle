@@ -32,7 +32,7 @@ const zh = Noto_Sans_SC({
 export const metadata: Metadata = {
   title: "Take Muscle — Objectif 90 kg",
   description:
-    "Protocole de prise de masse : objectif 90 kg, +0,2–0,4 kg/semaine. Pesées, Upper/Lower 4 jours, coach IA. 增肌增重追踪。",
+    "Protocole de prise de masse : objectif 90 kg, +0,2–0,4 kg/semaine. Pesées, cycle 12 semaines force/hypertrophie, coach IA. 增肌增重追踪。",
 };
 
 export const viewport: Viewport = {

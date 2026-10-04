@@ -11,6 +11,7 @@ import type {
   SessionExerciseLog,
   SessionLog,
 } from "./types";
+import { FOCUS_ALIASES, STARTING_LOADS, findRememberedLift, memoryKeys } from "./loads";
 import { emptySets, liftByName, templateById, activeVariant } from "./workouts";
 
 function num(value: string) {
@@ -441,6 +442,19 @@ function adjustExercise(
   });
 }
 
+export function mobilityDebrief(locale: Locale): SessionAnalysis {
+  return {
+    summary: txt(locale, {
+      fr: "Séance D notée. Mobilité douce : tu dois te sentir plus frais, pas fatigué. Pas de charges à monter. Prochaine musculation : mêmes poids de travail.",
+      en: "Session D logged. Easy mobility: you should feel fresher, not tired. No loads to add. Next lifting session: same working weights.",
+      zh: "恢复课已记录。轻松活动，应该更轻松，不要累。不用加重量。下次力量课用同样的工作重量。",
+      py: "huī fù kè yǐ jì lù. qīng sōng huó dòng, bú yào lèi. xià cì yòng tóng yàng de gōng zuò zhòng liàng.",
+    }),
+    source: "local",
+    adjustments: [],
+  };
+}
+
 function summarize(locale: Locale, name: string, adjustments: SessionAdjustment[]) {
   const addW = adjustments.filter((item) => item.change === "add_weight").length;
   const addR = adjustments.filter((item) => item.change === "add_reps").length;
@@ -510,10 +524,11 @@ export function previousCompleted(
   templateId: string,
   exceptId?: string,
 ) {
+  const ids = new Set([templateId, ...(FOCUS_ALIASES[templateId] ?? [])]);
   return (
     sessions.find(
       (session) =>
-        session.focus === templateId &&
+        ids.has(session.focus) &&
         session.completed &&
         session.id !== exceptId,
     ) ?? null
@@ -522,16 +537,17 @@ export function previousCompleted(
 
 export function adjustmentFor(
   session: SessionLog | null | undefined,
-  exercise: { id?: string; name: string },
+  exercise: { id?: string; catalogId?: string | null; name: string },
   locale: Locale,
 ) {
+  const keys = memoryKeys(exercise.id ?? exercise.name, exercise.catalogId ?? null, exercise.name);
+  const named = label(locale, exercise.name);
   return (
     session?.analysis?.adjustments.find(
       (item) =>
-        item.key === exercise.id ||
-        item.key === exercise.name ||
-        item.exercise === exercise.name ||
-        item.exercise === label(locale, exercise.name),
+        (item.key ? keys.has(item.key) : false) ||
+        keys.has(item.exercise) ||
+        item.exercise === named,
     ) ?? null
   );
 }
@@ -585,19 +601,22 @@ export function prepareForAnalysis(session: SessionLog): SessionLog {
 }
 
 export function seedSetsFromPrevious(
-  exercise: { id: string; name: string; kind: LiftKind; sets: number },
+  exercise: { id: string; catalogId: string | null; name: string; kind: LiftKind; sets: number },
   previous: SessionLog | null,
+  history: SessionLog[],
   locale: Locale,
 ) {
   const last =
     previous?.exercises.find((item) => item.id === exercise.id) ??
-    previous?.exercises.find((item) => item.name === exercise.name);
+    previous?.exercises.find((item) => item.name === exercise.name) ??
+    findRememberedLift(history, exercise.id, exercise.catalogId, exercise.name, previous?.id);
+  const start = STARTING_LOADS[exercise.id];
   const adj = adjustmentFor(previous, exercise, locale);
   return emptySets(exercise.sets).map((set, index) => {
     const src = last?.sets[index] ?? last?.sets.at(-1);
-    const kg = src?.kg ?? "";
+    const kg = src?.kg || start?.kg || "";
     const reps = src?.reps ?? "";
-    const seconds = src?.seconds || (exercise.kind === "timed" ? src?.reps ?? "" : "");
+    const seconds = src?.seconds || start?.seconds || (exercise.kind === "timed" ? src?.reps ?? "" : "");
     const next = adj
       ? applyChangeToLoad(adj.change, kg, reps, seconds, exercise.kind)
       : { kg, reps, seconds };
