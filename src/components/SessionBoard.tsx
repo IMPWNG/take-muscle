@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { activeVariant, templateById, variantsFor, warmupPlan } from "@/lib/workouts";
+import { activeVariant, templateById, variantsFor, warmupFor } from "@/lib/workouts";
 import { phaseFor, programWeek, scaleTemplate } from "@/lib/cycle";
-import { findRememberedLift, rampForLift, rampKindFor, workKgFromSets } from "@/lib/loads";
+import { findRememberedLift, rampsForExercise } from "@/lib/loads";
 import { catalogCues, gifUrl, thumbUrl } from "@/lib/exercises";
 import { formatDay, localDateKey, uid } from "@/lib/stats";
 import { useTracker } from "@/hooks/useTracker";
@@ -37,7 +37,6 @@ import type {
   SessionExercise,
   SessionExerciseLog,
   SessionLog,
-  WarmupStep,
 } from "@/lib/types";
 
 const EFFORTS: Effort[] = ["easy", "normal", "hard"];
@@ -96,28 +95,73 @@ function toLog(
   };
 }
 
-function rampLabel(exercise: { id: string; name: string; kind: LiftKind; sets: LiftSet[] }) {
-  const kind = rampKindFor(exercise.id, exercise.name, exercise.kind);
-  const kg = workKgFromSets(exercise.sets);
-  if (!kind || !kg) return "";
-  const steps = rampForLift(exercise.id, kind, kg);
-  return steps.length ? ` · ${steps.map((step) => `${step.kg}×${step.reps}`).join(" → ")}` : "";
+function rampId(exerciseId: string, kg: number) {
+  return `${exerciseId}-ramp-${kg}`;
 }
 
-function stepView(locale: Locale, step: WarmupStep) {
-  if (step.kg != null) {
-    return {
-      name: t(locale, {
-        fr: "Montée en charge",
-        en: "Load ramp",
-        zh: "热身加重",
-        py: "rè shēn jiā zhòng",
-      }),
-      dose: `${step.kg} kg × ${step.reps}`,
-      cue: msg(locale, "warmupRampCue"),
-    };
+function LiftRamps({
+  exercise,
+  done,
+  locale,
+  onToggle,
+}: {
+  exercise: SessionExerciseLog;
+  done: string[];
+  locale: Locale;
+  onToggle: (id: string) => void;
+}) {
+  const ramps = rampsForExercise(exercise);
+  if (ramps.length === 0) {
+    if (exercise.kind !== "load") return null;
+    return (
+      <p className="mb-2 text-[11px] leading-4 text-ink-soft">
+        <T text={msg(locale, "warmupUnknown")} />
+      </p>
+    );
   }
-  return warmupCopy(locale, step.id);
+  return (
+    <div className="mb-2 rounded-xl bg-white/70 px-2 py-2">
+      <T
+        text={msg(locale, "warmupRampTitle")}
+        as="p"
+        className="stamp text-[10px] text-ink-soft normal-case"
+      />
+      <ul className="mt-1 space-y-0.5">
+        {ramps.map((step) => {
+          const id = rampId(exercise.id, step.kg);
+          const on = done.includes(id);
+          return (
+            <li key={id}>
+              <button
+                type="button"
+                aria-pressed={on}
+                onClick={() => onToggle(id)}
+                className={`flex w-full min-h-10 items-center gap-2 rounded-lg px-1.5 text-left text-sm ${
+                  on ? "bg-sesame/20" : "hover:bg-tile/70"
+                }`}
+              >
+                <span
+                  className={`grid h-5 w-5 shrink-0 place-items-center rounded-sm border ${
+                    on ? "border-chili bg-chili text-[10px] text-chalk" : "border-ink/25"
+                  }`}
+                >
+                  {on ? "✓" : ""}
+                </span>
+                <span className="font-[family-name:var(--font-data)]">
+                  {step.kg} kg × {step.reps}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      <T
+        text={msg(locale, "warmupRampCue")}
+        as="p"
+        className="mt-1 text-[11px] leading-4 text-ink-soft"
+      />
+    </div>
+  );
 }
 
 function sessionTitle(locale: Locale, name: string): Text {
@@ -383,9 +427,7 @@ export function SessionBoard() {
   const previousPlan = log ? previousCompleted(state.sessions, log.focus, log.id) : null;
   const week = programWeek(state.sessions);
   const phase = phaseFor(week);
-  const template = log ? templateById(log.focus) : null;
-  const firstKg = log?.exercises[0] ? workKgFromSets(log.exercises[0].sets) : null;
-  const warmupSteps = template ? warmupPlan(template, firstKg) : [];
+  const warmupSteps = log ? warmupFor(log.focus) : [];
   const warmupDoneCount = warmupSteps.filter((step) => (log?.warmupDone ?? []).includes(step.id)).length;
   const todayCount = state.sessions.filter((session) => session.date === localDateKey()).length;
 
@@ -700,7 +742,7 @@ export function SessionBoard() {
               </div>
               <ul className="space-y-1">
                 {warmupSteps.map((step) => {
-                  const stepCopy = stepView(locale, step);
+                  const stepCopy = warmupCopy(locale, step.id);
                   const on = (log.warmupDone ?? []).includes(step.id);
                   return (
                     <li key={step.id}>
@@ -807,7 +849,6 @@ export function SessionBoard() {
                       {slot ? (
                         <p className="mt-1 font-[family-name:var(--font-data)] text-[11px] text-ink-soft">
                           {slot.sets} × {variant?.prescription ?? slot.prescription} · {slot.restSeconds}s
-                          {rampLabel(exercise)}
                         </p>
                       ) : null}
                       {cues.length > 0 ? (
@@ -846,6 +887,12 @@ export function SessionBoard() {
                       {cues[0]}
                     </p>
                   ) : null}
+                  <LiftRamps
+                    exercise={exercise}
+                    done={log.warmupDone ?? []}
+                    locale={locale}
+                    onToggle={toggleWarmup}
+                  />
                   <div className="grid gap-2">
                     {exercise.sets.map((set, setIndex) => (
                       <div

@@ -1,5 +1,4 @@
-import { rampForLift, rampKindFor, type RampKind } from "./loads";
-import type { ExerciseVariant, LiftKind, SessionExercise, WarmupStep, WorkoutTemplate } from "./types";
+import type { ExerciseVariant, LiftKind, SessionExercise, WorkoutTemplate } from "./types";
 
 export const WEEKLY_SPLIT: {
   day: "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
@@ -346,23 +345,6 @@ export function templateById(id: string) {
 
 export function warmupFor(templateId: string) {
   return templateById(templateId)?.warmup ?? [];
-}
-
-export function warmupPlan(
-  template: WorkoutTemplate,
-  workKg: number | null,
-): WarmupStep[] {
-  const first = template.exercises[0];
-  const kind = (first ? rampKindFor(first.id, first.name, first.kind) : null) ?? template.ramp ?? null;
-  const ramps =
-    kind && workKg
-      ? rampForLift(first.id, kind as RampKind, workKg).map((step) => ({
-          id: `ramp-${step.kg}`,
-          kg: step.kg,
-          reps: step.reps,
-        }))
-      : [];
-  return [...template.warmup, ...ramps];
 }
 
 export function emptySets(count: number) {

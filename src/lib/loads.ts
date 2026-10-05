@@ -158,10 +158,29 @@ export function rampSteps(kind: RampKind, workKg: number): RampStep[] {
   );
 }
 
-export function rampForLift(id: string, kind: RampKind, workKg: number) {
+export function rampForLift(id: string, kind: RampKind, workKg: number): RampStep[] {
   const preset = PRESET_RAMPS[id];
   if (preset && Math.abs(preset.work - workKg) < 1) return preset.steps;
   return rampSteps(kind, workKg);
+}
+
+export function workKgOf(exercise: { id: string; sets: LiftSet[] }) {
+  const fromSets = workKgFromSets(exercise.sets);
+  if (fromSets) return fromSets;
+  const start = Number(STARTING_LOADS[exercise.id]?.kg);
+  return Number.isFinite(start) && start > 0 ? start : null;
+}
+
+export function rampsForExercise(exercise: {
+  id: string;
+  name: string;
+  kind: LiftKind;
+  sets: LiftSet[];
+}): RampStep[] {
+  const kind = rampKindFor(exercise.id, exercise.name, exercise.kind);
+  const kg = workKgOf(exercise);
+  if (!kind || kg == null) return [];
+  return rampForLift(exercise.id, kind, kg);
 }
 
 export function rampKindFor(id: string, name: string, kind: LiftKind): RampKind | null {

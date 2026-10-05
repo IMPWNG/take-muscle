@@ -301,10 +301,22 @@ export const copy = {
     py: "rè shēn",
   },
   warmupLead: {
-    fr: "5–8 min de cardio léger, mobilité, puis montée en charge. Les chauffes ne doivent pas te fatiguer.",
-    en: "5–8 min easy cardio, mobility, then load ramps. Warm-up sets should not fatigue you.",
-    zh: "5 到 8 分钟轻松有氧，活动开，再加重。热身组不要把自己练累。",
-    py: "5 dào 8 fēn zhōng qīng sōng yǒu yǎng, huó dòng kāi, zài jiā zhòng. rè shēn zǔ bú yào lèi.",
+    fr: "5–8 min de cardio léger et mobilité. Les séries de chauffe (kg × reps) sont sous chaque exo, juste avant le travail.",
+    en: "5–8 min easy cardio and mobility. Load ramps (kg × reps) sit under each lift, right before the work sets.",
+    zh: "5 到 8 分钟轻松有氧和活动。每个动作下面、正式组之前，有热身组（公斤 × 次数）。",
+    py: "5 dào 8 fēn zhōng qīng sōng yǒu yǎng. měi gè dòng zuò xià miàn yǒu rè shēn zǔ.",
+  },
+  warmupRampTitle: {
+    fr: "Chauffe — kg × reps",
+    en: "Warm-up — kg × reps",
+    zh: "热身 — 公斤 × 次数",
+    py: "rè shēn — gōng jīn × cì shù",
+  },
+  warmupUnknown: {
+    fr: "Chauffe : charge légère × 10, puis un cran au-dessus × 6–8. Note le kg de travail, les séries chiffrées s’affichent.",
+    en: "Warm-up: light × 10, then one jump × 6–8. Log the working kg and the numbered ramps appear.",
+    zh: "热身：轻重量 10 次，再加一档做 6 到 8 次。记下工作重量后，会显示具体热身组。",
+    py: "rè shēn: qīng × 10, zài jiā yì dǎng × 6 dào 8. jì xià gōng zuò zhòng liàng.",
   },
   warmupRampCue: {
     fr: "Plusieurs reps en réserve. Repos 1–2 min. Puis séries de travail : 2–4 min.",

@@ -1,6 +1,6 @@
 import { analyzeSession, seedSetsFromPrevious } from "../src/lib/analyze";
 import { phaseFor, programWeek, scaleTemplate, setFactor } from "../src/lib/cycle";
-import { rampForLift, STARTING_LOADS } from "../src/lib/loads";
+import { rampForLift, rampsForExercise, STARTING_LOADS } from "../src/lib/loads";
 import type { SessionLog } from "../src/lib/types";
 import { templateById } from "../src/lib/workouts";
 
@@ -27,6 +27,15 @@ if (squatRamp.map((step) => step.kg).join(",") !== "20,40,50,60") {
 const benchRamp = rampForLift("sb-bench", "barbell", 55);
 if (benchRamp.map((step) => step.kg).join(",") !== "20,30,40,47.5") {
   throw new Error(`bench ramp ${JSON.stringify(benchRamp)}`);
+}
+const squatFromStart = rampsForExercise({
+  id: "sa-squat",
+  name: "Back squat",
+  kind: "load",
+  sets: [set({ kg: "", done: false })],
+});
+if (squatFromStart.map((step) => `${step.kg}×${step.reps}`).join(" → ") !== "20×8–10 → 40×5 → 50×3 → 60×1–2") {
+  throw new Error(`squat warmup series ${JSON.stringify(squatFromStart)}`);
 }
 
 if (setFactor(4) !== 0.5 || setFactor(12) !== 0.65 || setFactor(2) !== 1) {
